@@ -1,0 +1,184 @@
+<!-- prettier-ignore -->
+{extends file='Templates/mainlayout.tpl'} 
+
+{block name='content'}
+<div class="card rounded-0">
+  <div class="card-header bg-gradient-navy rounded-0">
+    <h3 class="card-title text-warning">{$subtitle}</h3>
+  </div>
+  <!-- /.card-header -->
+  <!-- form start -->
+  <form id="my_form" role="form" method="POST">
+    <input type="hidden" id="id" name="id" value="{$detail.id}" />
+    <div class="card-body">
+      <div class="form-group row">
+        <label for="usr_name" class="col-lg-3 col-sm-4 col-form-label">
+          Nama
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <input
+            type="text"
+            class="form-control rounded-0"
+            id="usr_name"
+            name="usr_name"
+            value="{$detail.usr_name}"
+            autocomplete="off"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="usr_username" class="col-lg-3 col-sm-4 col-form-label">
+          Username
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <input
+            type="text"
+            class="form-control rounded-0"
+            id="usr_username"
+            name="usr_username"
+            value="{$detail.usr_username}"
+            autocomplete="off"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="usr_password" class="col-lg-3 col-sm-4 col-form-label">
+          Password
+          <!-- prettier-ignore -->
+          {if $detail.id < 1}
+          <sup class="fas fa-asterisk text-red"></sup>
+          {/if}
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <input
+            type="password"
+            class="form-control rounded-0"
+            id="usr_password"
+            name="usr_password"
+            value=""
+            autocomplete="off"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="usr_is_master" class="col-lg-3 col-sm-4 col-form-label">
+          Privilege Master
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8 pt-2">
+          <input
+            type="checkbox"
+            id="usr_is_master"
+            name="usr_is_master"
+            data-bootstrap-switch
+            data-off-color="danger"
+            data-on-color="success"
+            data-on-text="YES"
+            data-off-text="NO"
+            value="1"
+            {$detail.usr_is_master}
+          />
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="usr_is_package" class="col-lg-3 col-sm-4 col-form-label">
+          Privilege Paket
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8 pt-2">
+          <input
+            type="checkbox"
+            id="usr_is_package"
+            name="usr_is_package"
+            data-bootstrap-switch
+            data-off-color="danger"
+            data-on-color="success"
+            data-on-text="YES"
+            data-off-text="NO"
+            value="1"
+            {$detail.usr_is_package}
+          />
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="usr_is_report" class="col-lg-3 col-sm-4 col-form-label">
+          Privilege Laporan
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8 pt-2">
+          <input
+            type="checkbox"
+            id="usr_is_report"
+            name="usr_is_report"
+            data-bootstrap-switch
+            data-off-color="danger"
+            data-on-color="success"
+            data-on-text="YES"
+            data-off-text="NO"
+            value="1"
+            {$detail.usr_is_report}
+          />
+        </div>
+      </div>
+    </div>
+    <!-- /.card-body -->
+
+    <div class="card-footer">
+      <!-- prettier-ignore -->
+      {include 'Templates/buttons/submit.tpl'}
+      {include 'Templates/buttons/back.tpl'}
+    </div>
+  </form>
+</div>
+<!-- prettier-ignore -->
+{/block} 
+
+{block 'script'} 
+{literal}
+<!-- Bootstrap Switch -->
+<script src="{/literal}{$smarty.const.BASE_URL}{literal}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $('#btn_submit').click(() => {
+      clearErrorMessage()
+      save()
+    })
+
+    $('input[data-bootstrap-switch]').each(function () {
+      $(this).bootstrapSwitch('state', $(this).prop('checked'))
+    })
+  })
+
+  let save = () => {
+    $.post(
+      `${main_url}/submit`,
+      $('#my_form').serialize(),
+      (res) => {
+        if (!res.success) {
+          if (typeof res.msg === 'object') {
+            $.each(res.msg, (id, message) => {
+              showErrorMessage(id, message)
+            })
+          } else flash(res.msg, 'error')
+        } else window.location = main_url
+      },
+      'JSON'
+    )
+  }
+</script>
+<!-- prettier-ignore -->
+{/literal}
+{/block}

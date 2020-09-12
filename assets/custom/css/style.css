@@ -1,0 +1,32 @@
+/* :root {
+  filter: invert(1) hue-rotate(180deg);
+}
+
+.invert {
+  filter: invert(1) hue-rotate(180deg);
+} */
+
+[class*="sidebar-light-"] .nav-treeview > .nav-item > .nav-link:focus,
+[class*="sidebar-light-"] .nav-treeview > .nav-item > .nav-link:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: #001f3f !important;
+}
+
+/* https://stackoverflow.com/a/48705668 */
+.tooltip .arrow-top-warning::before {
+  border-top-color: var(--warning);
+}
+.tooltip .arrow-right-warning::before {
+  border-right-color: var(--warning);
+}
+.tooltip .arrow-bottom-warning::before {
+  border-bottom-color: var(--warning);
+}
+.tooltip .arrow-left-warning::before {
+  border-left-color: var(--warning);
+}
+
+/* List table row */
+.list-row {
+  cursor: pointer;
+}

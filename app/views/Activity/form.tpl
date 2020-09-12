@@ -1,0 +1,111 @@
+<!-- prettier-ignore -->
+{extends file='Templates/mainlayout.tpl'} 
+
+{block name='content'}
+<div class="card rounded-0">
+  <div class="card-header bg-gradient-navy rounded-0">
+    <h3 class="card-title text-warning">{$subtitle}</h3>
+  </div>
+  <!-- /.card-header -->
+  <!-- form start -->
+  <form id="my_form" role="form" method="POST">
+    <input type="hidden" id="id" name="id" value="{$detail.id}" />
+    <div class="card-body">
+      <div class="form-group row">
+        <label for="act_code" class="col-lg-3 col-sm-4 col-form-label">
+          Kode Kegiatan
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-2 col-sm-3 col-6">
+          <input
+            type="text"
+            class="form-control rounded-0"
+            id="act_code"
+            name="act_code"
+            value="{$detail.act_code}"
+            autocomplete="off"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="act_name" class="col-lg-3 col-sm-4 col-form-label">
+          Nama Kegiatan
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <input
+            type="text"
+            class="form-control rounded-0"
+            id="act_name"
+            name="act_name"
+            value="{$detail.act_name}"
+            autocomplete="off"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="act_desc" class="col-lg-3 col-sm-4 col-form-label">
+          Deskripsi Kegiatan
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <input
+            type="text"
+            class="form-control rounded-0"
+            id="act_desc"
+            name="act_desc"
+            value="{$detail.act_desc}"
+            autocomplete="off"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+    </div>
+    <!-- /.card-body -->
+
+    <div class="card-footer">
+      <!-- prettier-ignore -->
+      {include 'Templates/buttons/submit.tpl'}
+      {include 'Templates/buttons/back.tpl'}
+    </div>
+  </form>
+</div>
+<!-- prettier-ignore -->
+{/block} 
+
+{block 'script'} 
+{literal}
+<script>
+  $(document).ready(function () {
+    $('#btn_submit').click(() => {
+      clearErrorMessage()
+      save()
+    })
+  })
+
+  let save = () => {
+    $.post(
+      `${main_url}/submit`,
+      $('#my_form').serialize(),
+      (res) => {
+        if (!res.success) {
+          if (typeof res.msg === 'object') {
+            $.each(res.msg, (id, message) => {
+              showErrorMessage(id, message)
+            })
+          } else flash(res.msg, 'error')
+        } else window.location = main_url
+      },
+      'JSON'
+    )
+  }
+</script>
+<!-- prettier-ignore -->
+{/literal}
+{/block}
