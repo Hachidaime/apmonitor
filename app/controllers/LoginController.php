@@ -29,11 +29,11 @@ class LoginController extends Controller
     public function submit()
     {
         if ($this->validate()) {
-            list($detail) = $this->userModel->get([
+            list($detail) = $this->userModel->singlearray([
                 ['usr_username', $_POST['usr_username']],
             ]);
 
-            $this->setUserSession($detail[0]);
+            $this->setUserSession($detail);
 
             $_SESSION['FISCAL_YEAR'] = $_POST['fiscal_year'];
 
