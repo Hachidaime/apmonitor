@@ -50,30 +50,30 @@ class Model
         return $this->table;
     }
 
+    public function multiarrray(array $params = null, array $orders = null)
+    {
+        $list = $this->get($params, $orders);
+        $list = $list->get();
+        $list = !empty($list) ? $list->toArray() : $list;
+        return [$list, $this->db->getCount()];
+    }
+
+    public function singlearray(array $params = null)
+    {
+        $list = $this->get($params);
+        $list = $list->get()->first();
+        $list = !empty($list) ? $list->toArray() : $list;
+        return [$list, $this->db->getCount()];
+    }
+
     public function paginate(
         int $page = 1,
         array $params = null,
         array $orders = null
     ) {
-        $list = $this->db->table($this->table);
-
-        $list = !is_null($params)
-            ? $list->orWhere($params)
-            : $list->where([['id', '>', 0]]);
-
-        if (!is_null($orders)) {
-            foreach ($orders as $value) {
-                $list =
-                    count($value) == 2
-                        ? $list->orderBy($value[0], $value[1])
-                        : $list->orderBy($value[0], 'ASC');
-            }
-        }
-
+        $list = $this->get($params, $orders);
         $list = $list->paginate($page, ROWS_PER_PAGE);
-
         $list = !empty($list) ? $list->toArray() : $list;
-
         return [$list, $this->db->paginationInfo()];
     }
 
@@ -94,13 +94,7 @@ class Model
             }
         }
 
-        $result =
-            !is_array($params) && !is_null($params)
-                ? $result->get()->first()
-                : $result->get();
-
-        $result = !empty($result) ? $result->toArray() : $result;
-        return [$result, $this->db->getCount()];
+        return $result;
     }
 
     public function save($data = [])
