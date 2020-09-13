@@ -18,13 +18,8 @@
         id="login_form"
       >
         <div class="form-group">
-          <label for="usr_username">Tahun Anggaran</label>
-          <select
-            class="custom-select"
-            id="fiscal_year"
-            name="fiscal_year"
-            autofocus
-          >
+          <label for="fiscal_year">Tahun Anggaran</label>
+          <select class="custom-select" id="fiscal_year" name="fiscal_year">
             <option value="2020">2020</option>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
