@@ -50,15 +50,18 @@ class Model
         return $this->table;
     }
 
-    public function multiarrray(array $params = null, array $orders = null)
-    {
-        $list = $this->get($params, $orders);
+    public function multiarray(
+        $params = null,
+        array $orders = null,
+        bool $or = false
+    ) {
+        $list = $this->get($params, $orders, $or);
         $list = $list->get();
         $list = !empty($list) ? $list->toArray() : $list;
         return [$list, $this->db->getCount()];
     }
 
-    public function singlearray(array $params = null)
+    public function singlearray($params = null)
     {
         $list = $this->get($params);
         $list = $list->get()->first();
@@ -69,21 +72,24 @@ class Model
     public function paginate(
         int $page = 1,
         array $params = null,
-        array $orders = null
+        array $orders = null,
+        bool $or = false
     ) {
-        $list = $this->get($params, $orders);
+        $list = $this->get($params, $orders, $or);
         $list = $list->paginate($page, ROWS_PER_PAGE);
         $list = !empty($list) ? $list->toArray() : $list;
         return [$list, $this->db->paginationInfo()];
     }
 
-    public function get($params = null, $orders = null)
+    public function get($params = null, $orders = null, bool $or = false)
     {
         $result = $this->db->table($this->table);
 
-        $result = !is_null($params)
-            ? $result->orWhere($params)
-            : $result->where([['id', '>', 0]]);
+        $result = is_null($params)
+            ? $result->where([['id', '>', 0]])
+            : ($or
+                ? $result->orWhere($params)
+                : $result->where($params));
 
         if (!is_null($orders)) {
             foreach ($orders as $value) {
@@ -104,7 +110,7 @@ class Model
         }, $data);
 
         if ($data['id'] > 0) {
-            list($detail) = $this->get($data['id']);
+            list($detail) = $this->singlearray([['id', $data['id']]]);
             foreach ($detail as $key => $value) {
                 if (!in_array($key, array_keys($data))) {
                     unset($detail[$key]);
