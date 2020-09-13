@@ -1,8 +1,9 @@
 <?php
 
 namespace app\rules;
-use PDO;
+
 use Rakit\Validation\Rule;
+use app\models\PackageModel;
 
 class UniquePackageRule extends Rule
 {
@@ -12,9 +13,9 @@ class UniquePackageRule extends Rule
 
     protected $pdo;
 
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
-        $this->pdo = $pdo;
+        $this->packageModel = new PackageModel();
     }
 
     public function check($value): bool
@@ -28,21 +29,14 @@ class UniquePackageRule extends Rule
         $except = $this->parameter('except');
         $key = $this->getAttribute()->getKey();
 
-        // do query
-        $query = "select count(*) as count from `apm_package` 
-            where `{$key}` = :value 
-            and `pkg_fiscal_year` = :pkg_fiscal_year
-            and `prg_code` = :prg_code
-            and `id` != :except";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(':value', $value);
-        $stmt->bindParam(':pkg_fiscal_year', $pkg_fiscal_year);
-        $stmt->bindParam(':prg_code', $prg_code);
-        $stmt->bindParam(':except', $except);
-        $stmt->execute();
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        list(, $count) = $this->packageModel->singlearray([
+            [$key, $value],
+            ['pkg_fiscal_year', $pkg_fiscal_year],
+            ['prg_code', $prg_code],
+            ['id', '!=', $except],
+        ]);
 
         // true for valid, false for invalid
-        return intval($data['count']) === 0;
+        return $count === 0;
     }
 }

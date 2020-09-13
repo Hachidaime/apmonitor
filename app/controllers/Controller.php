@@ -56,10 +56,10 @@ class Controller
             DB_PASS,
         );
         $this->validator->addValidator('unique', new UniqueRule($pdo));
-        $this->validator->addValidator('login', new LoginRule($pdo));
+        $this->validator->addValidator('login', new LoginRule());
         $this->validator->addValidator(
             'unique_package',
-            new UniquePackageRule($pdo),
+            new UniquePackageRule(),
         );
 
         $this->smarty = &$smarty;

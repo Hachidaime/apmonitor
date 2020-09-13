@@ -1,7 +1,7 @@
 <?php
 namespace app\rules;
-use \PDO;
 use Rakit\Validation\Rule;
+use app\models\UserModel;
 
 class LoginRule extends Rule
 {
@@ -9,11 +9,9 @@ class LoginRule extends Rule
 
     protected $fillableParams = ['usr_username'];
 
-    protected $pdo;
-
-    public function __construct(PDO $pdo)
+    public function __construct()
     {
-        $this->pdo = $pdo;
+        $this->userModel = new UserModel();
     }
 
     public function check($value): bool
@@ -25,16 +23,12 @@ class LoginRule extends Rule
         $username = $this->parameter('usr_username');
         $password = $value;
 
-        // do query
-        $query =
-            'select count(*) as count from `apm_user` where `usr_username` = :username and `usr_password` = :password';
-        $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->execute();
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
+        list(, $count) = $this->userModel->singlearray([
+            ['usr_username', $username],
+            ['usr_password', $password],
+        ]);
 
         // true for valid, false for invalid
-        return intval($data['count']) !== 0;
+        return $count !== 0;
     }
 }
