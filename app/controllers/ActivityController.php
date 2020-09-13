@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\models\ActivityModel;
 
 /**
  * @desc this class will handle Uang controller
@@ -20,7 +21,7 @@ class ActivityController extends Controller
         $this->title = 'Kegiatan';
         $this->smarty->assign('title', $this->title);
 
-        $this->activityModel = $this->model("{$this->name}Model");
+        $this->activityModel = new ActivityModel();
 
         if (!$_SESSION['USER']['usr_is_master']) {
             header('Location:' . BASE_URL . '/403');
@@ -78,7 +79,7 @@ class ActivityController extends Controller
 
     private function getDetail($params)
     {
-        list($detail, $count) = $this->activityModel->get($params);
+        list($detail, $count) = $this->activityModel->singlearray($params);
         if (!$count) {
             Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
             header('Location: ' . BASE_URL . "/{$this->lowerName}");

@@ -83,7 +83,9 @@ class UserController extends Controller
 
     private function getDetail($params)
     {
-        list($detail, $count) = $this->userModel->get($params);
+        list($detail, $count) = $this->userModel->singlearray([
+            ['id', $params],
+        ]);
         if (!$count) {
             Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
             header('Location: ' . BASE_URL . "/{$this->lowerName}");

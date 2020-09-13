@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\models\ProgramModel;
 
 /**
  * @desc this class will handle Uang controller
@@ -19,7 +20,7 @@ class ProgramController extends Controller
         $this->setControllerAttribute(__CLASS__);
         $this->smarty->assign('title', $this->title);
 
-        $this->programModel = $this->model("{$this->name}Model");
+        $this->programModel = new ProgramModel();
 
         if (!$_SESSION['USER']['usr_is_master']) {
             header('Location:' . BASE_URL . '/403');
@@ -77,7 +78,7 @@ class ProgramController extends Controller
 
     private function getDetail($params)
     {
-        list($detail, $count) = $this->programModel->get($params);
+        list($detail, $count) = $this->programModel->singlearray($params);
         if (!$count) {
             Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
             header('Location: ' . BASE_URL . "/{$this->lowerName}");

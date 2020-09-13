@@ -1,6 +1,7 @@
 <?php
 use app\helper\Flasher;
 use app\controllers\Controller;
+use app\models\UserModel;
 
 class LoginController extends Controller
 {
@@ -9,7 +10,7 @@ class LoginController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->userModel = $this->model('UserModel');
+        $this->userModel = new UserModel();
         $this->smarty->assign('title', 'Log In');
     }
 

@@ -2,7 +2,9 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
-use app\helper\Functions;
+use app\models\ActivityModel;
+use app\models\PackageModel;
+use app\models\ProgramModel;
 
 /**
  * @desc this class will handle Uang controller
@@ -21,7 +23,7 @@ class PackageController extends Controller
         $this->title = 'Pemaketan';
         $this->smarty->assign('title', $this->title);
 
-        $this->packageModel = $this->model("{$this->name}Model");
+        $this->packageModel = new PackageModel();
 
         if (!$_SESSION['USER']['usr_is_package']) {
             header('Location:' . BASE_URL . '/403');
@@ -64,18 +66,18 @@ class PackageController extends Controller
     {
         $tag = 'Tambah';
         if (!is_null($id)) {
-            $detail = $this->getDetail($id);
+            $detail = $this->getDetail([['id', $id]]);
             $tag = 'Ubah';
         }
 
         $detail['pkg_fiscal_year'] =
             $detail['pkg_fiscal_year'] ?? $_SESSION['FISCAL_YEAR'];
 
-        list($program) = $this->model('ProgramModel')->get(null, [
-            ['prg_code', 'ASC'],
-        ]);
+        $programModel = new ProgramModel();
+        list($program) = $programModel->multiarray(null, [['prg_code', 'ASC']]);
 
-        list($activity) = $this->model('ActivityModel')->get(null, [
+        $activityModel = new ActivityModel();
+        list($activity) = $activityModel->multiarray(null, [
             ['act_code', 'ASC'],
         ]);
 
@@ -94,7 +96,7 @@ class PackageController extends Controller
 
     private function getDetail($params)
     {
-        list($detail, $count) = $this->packageModel->get($params);
+        list($detail, $count) = $this->packageModel->singlearray($params);
         if (!$count) {
             Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
             header('Location: ' . BASE_URL . "/{$this->lowerName}");

@@ -1,5 +1,7 @@
 <?php
 
+namespace app\models;
+
 use app\models\Model;
 
 /**
@@ -17,4 +19,9 @@ class UserModel extends Model
      * @access protected
      */
     protected $table = 'apm_user';
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
 }
