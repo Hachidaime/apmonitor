@@ -197,3 +197,71 @@ let upload = (param) => {
     },
   })
 }
+
+let createEditBtn = (id) => {
+  let editBtn = document.createElement('a')
+  editBtn.innerHTML = 'Ubah'
+  editBtn.classList.add('badge', 'badge-warning', 'badge-pill')
+  editBtn.href = `${main_url}/edit/${id}`
+
+  return editBtn
+}
+
+let createDeleteBtn = (id) => {
+  let deleteBtn = document.createElement('a')
+  deleteBtn.innerHTML = 'Hapus'
+  deleteBtn.classList.add('badge', 'badge-danger', 'badge-pill', 'btn-delete')
+  deleteBtn.href = 'javascript:void(0)'
+  deleteBtn.dataset.id = `${id}`
+
+  return deleteBtn
+}
+
+/**
+ * @description Fungsi ini akan membuat pagination
+ * @function createPagination
+ *
+ * @param {*} paging Pagination info
+ * @param {*} pagination_id ID Pagination
+ */
+let createPagination = (page, paging, pagination_id) => {
+  // Total Data Rows
+  let totalRows = document.querySelector(`#${pagination_id} #totalRows`)
+  totalRows.innerHTML = paging.totalRows ?? 0
+
+  // Previous Button
+  let previousBtn = document.querySelector(`#${pagination_id} #previousBtn`)
+  previousBtn.disabled = true
+  delete previousBtn.dataset.id
+  if (paging.previousPage != null) {
+    previousBtn.disabled = false
+    previousBtn.dataset.id = paging.previousPage
+  }
+
+  // Pager Select
+  let pageSelect = document.querySelector(`#${pagination_id} #page`)
+
+  while (pageSelect.hasChildNodes()) {
+    pageSelect.removeChild(pageSelect.firstChild)
+  }
+
+  for (let index = 1; index <= paging.lastPage; index++) {
+    let pageOption = document.createElement('option')
+    pageOption.setAttribute('value', index)
+    pageOption.innerHTML = index
+
+    pageSelect.appendChild(pageOption)
+  }
+
+  pageSelect.value = page
+  // End Pager Select
+
+  // Next Button
+  let nextBtn = document.querySelector(`#${pagination_id} #nextBtn`)
+  nextBtn.disabled = true
+  delete nextBtn.dataset.id
+  if (paging.nextPage != null) {
+    nextBtn.disabled = false
+    nextBtn.dataset.id = paging.nextPage
+  }
+}
