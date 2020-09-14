@@ -27,27 +27,39 @@ class UserController extends Controller
         }
     }
 
-    public function index(int $page = 1, string $keyword = null)
+    public function index()
     {
-        $keyword = $keyword ?? $_POST['keyword'];
-        list($list, $info) = $this->userModel->paginate(
-            $page,
-            [['usr_name', 'LIKE', "%{$keyword}%"]],
-            [['usr_name', 'ASC']],
-        );
-        $info['keyword'] = $keyword;
-        $this->pagination($info);
-
         $this->smarty->assign('breadcrumb', [
             ['Master', ''],
             [$this->title, ''],
         ]);
 
         $this->smarty->assign('subtitle', "Daftar {$this->title}");
-        $this->smarty->assign('keyword', $keyword);
-        $this->smarty->assign('list', $list);
 
         $this->smarty->display("{$this->directory}/index.tpl");
+    }
+
+    public function search(int $page = 1, string $keyword = null)
+    {
+        $page = $_POST['page'] ?? 1;
+        $keyword = $_POST['keyword'] ?? null;
+
+        list($list, $info) = $this->userModel->paginate(
+            $page,
+            [['usr_name', 'LIKE', "%{$keyword}%"]],
+            [['usr_name', 'ASC']],
+        );
+        $info['keyword'] = $keyword;
+
+        foreach ($list as $idx => $row) {
+            unset($list[$idx]['usr_password']);
+        }
+
+        echo json_encode([
+            'list' => $list,
+            'info' => $info,
+        ]);
+        exit();
     }
 
     /**
@@ -60,14 +72,8 @@ class UserController extends Controller
     {
         $tag = 'Tambah';
         if (!is_null($id)) {
-            $detail = $this->getDetail($id);
-            $detail['usr_is_master'] =
-                $detail['usr_is_master'] == 1 ? 'checked' : '';
-            $detail['usr_is_package'] =
-                $detail['usr_is_package'] == 1 ? 'checked' : '';
-            $detail['usr_is_report'] =
-                $detail['usr_is_report'] == 1 ? 'checked' : '';
             $tag = 'Ubah';
+            $this->smarty->assign('id', $id);
         }
 
         $this->smarty->assign('breadcrumb', [
@@ -77,9 +83,18 @@ class UserController extends Controller
         ]);
 
         $this->smarty->assign('subtitle', "{$tag} {$this->title}");
-        $this->smarty->assign('detail', $detail);
 
         $this->smarty->display("{$this->directory}/form.tpl");
+    }
+
+    public function detail()
+    {
+        $id = $_POST['id'];
+        $detail = $this->getDetail($id);
+        unset($detail['usr_password']);
+
+        echo json_encode($detail);
+        exit();
     }
 
     private function getDetail($params)

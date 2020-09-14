@@ -9,7 +9,7 @@
   <!-- /.card-header -->
   <!-- form start -->
   <form id="my_form" role="form" method="POST">
-    <input type="hidden" id="id" name="id" value="{$detail.id}" />
+    <input type="hidden" id="id" name="id" value="{$id}" />
     <div class="card-body">
       <div class="form-group row">
         <label for="usr_name" class="col-lg-3 col-sm-4 col-form-label">
@@ -23,7 +23,6 @@
             class="form-control rounded-0"
             id="usr_name"
             name="usr_name"
-            value="{$detail.usr_name}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -42,7 +41,6 @@
             class="form-control rounded-0"
             id="usr_username"
             name="usr_username"
-            value="{$detail.usr_username}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -64,7 +62,6 @@
             class="form-control rounded-0"
             id="usr_password"
             name="usr_password"
-            value=""
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -87,7 +84,6 @@
             data-on-text="YES"
             data-off-text="NO"
             value="1"
-            {$detail.usr_is_master}
           />
         </div>
       </div>
@@ -108,7 +104,6 @@
             data-on-text="YES"
             data-off-text="NO"
             value="1"
-            {$detail.usr_is_package}
           />
         </div>
       </div>
@@ -129,7 +124,6 @@
             data-on-text="YES"
             data-off-text="NO"
             value="1"
-            {$detail.usr_is_report}
           />
         </div>
       </div>
@@ -152,6 +146,11 @@
 <script src="{/literal}{$smarty.const.BASE_URL}{literal}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 <script>
   $(document).ready(function () {
+    let id = document.getElementById('id').value
+    if (id) {
+      getDetail(id)
+    }
+
     $('#btn_submit').click(() => {
       clearErrorMessage()
       save()
@@ -161,6 +160,26 @@
       $(this).bootstrapSwitch('state', $(this).prop('checked'))
     })
   })
+
+  let getDetail = (data_id) => {
+    $.post(
+      `${main_url}/detail`,
+      { id: data_id },
+      (res) => {
+        let switchField = ['usr_is_master', 'usr_is_package', 'usr_is_report']
+        $.each(res, (id, value) => {
+          if (switchField.indexOf(id) < 0) $(`#${id}`).val(value)
+          else {
+            $(`#${id}`).bootstrapSwitch('state', false)
+            if (value == 1) {
+              $(`#${id}`).bootstrapSwitch('state', true)
+            }
+          }
+        })
+      },
+      'JSON'
+    )
+  }
 
   let save = () => {
     $.post(

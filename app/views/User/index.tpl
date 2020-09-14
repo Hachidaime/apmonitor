@@ -1,5 +1,6 @@
 <!-- prettier-ignore -->
 {extends file='Templates/mainlayout.tpl'}
+{include 'Templates/pagination.tpl'}
 
 {block name='content'}
 {assign 'yes' '<span class="text-success">YES</span>'}
@@ -17,26 +18,21 @@
       <div class="card-header bg-gradient-navy rounded-0">
         <h3 class="card-title text-warning">{$subtitle}</h3>
         <div class="card-tools">
-          <form
-            action="{$smarty.const.BASE_URL}/{$smarty.session.ACTIVE.name}"
-            method="post"
-          >
-            <div class="input-group input-group-sm" style="width: 150px;">
-              <input
-                type="text"
-                id="keyword"
-                name="keyword"
-                class="form-control float-right"
-                value="{$keyword}"
-                data-title="Cari Nama User"
-              />
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-default">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input
+              type="text"
+              id="keyword"
+              name="keyword"
+              class="form-control float-right"
+              value="{$keyword}"
+              data-title="Cari Nama User"
+            />
+            <div class="input-group-append">
+              <button type="button" class="btn btn-default" id="searchBtn">
+                <i class="fas fa-search"></i>
+              </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
       <!-- /.card-header -->
@@ -58,48 +54,15 @@
               <th class="align-middle text-center" width="100px">
                 Privilege<br />Laporan
               </th>
-              <th class="align-middle text-center" width="120px">&nbsp;</th>
+              <th class="align-middle text-center" width="130px">&nbsp;</th>
             </tr>
           </thead>
-          <tbody>
-            {section name=outer loop=$list}
-            <tr class="list-row" data-id="{$list[outer].id}">
-              <td class="text-right" scope="row">
-                {$smarty.const.ROWS_PER_PAGE * ($paging.currentPage - 1) +
-                $smarty.section.outer.index + 1}
-              </td>
-              <td>{$list[outer].usr_name}</td>
-              <td>{$list[outer].usr_username}</td>
-              <td class="text-center">
-                {if $list[outer].usr_is_master eq 1} {$yes} {else} {$no} {/if}
-              </td>
-              <td class="text-center">
-                {if $list[outer].usr_is_package eq 1} {$yes} {else} {$no} {/if}
-              </td>
-              <td class="text-center">
-                {if $list[outer].usr_is_report eq 1} {$yes} {else} {$no} {/if}
-              </td>
-              <td>
-                <!-- prettier-ignore -->
-                {include 'Templates/buttons/edit.tpl'}
-                {if $list[outer].id ne $smarty.session.USER.id}
-                {include 'Templates/buttons/remove.tpl'}
-                {/if}
-              </td>
-            </tr>
-            {sectionelse}
-            <tr>
-              <td colspan="5" class="text-center">Data kosong ...</td>
-            </tr>
-            {/section}
-          </tbody>
+          <tbody id="result_data"></tbody>
         </table>
       </div>
       <!-- /.card-body -->
 
-      <div class="card-footer clearfix">
-        {$pager}
-      </div>
+      <div class="card-footer clearfix">{block 'pagination'}{/block}</div>
     </div>
     <!-- /.card -->
   </div>
@@ -107,17 +70,115 @@
 <!-- prettier-ignore -->
 {/block} 
 
-{block 'script'} 
+{block 'script'}
+{block 'paginationJS'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
+    search()
+
     formTooltip('keyword', 'warning', 'top')
 
-    /* Tombol Hapus */
-    $('.btn-delete').click(function () {
-      deleteData($(this).data('id'))
+    $('#searchBtn').click(() => {
+      search()
+    })
+
+    $('#page').change(function () {
+      search(this.value)
+    })
+
+    $('#previousBtn').click(function () {
+      search(this.dataset.id)
+    })
+
+    $('#nextBtn').click(function () {
+      search(this.dataset.id)
     })
   })
+
+  let yesText = '<span class="text-success">YES</span>'
+  let noText = '<span class="text-danger">NO</span>'
+
+  let search = (page = 1) => {
+    let params = {}
+    params['page'] = page
+    params['keyword'] = $('#keyword').val()
+
+    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
+
+    $.post(
+      `${main_url}/search`,
+      params,
+      (res) => {
+        let paging = res.info
+
+        let list = res.list
+        let tBody = document.getElementById('result_data')
+        tBody.innerHTML = ''
+        let tRow = null
+        let no = null,
+          usrUsername = null,
+          usrName = null,
+          userIsMaster = null,
+          userIsPackage = null,
+          userIsReport = null,
+          action = null
+
+        for (let index in list) {
+          no = document.createElement('td')
+          no.classList.add('text-right')
+          no.innerHTML =
+            Number(ROWS_PER_PAGE * (paging.currentPage - 1)) + Number(index) + 1
+
+          usrName = document.createElement('td')
+          usrName.innerHTML = list[index].usr_name
+
+          usrUsername = document.createElement('td')
+          usrUsername.innerHTML = list[index].usr_username
+
+          userIsMaster = document.createElement('td')
+          userIsMaster.innerHTML =
+            list[index].usr_is_master == 1 ? yesText : noText
+
+          userIsPackage = document.createElement('td')
+          userIsPackage.innerHTML =
+            list[index].usr_is_package == 1 ? yesText : noText
+
+          userIsReport = document.createElement('td')
+          userIsReport.innerHTML =
+            list[index].usr_is_report == 1 ? yesText : noText
+
+          let editBtn = createEditBtn(list[index].id)
+          let deleteBtn = createDeleteBtn(list[index].id)
+
+          action = document.createElement('td')
+          action.appendChild(editBtn)
+
+          let sessionUserId = '{/literal}{$smarty.session.USER.id}{literal}'
+          if (list[index].id != sessionUserId) action.appendChild(deleteBtn)
+
+          tRow = document.createElement('tr')
+          tRow.appendChild(no)
+          tRow.appendChild(usrName)
+          tRow.appendChild(usrUsername)
+          tRow.appendChild(userIsMaster)
+          tRow.appendChild(userIsPackage)
+          tRow.appendChild(userIsReport)
+          tRow.appendChild(action)
+
+          tBody.appendChild(tRow)
+        }
+
+        createPagination(page, paging, 'pagination')
+
+        /* Tombol Hapus */
+        $('.btn-delete').click(function () {
+          deleteData($(this).data('id'))
+        })
+      },
+      'JSON'
+    )
+  }
 </script>
 <!-- prettier-ignore -->
 {/literal}
