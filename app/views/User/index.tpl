@@ -3,9 +3,6 @@
 {include 'Templates/pagination.tpl'}
 
 {block name='content'}
-{assign 'yes' '<span class="text-success">YES</span>'}
-<!-- prettier-ignore -->
-{assign 'no' '<span class="text-danger">NO</span>'}
 <div class="row mb-3">
   <div class="col-12">
     {include 'Templates/buttons/add.tpl'}
@@ -96,8 +93,8 @@
     })
   })
 
-  let yesText = '<span class="text-success">YES</span>'
-  let noText = '<span class="text-danger">NO</span>'
+  let yesText = '<i class="fas fa-check-circle text-success"></i>'
+  let noText = '<i class="fas fa-times-circle text-danger"></i>'
 
   let search = (page = 1) => {
     let params = {}
@@ -137,14 +134,17 @@
           usrUsername.innerHTML = list[index].usr_username
 
           userIsMaster = document.createElement('td')
+          userIsMaster.classList.add('text-center')
           userIsMaster.innerHTML =
             list[index].usr_is_master == 1 ? yesText : noText
 
           userIsPackage = document.createElement('td')
+          userIsPackage.classList.add('text-center')
           userIsPackage.innerHTML =
             list[index].usr_is_package == 1 ? yesText : noText
 
           userIsReport = document.createElement('td')
+          userIsReport.classList.add('text-center')
           userIsReport.innerHTML =
             list[index].usr_is_report == 1 ? yesText : noText
 
