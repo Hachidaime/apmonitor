@@ -25,6 +25,7 @@ foreach ($master as $value) {
         ['GET', "/{$route}", "{$controller}Controller::index", $route],
         ['GET', "/{$route}/add", "{$controller}Controller::form"],
         ['GET', "/{$route}/edit/[i:id]?", "{$controller}Controller::form"],
+        ['POST', "/{$route}/detail/[i:id]?", "{$controller}Controller::detail"],
         ['POST', "/{$route}/submit", "{$controller}Controller::submit"],
         ['POST', "/{$route}/search", "{$controller}Controller::search"],
         ['POST', "/{$route}/remove", "{$controller}Controller::remove"],
