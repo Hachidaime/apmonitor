@@ -1,5 +1,6 @@
 <!-- prettier-ignore -->
 {extends file='Templates/mainlayout.tpl'}
+{include 'Templates/pagination.tpl'}
 
 {block name='content'}
 <div class="row mb-3">
@@ -48,34 +49,7 @@
       </div>
       <!-- /.card-body -->
 
-      <div class="card-footer clearfix">
-        <div
-          class="d-flex flex-column flex-sm-row justify-content-between align-items-center"
-          id="pagination"
-        >
-          <span>
-            <strong>Jumlah Data:</strong>
-            <span id="totalRows"></span>
-          </span>
-          <div style="width: 150px;">
-            <div class="input-group">
-              <div class="input-group_prepend">
-                <button class="btn bg-gradient-blue btn-flat" id="previousBtn">
-                  <i class="fas fa-caret-left"></i>
-                </button>
-              </div>
-              <div style="width: 80px;">
-                <select class="custom-select rounded-0" id="page"> </select>
-              </div>
-              <div class="input-group_append">
-                <button class="btn bg-gradient-blue btn-flat" id="nextBtn">
-                  <i class="fas fa-caret-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="card-footer clearfix">{block 'pagination'}{/block}</div>
     </div>
     <!-- /.card -->
   </div>
@@ -83,7 +57,8 @@
 <!-- prettier-ignore -->
 {/block} 
 
-{block 'script'} 
+{block 'script'}
+{block 'paginationJS'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
@@ -94,18 +69,6 @@
     $('#searchBtn').click(() => {
       search()
     })
-
-    $('#page').change(function () {
-      search(this.value)
-    })
-
-    $('#previousBtn').click(function () {
-      search(this.dataset.id)
-    })
-
-    $('#nextBtn').click(function () {
-      search(this.dataset.id)
-    })
   })
 
   let search = (page = 1) => {
@@ -113,7 +76,7 @@
     params['page'] = page
     params['keyword'] = $('#keyword').val()
 
-    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROW_PER_PAGE}{literal}'
+    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
 
     $.post(
       `${main_url}/search`,
@@ -135,7 +98,9 @@
           no = document.createElement('td')
           no.classList.add('text-right')
           no.innerHTML =
-            Number(ROWS_PER_PAGE * (paging.currentPage - 1)) + Number(index) + 1
+            Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
+            Number(index) +
+            1
 
           prgCode = document.createElement('td')
           prgCode.innerHTML = list[index].prg_code
