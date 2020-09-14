@@ -9,7 +9,7 @@
   <!-- /.card-header -->
   <!-- form start -->
   <form id="my_form" role="form" method="POST">
-    <input type="hidden" id="id" name="id" value="{$detail.id}" />
+    <input type="hidden" id="id" name="id" value="{$id}" />
     <div class="card-body">
       <div class="form-group row">
         <label for="prg_code" class="col-lg-3 col-sm-4 col-form-label">
@@ -23,7 +23,6 @@
             class="form-control rounded-0"
             id="prg_code"
             name="prg_code"
-            value="{$detail.prg_code}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -42,7 +41,6 @@
             class="form-control rounded-0"
             id="prg_name"
             name="prg_name"
-            value="{$detail.prg_name}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -60,7 +58,6 @@
             class="form-control rounded-0"
             id="prg_desc"
             name="prg_desc"
-            value="{$detail.prg_desc}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -83,13 +80,31 @@
 {literal}
 <script>
   $(document).ready(function () {
+    let id = document.getElementById('id').value
+    if (id) {
+      getDetail(id)
+    }
+
     $('#btn_submit').click(() => {
       clearErrorMessage()
-      save()
+      saveData()
     })
   })
 
-  let save = () => {
+  let getDetail = (data_id) => {
+    $.post(
+      `${main_url}/detail`,
+      { id: data_id },
+      (res) => {
+        $.each(res, (id, value) => {
+          $(`#${id}`).val(value)
+        })
+      },
+      'JSON'
+    )
+  }
+
+  let saveData = () => {
     $.post(
       `${main_url}/submit`,
       $('#my_form').serialize(),
