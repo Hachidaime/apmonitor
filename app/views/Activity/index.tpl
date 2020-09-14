@@ -1,5 +1,6 @@
 <!-- prettier-ignore -->
 {extends file='Templates/mainlayout.tpl'}
+{include 'Templates/pagination.tpl'}
 
 {block name='content'}
 <div class="row mb-3">
@@ -14,26 +15,21 @@
       <div class="card-header bg-gradient-navy rounded-0">
         <h3 class="card-title text-warning">{$subtitle}</h3>
         <div class="card-tools">
-          <form
-            action="{$smarty.const.BASE_URL}/{$smarty.session.ACTIVE.name}"
-            method="post"
-          >
-            <div class="input-group input-group-sm" style="width: 150px;">
-              <input
-                type="text"
-                id="keyword"
-                name="keyword"
-                class="form-control float-right"
-                value="{$keyword}"
-                data-title="Cari Kode Kegiatan"
-              />
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-default">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input
+              type="text"
+              id="keyword"
+              name="keyword"
+              class="form-control float-right"
+              value="{$keyword}"
+              data-title="Cari Kode Kegiatan"
+            />
+            <div class="input-group-append">
+              <button type="button" class="btn btn-default" id="searchBtn">
+                <i class="fas fa-search"></i>
+              </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
       <!-- /.card-header -->
@@ -53,34 +49,7 @@
       </div>
       <!-- /.card-body -->
 
-      <div class="card-footer clearfix">
-        <div
-          class="d-flex flex-column flex-sm-row justify-content-between align-items-center"
-          id="pagination"
-        >
-          <span>
-            <strong>Jumlah Data:</strong>
-            <span id="totalRows"></span>
-          </span>
-          <div style="width: 150px;">
-            <div class="input-group">
-              <div class="input-group_prepend">
-                <button class="btn bg-gradient-blue btn-flat" id="previousBtn">
-                  <i class="fas fa-caret-left"></i>
-                </button>
-              </div>
-              <div style="width: 80px;">
-                <select class="custom-select rounded-0" id="page"> </select>
-              </div>
-              <div class="input-group_append">
-                <button class="btn bg-gradient-blue btn-flat" id="nextBtn">
-                  <i class="fas fa-caret-right"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="card-footer clearfix">{block 'pagination'}{/block}</div>
     </div>
     <!-- /.card -->
   </div>
@@ -89,6 +58,7 @@
 {/block} 
 
 {block 'script'} 
+{block 'paginationJS'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
@@ -118,7 +88,7 @@
     params['page'] = page
     params['keyword'] = $('#keyword').val()
 
-    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROW_PER_PAGE}{literal}'
+    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
 
     $.post(
       `${main_url}/search`,

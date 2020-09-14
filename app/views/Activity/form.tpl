@@ -9,7 +9,7 @@
   <!-- /.card-header -->
   <!-- form start -->
   <form id="my_form" role="form" method="POST">
-    <input type="hidden" id="id" name="id" value="{$detail.id}" />
+    <input type="hidden" id="id" name="id" value="{$id}" />
     <div class="card-body">
       <div class="form-group row">
         <label for="act_code" class="col-lg-3 col-sm-4 col-form-label">

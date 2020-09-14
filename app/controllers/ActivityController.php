@@ -69,8 +69,8 @@ class ActivityController extends Controller
     {
         $tag = 'Tambah';
         if (!is_null($id)) {
-            $detail = $this->getDetail($id);
             $tag = 'Ubah';
+            $this->smarty->assign('id', $id);
         }
 
         $this->smarty->assign('breadcrumb', [
@@ -80,7 +80,6 @@ class ActivityController extends Controller
         ]);
 
         $this->smarty->assign('subtitle', "{$tag} {$this->title}");
-        $this->smarty->assign('detail', $detail);
 
         $this->smarty->display("{$this->directory}/form.tpl");
     }
