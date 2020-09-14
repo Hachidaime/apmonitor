@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\models\UserModel;
 
 /**
  * @desc this class will handle Uang controller
@@ -19,7 +20,7 @@ class UserController extends Controller
         $this->setControllerAttribute(__CLASS__);
         $this->smarty->assign('title', $this->title);
 
-        $this->userModel = $this->model("{$this->name}Model");
+        $this->userModel = new UserModel();
 
         if (!$_SESSION['USER']['usr_is_master']) {
             header('Location:' . BASE_URL . '/403');
