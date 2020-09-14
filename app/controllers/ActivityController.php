@@ -28,27 +28,35 @@ class ActivityController extends Controller
         }
     }
 
-    public function index(int $page = 1, string $keyword = null)
+    public function index()
     {
-        $keyword = $keyword ?? $_POST['keyword'];
-        list($list, $info) = $this->activityModel->paginate(
-            $page,
-            [['act_code', 'LIKE', "%{$keyword}%"]],
-            [['act_code', 'ASC']],
-        );
-        $info['keyword'] = $keyword;
-        $this->pagination($info);
-
         $this->smarty->assign('breadcrumb', [
             ['Master', ''],
             [$this->title, ''],
         ]);
 
         $this->smarty->assign('subtitle', "Daftar {$this->title}");
-        $this->smarty->assign('keyword', $keyword);
-        $this->smarty->assign('list', $list);
 
         $this->smarty->display("{$this->directory}/index.tpl");
+    }
+
+    public function search(int $page = 1, string $keyword = null)
+    {
+        $page = $_POST['page'] ?? 1;
+        $keyword = $_POST['keyword'] ?? null;
+
+        list($list, $info) = $this->activityModel->paginate(
+            $page,
+            [['act_code', 'LIKE', "%{$keyword}%"]],
+            [['act_code', 'ASC']],
+        );
+        $info['keyword'] = $keyword;
+
+        echo json_encode([
+            'list' => $list,
+            'info' => $info,
+        ]);
+        exit();
     }
 
     /**
@@ -75,6 +83,15 @@ class ActivityController extends Controller
         $this->smarty->assign('detail', $detail);
 
         $this->smarty->display("{$this->directory}/form.tpl");
+    }
+
+    public function detail()
+    {
+        $id = $_POST['id'];
+        $detail = $this->getDetail($id);
+
+        echo json_encode($detail);
+        exit();
     }
 
     private function getDetail($params)

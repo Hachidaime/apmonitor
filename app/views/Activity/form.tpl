@@ -23,7 +23,6 @@
             class="form-control rounded-0"
             id="act_code"
             name="act_code"
-            value="{$detail.act_code}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -42,7 +41,6 @@
             class="form-control rounded-0"
             id="act_name"
             name="act_name"
-            value="{$detail.act_name}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -60,7 +58,6 @@
             class="form-control rounded-0"
             id="act_desc"
             name="act_desc"
-            value="{$detail.act_desc}"
             autocomplete="off"
           />
           <div class="invalid-feedback"></div>
@@ -83,11 +80,29 @@
 {literal}
 <script>
   $(document).ready(function () {
+    let id = document.getElementById('id').value
+    if (id) {
+      getDetail(id)
+    }
+
     $('#btn_submit').click(() => {
       clearErrorMessage()
       save()
     })
   })
+
+  let getDetail = (data_id) => {
+    $.post(
+      `${main_url}/detail`,
+      { id: data_id },
+      (res) => {
+        $.each(res, (id, value) => {
+          $(`#${id}`).val(value)
+        })
+      },
+      'JSON'
+    )
+  }
 
   let save = () => {
     $.post(

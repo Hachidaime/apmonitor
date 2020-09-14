@@ -48,34 +48,38 @@
               <th width="120px">&nbsp;</th>
             </tr>
           </thead>
-          <tbody>
-            {section name=outer loop=$list}
-            <tr>
-              <td>
-                {$smarty.const.ROWS_PER_PAGE * ($paging.currentPage - 1) +
-                $smarty.section.outer.index + 1}
-              </td>
-              <td>{$list[outer].act_code}</td>
-              <td>{$list[outer].act_name}</td>
-              <td>{$list[outer].act_desc}</td>
-              <td class="text-right">
-                <!-- prettier-ignore -->
-                {include 'Templates/buttons/edit.tpl'}
-                {include 'Templates/buttons/remove.tpl'}
-              </td>
-            </tr>
-            {sectionelse}
-            <tr>
-              <td colspan="5" class="text-center">Data kosong ...</td>
-            </tr>
-            {/section}
-          </tbody>
+          <tbody id="result_data"></tbody>
         </table>
       </div>
       <!-- /.card-body -->
 
       <div class="card-footer clearfix">
-        {$pager}
+        <div
+          class="d-flex flex-column flex-sm-row justify-content-between align-items-center"
+          id="pagination"
+        >
+          <span>
+            <strong>Jumlah Data:</strong>
+            <span id="totalRows"></span>
+          </span>
+          <div style="width: 150px;">
+            <div class="input-group">
+              <div class="input-group_prepend">
+                <button class="btn bg-gradient-blue btn-flat" id="previousBtn">
+                  <i class="fas fa-caret-left"></i>
+                </button>
+              </div>
+              <div style="width: 80px;">
+                <select class="custom-select rounded-0" id="page"> </select>
+              </div>
+              <div class="input-group_append">
+                <button class="btn bg-gradient-blue btn-flat" id="nextBtn">
+                  <i class="fas fa-caret-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <!-- /.card -->
@@ -88,13 +92,92 @@
 {literal}
 <script>
   $(document).ready(function () {
+    search()
+
     formTooltip('keyword', 'warning', 'top')
 
-    /* Tombol Hapus */
-    $('.btn-delete').click(function () {
-      deleteData($(this).data('id'))
+    $('#searchBtn').click(() => {
+      search()
+    })
+
+    $('#page').change(function () {
+      search(this.value)
+    })
+
+    $('#previousBtn').click(function () {
+      search(this.dataset.id)
+    })
+
+    $('#nextBtn').click(function () {
+      search(this.dataset.id)
     })
   })
+
+  let search = (page = 1) => {
+    let params = {}
+    params['page'] = page
+    params['keyword'] = $('#keyword').val()
+
+    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROW_PER_PAGE}{literal}'
+
+    $.post(
+      `${main_url}/search`,
+      params,
+      (res) => {
+        let paging = res.info
+
+        let list = res.list
+        let tBody = document.getElementById('result_data')
+        tBody.innerHTML = ''
+        let tRow = null
+        let no = null,
+          actCode = null,
+          actName = null,
+          actDesc = null,
+          action = null
+
+        for (let index in list) {
+          no = document.createElement('td')
+          no.classList.add('text-right')
+          no.innerHTML =
+            Number(ROWS_PER_PAGE * (paging.currentPage - 1)) + Number(index) + 1
+
+          actCode = document.createElement('td')
+          actCode.innerHTML = list[index].act_code
+
+          actName = document.createElement('td')
+          actName.innerHTML = list[index].act_name
+
+          actDesc = document.createElement('td')
+          actDesc.innerHTML = list[index].act_desc
+
+          let editBtn = createEditBtn(list[index].id)
+          let deleteBtn = createDeleteBtn(list[index].id)
+
+          action = document.createElement('td')
+          action.appendChild(editBtn)
+          action.appendChild(deleteBtn)
+
+          tRow = document.createElement('tr')
+          tRow.appendChild(no)
+          tRow.appendChild(actCode)
+          tRow.appendChild(actName)
+          tRow.appendChild(actDesc)
+          tRow.appendChild(action)
+
+          tBody.appendChild(tRow)
+        }
+
+        createPagination(page, paging, 'pagination')
+
+        /* Tombol Hapus */
+        $('.btn-delete').click(function () {
+          deleteData($(this).data('id'))
+        })
+      },
+      'JSON'
+    )
+  }
 </script>
 <!-- prettier-ignore -->
 {/literal}
