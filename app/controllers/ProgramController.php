@@ -27,7 +27,7 @@ class ProgramController extends Controller
         }
     }
 
-    public function index(int $page = 1, string $keyword = null)
+    public function index()
     {
         $this->smarty->assign('breadcrumb', [
             ['Master', ''],
