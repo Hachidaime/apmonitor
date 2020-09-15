@@ -65,6 +65,12 @@ class ProgramController extends Controller
      */
     public function form(int $id = null)
     {
+        list(, $count) = $this->programModel->singlearray($id);
+        if (!$count) {
+            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
+            header('Location: ' . BASE_URL . "/{$this->lowerName}");
+        }
+
         $tag = 'Tambah';
         if (!is_null($id)) {
             $tag = 'Ubah';
@@ -93,11 +99,7 @@ class ProgramController extends Controller
 
     private function getDetail($params)
     {
-        list($detail, $count) = $this->programModel->singlearray($params);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('X-PHP-Response-Code: 404', true, 404);
-        }
+        list($detail) = $this->programModel->singlearray($params);
         return $detail;
     }
 
