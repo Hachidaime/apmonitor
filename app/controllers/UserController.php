@@ -70,6 +70,12 @@ class UserController extends Controller
      */
     public function form(int $id = null)
     {
+        list(, $count) = $this->userModel->singlearray($id);
+        if (!$count) {
+            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
+            header('Location: ' . BASE_URL . "/{$this->lowerName}");
+        }
+
         $tag = 'Tambah';
         if (!is_null($id)) {
             $tag = 'Ubah';
@@ -89,24 +95,11 @@ class UserController extends Controller
 
     public function detail()
     {
-        $id = $_POST['id'];
-        $detail = $this->getDetail($id);
+        list($detail) = $this->userModel->singlearray($_POST['id']);
         unset($detail['usr_password']);
 
         echo json_encode($detail);
         exit();
-    }
-
-    private function getDetail($params)
-    {
-        list($detail, $count) = $this->userModel->singlearray([
-            ['id', $params],
-        ]);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
-        }
-        return $detail;
     }
 
     public function submit()
@@ -130,7 +123,7 @@ class UserController extends Controller
             }
 
             if ($result) {
-                $detail = $this->getDetail($id);
+                list($detail) = $this->userModel->singlearray($id);
 
                 if ($id == $_SESSION['USER']['id']) {
                     $this->setUserSession($detail);
