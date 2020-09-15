@@ -1,5 +1,6 @@
 <!-- prettier-ignore -->
-{extends file='Templates/mainlayout.tpl'} 
+{extends file='Templates/mainlayout.tpl'}
+{include 'PackageDetail/index.tpl'}
 
 {block name='content'}
 <div class="card rounded-0">
@@ -105,7 +106,7 @@
         </div>
       </div>
 
-      {include 'PackageDetail/index.tpl'}
+      {block 'detailList'}{/block}
     </div>
     <!-- /.card-body -->
 
@@ -120,10 +121,11 @@
 {/block} 
 
 {block 'script'} 
+{block 'detailJS'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
-    let id = document.getElementById('id').value
+    let id = document.querySelector('#my_form #id').value
     if (id) {
       getDetail(id)
     }
