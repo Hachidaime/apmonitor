@@ -43,11 +43,11 @@
           <thead>
             <tr>
               <th class="align-middle text-right" width="50px">#</th>
-              <th class="align-middle text-center" width="120px">
-                Tahun<br />Anggaran
+              <th class="align-middle text-center" width="*">
+                Tahun Anggaran
               </th>
-              <th class="align-middle text-center" width="*">Program</th>
-              <th class="align-middle text-center" width="*">Kegiatan</th>
+              <th class="align-middle text-center" width="400px">Program</th>
+              <th class="align-middle text-center" width="400px">Kegiatan</th>
               <th width="130px">&nbsp;</th>
             </tr>
           </thead>
@@ -111,6 +111,7 @@
             1
 
           pkgFiscalYear = document.createElement('td')
+          pkgFiscalYear.classList.add('text-center')
           pkgFiscalYear.innerHTML = list[index].pkg_fiscal_year
 
           prgName = document.createElement('td')
