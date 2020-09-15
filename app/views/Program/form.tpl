@@ -101,9 +101,7 @@
         })
       },
       'JSON'
-    ).fail(function (error) {
-      if (error.status == 404) window.location = main_url
-    })
+    )
   }
 
   let saveData = () => {
