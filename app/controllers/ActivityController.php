@@ -67,6 +67,12 @@ class ActivityController extends Controller
      */
     public function form(int $id = null)
     {
+        list(, $count) = $this->activityModel->singlearray($id);
+        if (!$count) {
+            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
+            header('Location: ' . BASE_URL . "/{$this->lowerName}");
+        }
+
         $tag = 'Tambah';
         if (!is_null($id)) {
             $tag = 'Ubah';
@@ -86,21 +92,10 @@ class ActivityController extends Controller
 
     public function detail()
     {
-        $id = $_POST['id'];
-        $detail = $this->getDetail($id);
+        list($detail, $count) = $this->activityModel->singlearray($_POST['id']);
 
         echo json_encode($detail);
         exit();
-    }
-
-    private function getDetail($params)
-    {
-        list($detail, $count) = $this->activityModel->singlearray($params);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
-        }
-        return $detail;
     }
 
     public function submit()
