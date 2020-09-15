@@ -95,13 +95,15 @@
     $.post(
       `${main_url}/detail`,
       { id: data_id },
-      (res) => {
+      function (res) {
         $.each(res, (id, value) => {
           $(`#${id}`).val(value)
         })
       },
       'JSON'
-    )
+    ).fail(function (error) {
+      if (error.status == 404) window.location = main_url
+    })
   }
 
   let saveData = () => {

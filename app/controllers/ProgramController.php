@@ -49,7 +49,6 @@ class ProgramController extends Controller
             [['prg_code', 'LIKE', "%{$keyword}%"]],
             [['prg_code', 'ASC']],
         );
-        $info['keyword'] = $keyword;
 
         echo json_encode([
             'list' => $list,
@@ -97,7 +96,7 @@ class ProgramController extends Controller
         list($detail, $count) = $this->programModel->singlearray($params);
         if (!$count) {
             Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
+            header('X-PHP-Response-Code: 404', true, 404);
         }
         return $detail;
     }
