@@ -90,17 +90,10 @@ class ProgramController extends Controller
 
     public function detail()
     {
-        $id = $_POST['id'];
-        $detail = $this->getDetail($id);
+        list($detail) = $this->programModel->singlearray($_POST['id']);
 
         echo json_encode($detail);
         exit();
-    }
-
-    private function getDetail($params)
-    {
-        list($detail) = $this->programModel->singlearray($params);
-        return $detail;
     }
 
     public function submit()
