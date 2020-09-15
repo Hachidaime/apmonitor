@@ -1,5 +1,6 @@
 <!-- prettier-ignore -->
 {extends file='Templates/mainlayout.tpl'}
+{include 'Templates/pagination.tpl'}
 
 {block name='content'}
 <div class="row mb-3">
@@ -38,7 +39,7 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
-        <table class="table table-hover table-bordered table-sm text-nowrap">
+        <table class="table table-hover table-bordered table-sm">
           <thead>
             <tr>
               <th class="align-middle text-right" width="50px">#</th>
@@ -47,38 +48,15 @@
               </th>
               <th class="align-middle text-center" width="*">Program</th>
               <th class="align-middle text-center" width="*">Kegiatan</th>
-              <th width="120px">&nbsp;</th>
+              <th width="130px">&nbsp;</th>
             </tr>
           </thead>
-          <tbody>
-            {section name=outer loop=$list}
-            <tr>
-              <td class="text-right" scope="row">
-                {$smarty.const.ROWS_PER_PAGE * ($paging.currentPage - 1) +
-                $smarty.section.outer.index + 1}
-              </td>
-              <td class="text-center">{$list[outer].pkg_fiscal_year}</td>
-              <td>{$list[outer].prg_code}</td>
-              <td>{$list[outer].act_code}</td>
-              <td>
-                <!-- prettier-ignore -->
-                {include 'Templates/buttons/edit.tpl'}
-                {include 'Templates/buttons/remove.tpl'}
-              </td>
-            </tr>
-            {sectionelse}
-            <tr>
-              <td colspan="5" class="text-center">Data kosong ...</td>
-            </tr>
-            {/section}
-          </tbody>
+          <tbody id="result_data"></tbody>
         </table>
       </div>
       <!-- /.card-body -->
 
-      <div class="card-footer clearfix">
-        {$pager}
-      </div>
+      <div class="card-footer clearfix">{block 'pagination'}{/block}</div>
     </div>
     <!-- /.card -->
   </div>
@@ -87,9 +65,12 @@
 {/block} 
 
 {block 'script'} 
+{block 'paginationJS'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
+    search()
+
     formTooltip('keyword', 'warning', 'top')
 
     /* Tombol Hapus */
@@ -97,6 +78,74 @@
       deleteData($(this).data('id'))
     })
   })
+
+  let search = (page = 1) => {
+    let params = {}
+    params['page'] = page
+    params['keyword'] = $('#keyword').val()
+
+    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
+
+    $.post(
+      `${main_url}/search`,
+      params,
+      (res) => {
+        let paging = res.info
+
+        let list = res.list
+        let tBody = document.getElementById('result_data')
+        tBody.innerHTML = ''
+        let tRow = null
+        let no = null,
+          pkgFiscalYear = null,
+          prgName = null,
+          actName = null,
+          action = null
+
+        for (let index in list) {
+          no = document.createElement('td')
+          no.classList.add('text-right')
+          no.innerHTML =
+            Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
+            Number(index) +
+            1
+
+          pkgFiscalYear = document.createElement('td')
+          pkgFiscalYear.innerHTML = list[index].pkg_fiscal_year
+
+          prgName = document.createElement('td')
+          prgName.innerHTML = list[index].prg_name
+
+          actName = document.createElement('td')
+          actName.innerHTML = list[index].act_name
+
+          let editBtn = createEditBtn(list[index].id)
+          let deleteBtn = createDeleteBtn(list[index].id)
+
+          action = document.createElement('td')
+          action.appendChild(editBtn)
+          action.appendChild(deleteBtn)
+
+          tRow = document.createElement('tr')
+          tRow.appendChild(no)
+          tRow.appendChild(pkgFiscalYear)
+          tRow.appendChild(prgName)
+          tRow.appendChild(actName)
+          tRow.appendChild(action)
+
+          tBody.appendChild(tRow)
+        }
+
+        createPagination(page, paging, 'pagination')
+
+        /* Tombol Hapus */
+        $('.btn-delete').click(function () {
+          deleteData($(this).data('id'))
+        })
+      },
+      'JSON'
+    )
+  }
 </script>
 <!-- prettier-ignore -->
 {/literal}

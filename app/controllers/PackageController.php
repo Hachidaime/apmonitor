@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\helper\Functions;
 use app\models\ActivityModel;
 use app\models\PackageModel;
 use app\models\ProgramModel;
@@ -30,9 +31,43 @@ class PackageController extends Controller
         }
     }
 
-    public function index(int $page = 1, string $keyword = null)
+    public function index()
     {
-        $keyword = $keyword ?? $_POST['keyword'];
+        $this->smarty->assign('breadcrumb', [
+            ['Master', ''],
+            [$this->title, ''],
+        ]);
+
+        $this->smarty->assign('subtitle', "Daftar {$this->title}");
+
+        $this->smarty->display("{$this->directory}/index.tpl");
+    }
+
+    public function search(int $page = 1, string $keyword = null)
+    {
+        $page = $_POST['page'] ?? 1;
+        $keyword = $_POST['keyword'] ?? null;
+
+        $programModel = new ProgramModel();
+        list($program) = $programModel->multiarray(null, [['prg_code', 'ASC']]);
+
+        $programOptions = Functions::listToOptions(
+            $program,
+            'prg_code',
+            'prg_name',
+        );
+
+        $activityModel = new ActivityModel();
+        list($activity) = $activityModel->multiarray(null, [
+            ['act_code', 'ASC'],
+        ]);
+
+        $activityOptions = Functions::listToOptions(
+            $activity,
+            'act_code',
+            'act_name',
+        );
+
         list($list, $info) = $this->packageModel->paginate(
             $page,
             [['pkg_fiscal_year', 'LIKE', "%{$keyword}%"]],
@@ -42,18 +77,17 @@ class PackageController extends Controller
                 ['act_code', 'ASC'],
             ],
         );
-        $info['keyword'] = $keyword;
-        $this->pagination($info);
 
-        $this->smarty->assign('breadcrumb', [
-            ['Master', ''],
-            [$this->title, ''],
+        foreach ($list as $idx => $row) {
+            $list[$idx]['prg_name'] = $programOptions[$row['prg_code']];
+            $list[$idx]['act_name'] = $activityOptions[$row['act_code']];
+        }
+
+        echo json_encode([
+            'list' => $list,
+            'info' => $info,
         ]);
-
-        $this->smarty->assign('subtitle', "Daftar {$this->title}");
-        $this->smarty->assign('keyword', $keyword);
-        $this->smarty->assign('list', $list);
-        $this->smarty->display("{$this->directory}/index.tpl");
+        exit();
     }
 
     /**
@@ -64,14 +98,17 @@ class PackageController extends Controller
      */
     public function form(int $id = null)
     {
-        $tag = 'Tambah';
-        if (!is_null($id)) {
-            $detail = $this->getDetail([['id', $id]]);
-            $tag = 'Ubah';
+        list(, $count) = $this->packageModel->singlearray($id);
+        if (!$count) {
+            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
+            header('Location: ' . BASE_URL . "/{$this->lowerName}");
         }
 
-        $detail['pkg_fiscal_year'] =
-            $detail['pkg_fiscal_year'] ?? $_SESSION['FISCAL_YEAR'];
+        $tag = 'Tambah';
+        if (!is_null($id)) {
+            $tag = 'Ubah';
+            $this->smarty->assign('id', $id);
+        }
 
         $programModel = new ProgramModel();
         list($program) = $programModel->multiarray(null, [['prg_code', 'ASC']]);
@@ -90,18 +127,15 @@ class PackageController extends Controller
         $this->smarty->assign('subtitle', "{$tag} {$this->title}");
         $this->smarty->assign('program', $program);
         $this->smarty->assign('activity', $activity);
-        $this->smarty->assign('detail', $detail);
         $this->smarty->display("{$this->directory}/form.tpl");
     }
 
-    private function getDetail($params)
+    public function detail()
     {
-        list($detail, $count) = $this->packageModel->singlearray($params);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
-        }
-        return $detail;
+        list($detail) = $this->packageModel->singlearray($_POST['id']);
+
+        echo json_encode($detail);
+        exit();
     }
 
     public function submit()
