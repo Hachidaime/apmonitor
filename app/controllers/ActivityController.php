@@ -67,14 +67,18 @@ class ActivityController extends Controller
      */
     public function form(int $id = null)
     {
-        list(, $count) = $this->activityModel->singlearray($id);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
-        }
-
         $tag = 'Tambah';
         if (!is_null($id)) {
+            list(, $count) = $this->activityModel->singlearray($id);
+            if (!$count) {
+                Flasher::setFlash(
+                    'Data tidak ditemukan!',
+                    $this->name,
+                    'error',
+                );
+                header('Location: ' . BASE_URL . "/{$this->lowerName}");
+            }
+
             $tag = 'Ubah';
             $this->smarty->assign('id', $id);
         }
