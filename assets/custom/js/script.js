@@ -10,6 +10,9 @@ $(document).ready(function () {
   $('[data-toggle="tooltip"]').bstooltip()
 })
 
+let yesText = /* html */ `<i class="fas fa-check-circle text-success"></i>`
+let noText = /* html */ `<i class="fas fa-times-circle text-danger"></i>`
+
 /**
  * @description fungsi ini untuk menampilkan flash data
  * @function flash()
