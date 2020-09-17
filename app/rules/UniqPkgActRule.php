@@ -5,7 +5,7 @@ namespace app\rules;
 use Rakit\Validation\Rule;
 use app\models\PackageModel;
 
-class UniquePackageRule extends Rule
+class UniqPkgActRule extends Rule
 {
     protected $message = ':attribute :value has been used';
 
