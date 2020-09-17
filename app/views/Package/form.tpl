@@ -1,6 +1,7 @@
 <!-- prettier-ignore -->
 {extends file='Templates/mainlayout.tpl'}
 {include 'PackageDetail/index.tpl'}
+{include 'PackageDetail/form.tpl'}
 
 {block name='content'}
 <div class="card rounded-0">
@@ -118,9 +119,12 @@
   </form>
 </div>
 <!-- prettier-ignore -->
+{block 'detailForm'}{/block}
 {/block} 
+{block 'script'}
 
-{block 'script'} 
+<!-- prettier-ignore -->
+{block 'detailFormJS'}{/block}
 {block 'detailJS'}{/block}
 {literal}
 <script>
@@ -166,10 +170,10 @@
       { id: data_id },
       function (res) {
         $.each(res, (id, value) => {
-          $(`#${id}`).val(value)
+          $(`#my_form #${id}`).val(value)
         })
-        $('#prg_code').change()
-        $('#act_code').change()
+        $('#my_form #prg_code').change()
+        $('#my_form #act_code').change()
       },
       'JSON'
     )

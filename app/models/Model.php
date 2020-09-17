@@ -130,6 +130,7 @@ class Model
             $result = $this->db->insert($this->table, $data);
         }
 
+        // var_dump($this->db);
         return $result;
     }
 

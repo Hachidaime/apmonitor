@@ -4,7 +4,9 @@ use app\controllers\Controller;
 use app\helper\Flasher;
 use app\helper\Functions;
 use app\models\ActivityModel;
+use app\models\PackageDetailModel;
 use app\models\PackageModel;
+use app\models\PackageSessionModel;
 use app\models\ProgramModel;
 
 /**
@@ -108,6 +110,10 @@ class PackageController extends Controller
         if (!is_null($id)) {
             $tag = 'Ubah';
             $this->smarty->assign('id', $id);
+        } else {
+            $packageSessionModel = new PackageSessionModel();
+            $pkgs_id = $packageSessionModel->getPackageSessionId();
+            $_SESSION['PKGS_ID'] = $pkgs_id;
         }
 
         $programModel = new ProgramModel();
@@ -133,7 +139,12 @@ class PackageController extends Controller
     public function detail()
     {
         list($detail) = $this->packageModel->singlearray($_POST['id']);
-
+        if (!empty($detail['pkgs_id'])) {
+            $_SESSION['PKGS_ID'] = $detail['pkgs_id'];
+        } else {
+            $packageSessionModel = new PackageSessionModel();
+            $_SESSION['PKGS_ID'] = $packageSessionModel->getPackageSessionId();
+        }
         echo json_encode($detail);
         exit();
     }
@@ -141,6 +152,7 @@ class PackageController extends Controller
     public function submit()
     {
         $data = $_POST;
+        $data['pkgs_id'] = $_SESSION['PKGS_ID'];
         if ($this->validate($data)) {
             $result = $this->packageModel->save($data);
             if ($data['id'] > 0) {
@@ -152,6 +164,12 @@ class PackageController extends Controller
             }
 
             if ($result) {
+                $packageDetailModel = new PackageDetailModel();
+                $packageDetailModel->db->update(
+                    $packageDetailModel->getTable(),
+                    ['pkg_id' => $id],
+                    [['pkgs_id', $data['pkgs_id']]],
+                );
                 Flasher::setFlash(
                     "Berhasil {$tag} {$this->title}.",
                     $this->name,
