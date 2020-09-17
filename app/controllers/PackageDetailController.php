@@ -3,6 +3,7 @@
 use app\controllers\Controller;
 use app\helper\Flasher;
 use app\models\PackageDetailModel;
+use app\models\PackageModel;
 
 class PackageDetailController extends Controller
 {
@@ -18,12 +19,15 @@ class PackageDetailController extends Controller
         }
     }
 
-    public function index()
+    public function search()
     {
-        list($list) = $this->packageDetailModel->get(
-            [['pkgs_id', $_POST['pkgs_id']]],
-            [['pkgd_no', 'ASC']],
-        );
+        $packageModel = new PackageModel();
+        list($detail, $dcount) = $packageModel->singlearray($_POST['pkg_id']);
+
+        list($list, $lcount) = $this->packageDetailModel->multiarray([
+            ['pkg_id', $detail['id']],
+            ['pkgs_id', $detail['pkgs_id']],
+        ]);
 
         echo json_encode($list);
         exit();
@@ -53,11 +57,6 @@ class PackageDetailController extends Controller
             }
 
             if ($result) {
-                // Flasher::setFlash(
-                //     "Berhasil {$tag} {$this->title}.",
-                //     $this->name,
-                //     'success',
-                // );
                 $this->writeLog(
                     "{$tag} {$this->title}",
                     "{$tag} {$this->title} [{$id}] berhasil.",

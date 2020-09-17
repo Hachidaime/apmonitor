@@ -157,6 +157,7 @@
         } else {
           flash(res.msg, 'success')
           $('#detailFormModal').modal('hide')
+          detailSearch()
         }
       },
       'JSON'
