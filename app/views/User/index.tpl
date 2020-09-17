@@ -34,7 +34,7 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
-        <table class="table table-hover table-bordered table-sm text-nowrap">
+        <table class="table table-bordered table-sm text-nowrap">
           <thead>
             <tr>
               <th class="align-middle text-right" width="50px">#</th>
@@ -92,9 +92,6 @@
       search(this.dataset.id)
     })
   })
-
-  let yesText = '<i class="fas fa-check-circle text-success"></i>'
-  let noText = '<i class="fas fa-times-circle text-danger"></i>'
 
   let search = (page = 1) => {
     let params = {}
