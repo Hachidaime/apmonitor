@@ -5,7 +5,8 @@ use PDO;
 use Rakit\Validation\Validator;
 use app\rules\UniqueRule;
 use app\rules\LoginRule;
-use app\rules\UniquePackageRule;
+use app\rules\UniqPkgActRule;
+use app\rules\UniqPkgdNoRule;
 use app\helper\Flasher;
 use app\helper\Functions;
 
@@ -57,10 +58,8 @@ class Controller
         );
         $this->validator->addValidator('unique', new UniqueRule($pdo));
         $this->validator->addValidator('login', new LoginRule());
-        $this->validator->addValidator(
-            'unique_package',
-            new UniquePackageRule(),
-        );
+        $this->validator->addValidator('uniq_pkg_act', new UniqPkgActRule());
+        $this->validator->addValidator('uniq_pkgd_no', new UniqPkgdNoRule());
 
         $this->smarty = &$smarty;
 

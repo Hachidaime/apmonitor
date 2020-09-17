@@ -199,7 +199,7 @@ class PackageController extends Controller
         $validation = $this->validator->make($data, [
             'pkg_fiscal_year' => 'required|digits:4',
             'prg_code' => 'required',
-            'act_code' => "required|unique_package:{$data['pkg_fiscal_year']},{$data['prg_code']},{$data['id']}",
+            'act_code' => "required|uniq_pkg_act:{$data['pkg_fiscal_year']},{$data['prg_code']},{$data['id']}",
         ]);
 
         $validation->setAliases([
@@ -210,7 +210,7 @@ class PackageController extends Controller
 
         $validation->setMessages([
             'required' => '<strong>:attribute</strong> harus diisi.',
-            'act_code:unique_package' =>
+            'act_code:uniq_pkg_act' =>
                 '<strong>Program</strong> dan <strong>:attribute</strong> sudah ada di database.',
             'pkg_fiscal_year:digits' =>
                 'Format <strong>:attribute</strong> salah.',

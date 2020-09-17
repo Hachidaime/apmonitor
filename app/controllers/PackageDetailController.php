@@ -78,7 +78,7 @@ class PackageDetailController extends Controller
     public function validate($data)
     {
         $validation = $this->validator->make($data, [
-            'pkgd_no' => 'required',
+            'pkgd_no' => "required|uniq_pkgd_no:{$data['pkgs_id']},{$data['id']}",
             'pkgd_name' => 'required',
             'pkgd_period_type' => 'required',
         ]);
@@ -91,6 +91,7 @@ class PackageDetailController extends Controller
 
         $validation->setMessages([
             'required' => '<strong>:attribute</strong> harus diisi.',
+            'pkgd_no:uniq_pkgd_no' => 'Data sudah ada di database.',
         ]);
 
         $validation->validate();
