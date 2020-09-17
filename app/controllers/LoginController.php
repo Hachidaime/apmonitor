@@ -53,11 +53,13 @@ class LoginController extends Controller
     private function validate()
     {
         $validation = $this->validator->make($_POST, [
+            'fiscal_year' => 'required',
             'usr_username' => 'required',
             'usr_password' => 'required|login:' . $_POST['usr_username'],
         ]);
 
         $validation->setAliases([
+            'fiscal_year' => 'Tahun Anggaran',
             'usr_username' => 'Username',
             'usr_password' => 'Password',
         ]);

@@ -1,6 +1,14 @@
 <!-- prettier-ignore -->
 {extends 'Templates/blank.tpl'}
 
+{block 'style'}
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
+  rel="stylesheet"
+/>
+<!-- prettier-ignore -->
+{/block}
+
 {block 'content'}
 <div class="login-box">
   <div class="login-logo">
@@ -19,13 +27,14 @@
       >
         <div class="form-group">
           <label for="fiscal_year">Tahun Anggaran</label>
-          <select class="custom-select" id="fiscal_year" name="fiscal_year">
-            <option value="2020">2020</option>
-            <option value="2021">2021</option>
-            <option value="2022">2022</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-          </select>
+          <input
+            type="text"
+            class="form-control rounded-0"
+            id="fiscal_year"
+            name="fiscal_year"
+            autocomplete="off"
+            autofocus
+          />
           <div class="invalid-feedback"></div>
         </div>
 
@@ -76,8 +85,19 @@
 
 {block 'script'}
 {literal}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <script>
   $(document).ready(function () {
+    $('#fiscal_year').datepicker({
+      format: 'yyyy', // Notice the Extra space at the beginning
+      viewMode: 'years',
+      minViewMode: 'years',
+      startView: 'decade',
+      minView: 'decade',
+      viewSelect: 'decade',
+      autoclose: true,
+    })
+
     $('#btn_login').click(() => {
       let data = $('#login_form').serialize()
       let url = '{/literal}{$smarty.const.BASE_URL}{literal}/login/submit'
