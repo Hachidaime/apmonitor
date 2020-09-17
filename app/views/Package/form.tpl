@@ -3,6 +3,13 @@
 {include 'PackageDetail/index.tpl'}
 {include 'PackageDetail/form.tpl'}
 
+{block 'style'}
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
+  rel="stylesheet"
+/>
+<!-- prettier-ignore -->
+{/block}
 {block name='content'}
 <div class="card rounded-0">
   <div class="card-header bg-gradient-navy rounded-0">
@@ -123,6 +130,7 @@
 {/block} 
 {block 'script'}
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <!-- prettier-ignore -->
 {block 'detailFormJS'}{/block}
 {block 'detailJS'}{/block}
@@ -133,6 +141,16 @@
     if (id) {
       getDetail(id)
     }
+
+    $('#pkg_fiscal_year').datepicker({
+      format: 'yyyy', // Notice the Extra space at the beginning
+      viewMode: 'years',
+      minViewMode: 'years',
+      startView: 'decade',
+      minView: 'decade',
+      viewSelect: 'decade',
+      autoclose: true,
+    })
 
     $('#prg_code')
       .change(function () {
