@@ -26,6 +26,11 @@
       rel="stylesheet"
       href="{$smarty.const.BASE_URL}/assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css"
     />
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link
+      rel="stylesheet"
+      href="{$smarty.const.BASE_URL}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
+    />
     <!-- overlayScrollbars -->
     <link
       rel="stylesheet"
@@ -94,6 +99,9 @@
     </script>
     <!-- Bootstrap 4 -->
     <script src="{$smarty.const.BASE_URL}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{$smarty.const.BASE_URL}/assets/plugins/moment/moment.min.js"></script>
+    <script src="{$smarty.const.BASE_URL}/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="{$smarty.const.BASE_URL}/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
     <!-- overlayScrollbars -->
