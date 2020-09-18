@@ -19,10 +19,10 @@
           <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
-        <div class="col-lg-2 col-sm-3 col-8">
+        <div class="col-lg-1 col-sm-2 col-3">
           <input
             type="text"
-            class="form-control rounded-0"
+            class="form-control rounded-0 text-center"
             id="pkg_fiscal_year"
             name="pkg_fiscal_year"
             value="{$smarty.session.FISCAL_YEAR}"
@@ -31,7 +31,6 @@
             data-target="#pkg_fiscal_year"
           />
           <div class="invalid-feedback"></div>
-          <small>Format: YYYY. Contoh: 2020.</small>
         </div>
       </div>
 
