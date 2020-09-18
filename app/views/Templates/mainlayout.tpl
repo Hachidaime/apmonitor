@@ -62,7 +62,7 @@
         <!-- /.content-header -->
 
         <!-- Main content -->
-        <div class="content">
+        <div class="content pb-3">
           <div class="container">
             {block name='content'}{/block}
           </div>
