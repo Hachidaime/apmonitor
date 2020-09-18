@@ -33,7 +33,6 @@
             id="fiscal_year"
             name="fiscal_year"
             autocomplete="off"
-            autofocus
           />
           <div class="invalid-feedback"></div>
         </div>
@@ -45,7 +44,6 @@
             class="form-control rounded-0"
             id="usr_username"
             name="usr_username"
-            autofocus
           />
           <div class="invalid-feedback"></div>
         </div>
