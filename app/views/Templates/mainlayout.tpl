@@ -100,7 +100,7 @@
     <!-- Bootstrap 4 -->
     <script src="{$smarty.const.BASE_URL}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Tempusdominus Bootstrap 4 -->
-    <script src="{$smarty.const.BASE_URL}/assets/plugins/moment/moment.min.js"></script>
+    <script src="{$smarty.const.BASE_URL}/assets/plugins/moment/moment-with-locales.min.js"></script>
     <script src="{$smarty.const.BASE_URL}/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="{$smarty.const.BASE_URL}/assets/plugins/sweetalert2/sweetalert2.min.js"></script>
