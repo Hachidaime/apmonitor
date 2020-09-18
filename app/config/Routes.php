@@ -15,7 +15,14 @@ $router->addRoutes([
     ['GET', '/logout', 'LoginController::logout', 'logout'],
 ]);
 
-$master = ['User', 'Program', 'Activity', 'Package', 'PackageDetail'];
+$master = [
+    'User',
+    'Program',
+    'Activity',
+    'Package',
+    'PackageDetail',
+    'Progress',
+];
 
 foreach ($master as $value) {
     $controller = $value;
