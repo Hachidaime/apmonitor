@@ -1,14 +1,6 @@
 <!-- prettier-ignore -->
 {extends 'Templates/blank.tpl'}
 
-{block 'style'}
-<link
-  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
-  rel="stylesheet"
-/>
-<!-- prettier-ignore -->
-{/block}
-
 {block 'content'}
 <div class="login-box">
   <div class="login-logo">
@@ -33,6 +25,8 @@
             id="fiscal_year"
             name="fiscal_year"
             autocomplete="off"
+            data-toggle="datetimepicker"
+            data-target="#fiscal_year"
           />
           <div class="invalid-feedback"></div>
         </div>
@@ -82,19 +76,23 @@
 {/block}
 
 {block 'script'}
+
 {literal}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <script>
   $(document).ready(function () {
-    $('#fiscal_year').datepicker({
-      format: 'yyyy', // Notice the Extra space at the beginning
+    $('#fiscal_year').datetimepicker({
       viewMode: 'years',
-      minViewMode: 'years',
-      startView: 'decade',
-      minView: 'decade',
-      viewSelect: 'decade',
-      autoclose: true,
+      format: 'YYYY',
     })
+    // .datepicker({
+    //   format: 'yyyy', // Notice the Extra space at the beginning
+    //   viewMode: 'years',
+    //   minViewMode: 'years',
+    //   startView: 'decade',
+    //   minView: 'decade',
+    //   viewSelect: 'decade',
+    //   autoclose: true,
+    // })
 
     $('#btn_login').click(() => {
       let data = $('#login_form').serialize()

@@ -7,6 +7,16 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="{$smarty.const.BASE_URL}/assets/plugins/fontawesome-free/css/all.min.css"
+    />
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link
+      rel="stylesheet"
+      href="{$smarty.const.BASE_URL}/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
+    />
     <!-- Theme style -->
     <link
       rel="stylesheet"
@@ -29,6 +39,9 @@
     <script src="{$smarty.const.BASE_URL}/assets/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="{$smarty.const.BASE_URL}/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="{$smarty.const.BASE_URL}/assets/plugins/moment/moment.min.js"></script>
+    <script src="{$smarty.const.BASE_URL}/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{$smarty.const.BASE_URL}/assets/dist/js/adminlte.min.js"></script>
 
