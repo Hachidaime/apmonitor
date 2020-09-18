@@ -236,7 +236,7 @@ let createPagination = (page, paging, pagination_id) => {
   let previousBtn = document.querySelector(`#${pagination_id} #previousBtn`)
   previousBtn.disabled = true
   delete previousBtn.dataset.id
-  if (paging.previousPage != null) {
+  if (paging.previousPage != null && Number(paging.totalRows) > 0) {
     previousBtn.disabled = false
     previousBtn.dataset.id = paging.previousPage
   }
@@ -263,7 +263,7 @@ let createPagination = (page, paging, pagination_id) => {
   let nextBtn = document.querySelector(`#${pagination_id} #nextBtn`)
   nextBtn.disabled = true
   delete nextBtn.dataset.id
-  if (paging.nextPage != null) {
+  if (paging.nextPage != null && Number(paging.totalRows) > 0) {
     nextBtn.disabled = false
     nextBtn.dataset.id = paging.nextPage
   }
