@@ -2,6 +2,8 @@
 
 namespace app\helper;
 
+use DateTime;
+
 /**
  * Class Functions
  *
@@ -197,5 +199,12 @@ class Functions
                 return $array[$el][$value];
             }, array_keys($array)),
         );
+    }
+
+    public static function dateFormat($orig, $new, $param)
+    {
+        $datetime = DateTime::createFromFormat($orig, $param);
+
+        return $datetime->format($new);
     }
 }
