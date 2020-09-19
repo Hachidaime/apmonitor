@@ -1,6 +1,7 @@
 <?php
 
 use app\controllers\Controller;
+use app\helper\File;
 use app\helper\Flasher;
 use app\helper\Functions;
 use app\models\ProgressModel;
@@ -158,6 +159,31 @@ class ProgressController extends Controller
             }
 
             if ($result) {
+                $update = ['id' => $id];
+                if (!empty($data['prog_img'])) {
+                    $imgdir = "img/progress/{$id}";
+                    $prog_img = File::moveFromTemp(
+                        $imgdir,
+                        $data['prog_img'],
+                        false,
+                        true,
+                    );
+                    $update['prog_img'] = $prog_img ?? $data['prog_img'];
+                }
+
+                if (!empty($data['prog_doc'])) {
+                    $docdir = "pdf/progress/{$id}";
+                    $prog_doc = File::moveFromTemp(
+                        $docdir,
+                        $data['prog_doc'],
+                        false,
+                        true,
+                    );
+                    $update['prog_doc'] = $prog_doc ?? $data['prog_doc'];
+                }
+
+                $this->progressModel->save($update);
+
                 Flasher::setFlash(
                     "Berhasil {$tag} {$this->title}.",
                     $this->name,
