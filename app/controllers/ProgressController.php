@@ -3,6 +3,8 @@
 use app\controllers\Controller;
 use app\helper\Flasher;
 use app\helper\Functions;
+use app\models\ProgressModel;
+use app\models\PackageDetailModel;
 
 /**
  * @desc this class will handle Uang controller
@@ -18,40 +20,67 @@ class ProgressController extends Controller
     {
         parent::__construct();
         $this->setControllerAttribute(__CLASS__);
-        $this->progressModel = $this->model("{$this->name}Model");
         $this->title = 'Progres Paket';
         $this->smarty->assign('title', $this->title);
 
-        $access = [1, 2, 3];
-        if (!in_array($_SESSION['USER']['usr_access'], $access)) {
+        $this->progressModel = new ProgressModel();
+        $this->packageDetailModel = new PackageDetailModel();
+
+        if (!$_SESSION['USER']['usr_is_package']) {
             header('Location:' . BASE_URL . '/403');
         }
     }
 
-    public function index(int $page = 1, string $keyword = null)
+    public function index()
     {
-        $keyword = $keyword ?? $_POST['keyword'];
-        list($list, $info) = $this->progressModel->paginate(
-            $page,
-            // [['pkt_code', 'LIKE', "%{$keyword}%"]],
-            // [['pkt_code', 'ASC']],
-        );
-        $info['keyword'] = $keyword;
-        $this->pagination($info);
+        $this->smarty->assign('breadcrumb', [
+            ['Master', ''],
+            [$this->title, ''],
+        ]);
 
         $this->smarty->assign('subtitle', "Daftar {$this->title}");
-        $this->smarty->assign('keyword', $keyword);
-        $this->smarty->assign('list', $list);
+
         $this->smarty->display("{$this->directory}/index.tpl");
     }
 
-    public function detail(int $id)
+    public function search(int $page = 1, string $keyword = null)
     {
-        $detail = $this->getDetail($id);
+        $page = $_POST['page'] ?? 1;
+        $keyword = $_POST['keyword'] ?? null;
 
-        $this->smarty->assign('detail', $detail);
-        $this->smarty->assign('subtitle', "Detail {$this->title}");
-        $this->smarty->display("{$this->directory}/detail.tpl");
+        list($packageDetail) = $this->packageDetailModel->multiarray();
+
+        $packageDetailOptions = Functions::listToOptions(
+            $packageDetail,
+            'id',
+            'pkgd_name',
+        );
+
+        list($list, $info) = $this->progressModel->paginate($page, null, [
+            ['prog_fiscal_year', 'ASC'],
+            ['id', 'DESC'],
+        ]);
+
+        foreach ($list as $idx => $row) {
+            $list[$idx]['prog_date'] = Functions::dateFormat(
+                'Y-m-d',
+                'd/m/Y',
+                $row['prog_date'],
+            );
+            $list[$idx]['pkgd_name'] = $packageDetailOptions[$row['pkgd_id']];
+            $list[$idx]['prog_finance'] = number_format(
+                $row['prog_finance'],
+                2,
+                ',',
+                '.',
+            );
+        }
+
+        echo json_encode([
+            'list' => $list,
+            'info' => $info,
+        ]);
+        exit();
     }
 
     /**
@@ -64,28 +93,60 @@ class ProgressController extends Controller
     {
         $tag = 'Tambah';
         if (!is_null($id)) {
-            $detail = $this->getDetail($id);
+            list(, $count) = $this->progressModel->singlearray($id);
+            if (!$count) {
+                Flasher::setFlash(
+                    'Data tidak ditemukan!',
+                    $this->name,
+                    'error',
+                );
+                header('Location: ' . BASE_URL . "/{$this->lowerName}");
+            }
+
             $tag = 'Ubah';
+            $this->smarty->assign('id', $id);
         }
 
-        $this->smarty->assign('detail', $detail);
+        $this->smarty->assign('breadcrumb', [
+            ['Master', ''],
+            [$this->title, $this->lowerName],
+            [$tag, ''],
+        ]);
+
+        list($packageDetail) = $this->packageDetailModel->multiarray(null, [
+            ['pkgd_no', 'ASC'],
+        ]);
+
         $this->smarty->assign('subtitle', "{$tag} {$this->title}");
+        $this->smarty->assign('package_detail', $packageDetail);
+
         $this->smarty->display("{$this->directory}/form.tpl");
     }
 
-    private function getDetail($params)
+    public function detail()
     {
-        list($detail, $count) = $this->progressModel->get($params);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
-        }
-        return $detail;
+        list($detail) = $this->progressModel->singlearray($_POST['id']);
+        $detail['prog_date'] = Functions::dateFormat(
+            'Y-m-d',
+            'd/m/Y',
+            $detail['prog_date'],
+        );
+
+        echo json_encode($detail);
+        exit();
     }
 
     public function submit()
     {
         $data = $_POST;
+        $data['prog_date'] = Functions::dateFormat(
+            'd/m/Y',
+            'Y-m-d',
+            $data['prog_date'],
+        );
+        $data['prog_finance'] = !empty($data['prog_finance'])
+            ? str_replace(',', '.', $data['prog_finance'])
+            : 0;
         if ($this->validate($data)) {
             $result = $this->progressModel->save($data);
             if ($data['id'] > 0) {
@@ -119,22 +180,26 @@ class ProgressController extends Controller
 
     public function validate($data)
     {
-        $data['prog_physical'] = (float) $data['prog_physical'];
-        $data['prog_finance'] = (float) $data['prog_finance'];
         $validation = $this->validator->make($data, [
-            'prog_physical' => 'required|between:0,100',
-            'prog_finance' => 'required|between:0,100',
+            'prog_fiscal_year' => 'required',
+            'prog_date' => 'required|date',
+            'pkgd_id' => 'required',
+            'prog_physical' => 'required',
+            'prog_img' => 'required',
         ]);
 
         $validation->setAliases([
-            'prog_physical' => 'Fisik',
-            'prog_finance' => 'Keuangan',
+            'prog_fiscal_year' => 'Tahun Anggaran',
+            'prog_date' => 'Tanggal Progres',
+            'pkgd_id' => 'Nama Paket',
+            'prog_physical' => 'Progres Fisik',
+            'prog_img' => 'Foto',
         ]);
 
         $validation->setMessages([
             'required' => '<strong>:attribute</strong> harus diisi.',
             'unique' => '<strong>:attribute</strong> sudah ada di database.',
-            'between' => '<strong>:attribute</strong> tidak valid.',
+            'date' => 'Format <strong>:attribute</strong> tidak valid.',
         ]);
 
         $validation->validate();

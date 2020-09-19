@@ -1,5 +1,5 @@
 <?php
-
+namespace app\models;
 use app\models\Model;
 
 /**
@@ -16,5 +16,5 @@ class ProgressModel extends Model
      * @var string
      * @access protected
      */
-    protected $table = 'dik_progress';
+    protected $table = 'apm_progress';
 }

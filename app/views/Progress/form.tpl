@@ -3,112 +3,187 @@
 
 {block 'style'}
 <!-- Ekko Lightbox -->
-<link rel="stylesheet" href="../plugins/ekko-lightbox/ekko-lightbox.css" />
+<link
+  rel="stylesheet"
+  href="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.css"
+/>
+
+{literal}
+<style>
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+</style>
+{/literal}
 <!-- prettier-ignore -->
 {/block}
 
 {block name='content'}
-<div class="card rounded-0">
+<div class="card rounded-0 m-0">
   <div class="card-header bg-gradient-navy rounded-0">
     <h3 class="card-title text-warning">{$subtitle}</h3>
   </div>
   <!-- /.card-header -->
   <!-- form start -->
   <form id="my_form" role="form" method="POST">
-    <input type="hidden" id="id" name="id" value="{$detail.id}" />
+    <input type="hidden" id="id" name="id" value="{$id}" />
     <div class="card-body">
       <div class="form-group row">
-        <label
-          for="prog_physical"
-          class="col-lg-2 col-sm-3 col-form-label text-sm-right"
-        >
-          Fisik (%):
+        <label for="prog_fiscal_year" class="col-lg-3 col-sm-4 col-form-label">
+          Tahun Anggaran
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-1 col-sm-2 col-3">
+          <input
+            type="text"
+            class="form-control rounded-0 text-center"
+            id="prog_fiscal_year"
+            name="prog_fiscal_year"
+            value="{$smarty.session.FISCAL_YEAR}"
+            autocomplete="off"
+            data-toggle="datetimepicker"
+            data-target="#prog_fiscal_year"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="prog_date" class="col-lg-3 col-sm-4 col-form-label">
+          Tanggal Progres
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
         <div class="col-lg-2 col-sm-3 col-6">
           <input
+            type="text"
+            class="form-control rounded-0"
+            id="prog_date"
+            name="prog_date"
+            autocomplete="off"
+            data-toggle="datetimepicker"
+            data-target="#prog_date"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="prg_code" class="col-lg-3 col-sm-4 col-form-label">
+          Nama Paket
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <select class="custom-select rounded-0" name="pkgd_id" id="pkgd_id">
+            <option value="">-- Pilih --</option>
+            {section inner $package_detail}
+            <option value="{$package_detail[inner].id}">
+              {$package_detail[inner].pkgd_name}
+            </option>
+            {/section}
+          </select>
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="prog_physical" class="col-lg-3 col-sm-4 col-form-label">
+          Progres Fisik (%)
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-1 col-sm-2 col-3">
+          <input
             type="number"
-            class="form-control rounded-0 {if $error.prog_physical}is-invalid{/if}"
+            class="form-control rounded-0 text-right"
             id="prog_physical"
             name="prog_physical"
-            value="{$detail.prog_physical|default:'0.00'}"
             autocomplete="off"
             min="0"
             max="100"
             step=".10"
           />
-          <div class="invalid-feedback">
-            {$error.prog_physical}
-          </div>
+          <div class="invalid-feedback"></div>
         </div>
       </div>
 
       <div class="form-group row">
-        <label
-          for="prog_physical_img"
-          class="col-lg-2 col-sm-3 col-form-label text-sm-right"
-        >
-          Foto Fisik:
+        <label for="prog_finance" class="col-lg-3 col-sm-4 col-form-label">
+          Keuangan (Rp)
+          <!-- <sup class="fas fa-asterisk text-red"></sup> -->
+          <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
-        <div class="col-lg-10 col-sm-9">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text rounded-0"
-                ><i class="fas fa-file-image"></i
-              ></span>
-            </div>
-            <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input file-upload"
-                accept="image/*"
-                data-id="prog_physical_img"
-              />
-              <label
-                class="custom-file-label rounded-0"
-                for="prog_physical_img"
-              ></label>
-            </div>
-          </div>
+        <div class="col-lg-2 col-sm-3">
+          <input
+            class="form-control rounded-0 text-right"
+            id="prog_finance"
+            name="prog_finance"
+            autocomplete="off"
+            placeholder="0,00"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="prog_img" class="col-lg-3 col-sm-4 col-form-label">
+          Foto
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8">
+          <button
+            type="button"
+            class="btn bg-gradient-info btn-flat btn-upload"
+          >
+            <i class="fas fa-upload mr-2"></i> Upload
+          </button>
+
+          <input
+            type="file"
+            class="file-upload sr-only"
+            accept="image/*"
+            data-id="prog_img"
+          />
 
           <input
             type="hidden"
             class="input-file"
-            name="prog_physical_img"
-            id="prog_physical_img"
-            value="{$detail.prog_physical_img}"
-            data-id="{$prog_physical_img}"
+            name="prog_img"
+            id="prog_img"
+            data-id="prog_img"
           />
+          <div class="invalid-feedback"></div>
 
-          <div
-            id="preview_prog_physical_img"
-            class="mt-2"
-            style="display: none;"
-          >
-            <a
-              href="{$smarty.const.BASE_URL}/upload/img/progress/{$detail.id}/{$detail.prog_physical_img}"
-              data-toggle="lightbox"
-            >
-              <img
-                src="{$smarty.const.BASE_URL}/upload/img/progress/{$detail.id}/{$detail.prog_physical_img}"
-                class="img-fluid"
-                width="300"
-              />
+          <div id="preview_prog_img" class="mt-2" style="display: none;">
+            <a href="" data-toggle="lightbox">
+              <img src="" class="img-fluid" width="300" />
             </a>
           </div>
 
           <ul
-            id="file_action_prog_physical_img"
+            id="file_action_prog_img"
             class="list-group mt-2"
             style="display: none;"
           >
             <li
               class="list-group-item d-flex justify-content-between align-items-center py-1 px2"
             >
-              <span class="filename">{$detail.prog_physical_img}</span>
+              <span class="filename"></span>
               <a
                 class="badge badge-light badge-pill"
                 title="Download"
-                href="{$smarty.const.BASE_URL}/upload/img/progress/{$detail.id}/{$detail.prog_physical_img}"
+                href=""
                 download
                 ><i class="fas fa-download"></i
               ></a>
@@ -118,79 +193,46 @@
       </div>
 
       <div class="form-group row">
-        <label
-          for="prog_finance"
-          class="col-lg-2 col-sm-3 col-form-label text-sm-right"
-        >
-          Keuangan (%):
+        <label for="prog_doc" class="col-lg-3 col-sm-4 col-form-label">
+          Dokumen Pendukung
+          <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
-        <div class="col-lg-2 col-sm-3 col-6">
-          <input
-            type="number"
-            class="form-control rounded-0 {if $error.prog_finance}is-invalid{/if}"
-            id="prog_finance"
-            name="prog_finance"
-            value="{$detail.prog_finance|default:'0.00'}"
-            autocomplete="off"
-            min="0"
-            max="100"
-            step=".10"
-          />
-          <div class="invalid-feedback">
-            {$error.prog_finance}
-          </div>
-        </div>
-      </div>
+        <div class="col-lg-9 col-sm-8">
+          <button
+            type="button"
+            class="btn bg-gradient-info btn-flat btn-upload"
+          >
+            <i class="fas fa-upload mr-2"></i> Upload
+          </button>
 
-      <div class="form-group row">
-        <label
-          for="prog_document"
-          class="col-lg-2 col-sm-3 col-form-label text-sm-right"
-        >
-          Dokumen Pendukung:
-        </label>
-        <div class="col-lg-10 col-sm-9">
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text rounded-0"
-                ><i class="fas fa-file-pdf"></i
-              ></span>
-            </div>
-            <div class="custom-file">
-              <input
-                type="file"
-                class="custom-file-input file-upload"
-                accept="application/pdf"
-                data-id="prog_document"
-              />
-              <label
-                class="custom-file-label rounded-0"
-                for="prog_document"
-              ></label>
-            </div>
-          </div>
+          <input
+            type="file"
+            class="file-upload sr-only"
+            accept="application/pdf"
+            data-id="prog_doc"
+          />
+
           <input
             type="hidden"
             class="input-file"
-            name="prog_document"
-            id="prog_document"
-            value="{$detail.prog_document}"
-            data-id="{$prog_document}"
+            name="prog_doc"
+            id="prog_doc"
+            data-id="prog_doc"
           />
 
           <ul
-            id="file_action_prog_document"
+            id="file_action_prog_doc"
             class="list-group mt-2"
             style="display: none;"
           >
             <li
               class="list-group-item d-flex justify-content-between align-items-center py-1 px2"
             >
-              <span class="filename">{$detail.prog_document}</span>
+              <span class="filename"></span>
               <a
                 class="badge badge-light badge-pill"
                 title="Download"
-                href="{$smarty.const.BASE_URL}/upload/img/progress/{$detail.id}/{$detail.prog_document}"
+                href=""
                 download
                 ><i class="fas fa-download"></i
               ></a>
@@ -211,15 +253,46 @@
 <!-- prettier-ignore -->
 {/block} 
 
-{block 'script'} 
-{literal}
+{block 'script'}
 <!-- bs-custom-file-input -->
-<script src="{/literal}{$smarty.const.BASE_URL}{literal}/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script src="{$smarty.const.BASE_URL}/assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
 <!-- Ekko Lightbox -->
-<script src="{/literal}{$smarty.const.BASE_URL}{literal}/assets/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+<script src="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+<!-- Input Mask -->
+<script src="{$smarty.const.BASE_URL}/assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
 
+{literal}
 <script>
   $(document).ready(function () {
+    let id = document.getElementById('id').value
+    if (id) {
+      getDetail(id)
+    }
+
+    $('#prog_fiscal_year').datetimepicker({
+      viewMode: 'years',
+      format: 'YYYY',
+    })
+
+    $('#prog_date').datetimepicker({
+      format: 'DD/MM/YYYY',
+      locale: 'id',
+    })
+
+    $('#prog_finance').inputmask({
+      alias: 'numeric',
+      groupSeparator: '.',
+      radixPoint: ',',
+      placeholder: '0,00',
+      numericInput: true,
+      autoGroup: true,
+      autoUnmask: true,
+    })
+
+    $('.btn-upload').click(function () {
+      $(this).next('.file-upload').click()
+    })
+
     $('#btn_submit').click(() => {
       clearErrorMessage()
       save()
@@ -239,6 +312,19 @@
     bsCustomFileInput.init()
   })
 
+  let getDetail = (data_id) => {
+    $.post(
+      `${main_url}/detail`,
+      { id: data_id },
+      function (res) {
+        $.each(res, (id, value) => {
+          $(`#${id}`).val(value)
+        })
+      },
+      'JSON'
+    )
+  }
+
   let save = () => {
     $.post(
       `${main_url}/submit`,
@@ -250,10 +336,7 @@
               showErrorMessage(id, message)
             })
           } else flash(res.msg, 'error')
-        } else
-          window.location = $('#id').val()
-            ? `${main_url}/detail/${$('#id').val()}`
-            : main_url
+        } else window.location = main_url
       },
       'JSON'
     )

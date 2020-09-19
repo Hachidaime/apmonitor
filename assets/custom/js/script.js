@@ -46,7 +46,7 @@ let showErrorMessage = (id, message) => {
  */
 let clearErrorMessage = () => {
   // Todo: clear error message
-  $('.form-control, .custom-select, .btn-group-toggle')
+  $('.form-control, .custom-select, .btn-group-toggle, .input-file')
     .removeClass('is-invalid')
     .next('.invalid-feedback')
     .html('')
