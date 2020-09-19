@@ -168,7 +168,9 @@ class ProgressController extends Controller
                         false,
                         true,
                     );
-                    $update['prog_img'] = $prog_img ?? $data['prog_img'];
+                    $update['prog_img'] = $prog_img
+                        ? $prog_img
+                        : $data['prog_img'];
                 }
 
                 if (!empty($data['prog_doc'])) {
@@ -179,7 +181,9 @@ class ProgressController extends Controller
                         false,
                         true,
                     );
-                    $update['prog_doc'] = $prog_doc ?? $data['prog_doc'];
+                    $update['prog_doc'] = $prog_doc
+                        ? $prog_doc
+                        : $data['prog_doc'];
                 }
 
                 $this->progressModel->save($update);
