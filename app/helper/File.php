@@ -90,7 +90,7 @@ class File
      * ? Nama file
      * @param bool $timestamp
      */
-    public static function MoveFromTemp(
+    public static function moveFromTemp(
         string $filedir,
         string $filename,
         bool $timestamp = false,
@@ -116,17 +116,22 @@ class File
                 self::clearOldFile($filedir);
             }
 
+            $filename = !empty($time) ? $time . $filename : $filename;
+
             // TODO: Pindah file
             rename(
                 DOC_ROOT . "upload/temp/{$filename}",
-                DOC_ROOT . "upload/{$filedir}/{$time}{$filename}",
+                DOC_ROOT . "upload/{$filedir}/{$filename}",
             );
+
+            return $filename;
             // if (file_exists(UPLOAD_DIR . "{$filedir}/{$time}{$filename}")) {
             //   echo UPLOAD_DIR . "{$filedir}/{$time}{$filename}" . 'moved <br>';
             // } else {
             //   echo UPLOAD_DIR . "{$filedir}/{$time}{$filename}" . 'not moved <br>';
             // }
         }
+        return false;
     }
 
     public static function clearOldFile(string $filedir)
