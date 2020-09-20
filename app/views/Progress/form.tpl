@@ -321,15 +321,22 @@
           $(`#${id}`).val(value)
         })
 
-        console.log(res.prog_img)
-        let prog_img = {
-          filename: res.prog_img,
-          source: `${base_url}/upload/img/progress/${res.id}/${res.prog_img}`,
+        if (res.prog_img != '') {
+          const prog_img = {
+            filename: res.prog_img,
+            source: `${base_url}/upload/img/progress/${res.id}/${res.prog_img}`,
+          }
+          showPreview('prog_img', prog_img)
+          showFileAction('prog_img', prog_img)
         }
 
-        showPreview('prog_img', data)
-        showFileAction('prog_img', data)
-        showFileAction('prog_img', data)
+        if (res.prog_img != '') {
+          const prog_doc = {
+            filename: res.prog_doc,
+            source: `${base_url}/upload/pdf/progress/${res.id}/${res.prog_doc}`,
+          }
+          showFileAction('prog_doc', prog_doc)
+        }
       },
       'JSON'
     )
