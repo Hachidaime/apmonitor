@@ -4,6 +4,10 @@
 {include 'PackageDetail/form.tpl'}
 {include 'PackageDetail/progress.tpl'}
 
+{block 'style'}
+{block 'detailStyle'}{/block}
+{/block}
+
 {block name='content'}
 <div class="card rounded-0">
   <div class="card-header bg-gradient-navy rounded-0">

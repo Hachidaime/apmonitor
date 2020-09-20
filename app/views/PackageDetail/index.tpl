@@ -1,3 +1,12 @@
+{block 'detailStyle'}
+<!-- Ekko Lightbox -->
+<link
+  rel="stylesheet"
+  href="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.css"
+/>
+<!-- prettier-ignore -->
+{/block}
+
 {block 'detailList'}
 <legend>Detail</legend>
 <div class="row mb-3">
@@ -88,6 +97,9 @@
 {/block}
 
 {block 'detailJS'}
+<!-- Ekko Lightbox -->
+<script src="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+
 {literal}
 <script>
   $(document).ready(function () {
@@ -99,6 +111,13 @@
     $('#detailAddBtn').click(() => {
       $('#detailFormModal').modal('show')
       $('#detailFormModalLabel').text('Tambah Paket')
+    })
+
+    $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+      event.preventDefault()
+      $(this).ekkoLightbox({
+        alwaysShowClose: false,
+      })
     })
   })
 
@@ -163,7 +182,7 @@
       pkgdAdvancedYear = createPkgdAdvancedYear(
         params != null ? params.pkgd_advanced_year : ''
       ),
-      action = createAction(params.id)
+      action = createAction(params)
 
     tRow.appendChild(no)
     tRow.appendChild(pkgdNo)
@@ -216,7 +235,7 @@
     return pkgdAdvancedYear
   }
 
-  let createAction = (id) => {
+  let createAction = (params) => {
     let partnerBtn = document.createElement('a')
     partnerBtn.classList.add('btn', 'btn-info', 'btn-sm')
     partnerBtn.href = 'javascript:void(0)'
@@ -230,12 +249,16 @@
     let progressBtn = document.createElement('a')
     progressBtn.classList.add('btn', 'btn-info', 'btn-sm')
     progressBtn.href = 'javascript:void(0)'
-    progressBtn.setAttribute('onclick', `getProgress(${id})`)
+    progressBtn.setAttribute('onclick', `showProgress(${params.id})`)
     progressBtn.innerHTML = 'Progres'
 
     let imageBtn = document.createElement('a')
     imageBtn.classList.add('btn', 'btn-info', 'btn-sm')
-    imageBtn.href = 'javascript:void(0)'
+    imageBtn.dataset.toggle = 'lightbox'
+    imageBtn.href =
+      params.pkgd_last_prog_img != '' && params.pkgd_last_prog_img != null
+        ? `${base_url}/upload/${params.pkgd_last_prog_img}`
+        : 'javascript:void(0)'
     imageBtn.innerHTML = 'Foto'
 
     let editBtn = document.createElement('a')
@@ -275,7 +298,7 @@
     tBody.appendChild(tRow)
   }
 
-  let getProgress = (id) => {
+  let showProgress = (id) => {
     let data = $(`input[data-id=${id}]`).data()
 
     $('#progressModal').modal('show')
@@ -284,6 +307,10 @@
     $('#pkgdLastProgDate').val(data.pkgdLastProgDate)
     $('#pkgdSumProgPhysical').val(`${data.pkgdSumProgPhysical} %`)
     $('#pkgdSumProgFinance').val(`Rp ${data.pkgdSumProgFinance}`)
+  }
+
+  let showImage = (id) => {
+    // Code
   }
 </script>
 {/literal} {/block}
