@@ -320,6 +320,16 @@
         $.each(res, (id, value) => {
           $(`#${id}`).val(value)
         })
+
+        console.log(res.prog_img)
+        let prog_img = {
+          filename: res.prog_img,
+          source: `${base_url}/upload/img/progress/${res.id}/${res.prog_img}`,
+        }
+
+        showPreview('prog_img', data)
+        showFileAction('prog_img', data)
+        showFileAction('prog_img', data)
       },
       'JSON'
     )

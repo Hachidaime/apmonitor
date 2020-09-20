@@ -132,8 +132,6 @@ let upload = (param) => {
    */
   let input = $(param)
   let id = input.data('id') // ? field id
-  let preview = $(`#preview_${id}`) // ? file preview
-  let file_action = $(`#file_action_${id}`) // ? file action: download
   let files = input[0].files[0]
   let accept = input.attr('accept')
   let url = `${base_url}/file/upload`
@@ -162,19 +160,10 @@ let upload = (param) => {
         // ? Upload Berhasil
 
         // TODO: Menampilkan preview gambar
-        preview.show()
-        preview.find('img').attr({
-          src: data.source,
-          alt: data.filename,
-        })
-        preview.find('a').attr({
-          href: data.source,
-        })
+        showPreview(id, data)
 
         // TODO: Menampilkan link download dari file yang diupload
-        file_action.show()
-        file_action.find('.filename').text(data.filename)
-        file_action.find('a').attr('href', data.source)
+        showFileAction(id, data)
 
         // TODO: Set input value untuk file upload
         $(`#${id}`).val(data.filename)
@@ -199,6 +188,29 @@ let upload = (param) => {
       }
     },
   })
+}
+
+let showPreview = (id, data) => {
+  let preview = $(`#preview_${id}`) // ? file preview
+
+  // TODO: Menampilkan preview gambar
+  preview.show()
+  preview.find('img').attr({
+    src: data.source,
+    alt: data.filename,
+  })
+  preview.find('a').attr({
+    href: data.source,
+  })
+}
+
+let showFileAction = (id, data) => {
+  let fileAction = $(`#file_action_${id}`) // ? file action: download
+
+  // TODO: Menampilkan link download dari file yang diupload
+  fileAction.show()
+  fileAction.find('.filename').text(data.filename)
+  fileAction.find('a').attr('href', data.source)
 }
 
 let createEditBtn = (id) => {
