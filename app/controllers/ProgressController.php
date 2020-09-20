@@ -277,13 +277,22 @@ class ProgressController extends Controller
         $query = "SELECT SUM(prog_finance) as pkgd_sum_prog_finance, 
             MAX(prog_physical) as pkgd_sum_prog_physical,
             MAX(prog_date) as pkgd_last_prog_date,
+            (SELECT prog_img FROM {$this->progressModel->getTable()} 
+                WHERE pkgd_id = ? 
+                ORDER BY id DESC 
+                LIMIT 1) as pkgd_last_prog_img,
+            MAX(id) as prog_id,
             pkgd_id as id
             FROM {$this->progressModel->getTable()} 
             WHERE pkgd_id = ?";
         $data = $this->progressModel->db
-            ->query($query, [$pkgd_id])
+            ->query($query, [$pkgd_id, $pkgd_id])
             ->first()
             ->toArray();
+        $data[
+            'pkgd_last_prog_img'
+        ] = "img/progress/{$data['prog_id']}/{$data['pkgd_last_prog_img']}";
+        unset($data['prog_id']);
 
         $this->packageDetailModel->save($data);
         // var_dump($this->packageDetailModel->db);
