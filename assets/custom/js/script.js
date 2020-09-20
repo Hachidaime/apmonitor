@@ -280,3 +280,9 @@ let createPagination = (page, paging, pagination_id) => {
     nextBtn.dataset.id = paging.nextPage
   }
 }
+
+let camelCase = (str, delimeter = '_') => {
+  return str
+    .split(delimeter)
+    .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1))
+}

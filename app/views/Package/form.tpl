@@ -2,6 +2,7 @@
 {extends file='Templates/mainlayout.tpl'}
 {include 'PackageDetail/index.tpl'}
 {include 'PackageDetail/form.tpl'}
+{include 'PackageDetail/progress.tpl'}
 
 {block name='content'}
 <div class="card rounded-0">
@@ -121,6 +122,7 @@
 </div>
 <!-- prettier-ignore -->
 {block 'detailForm'}{/block}
+{block 'progressForm'}{/block}
 {/block} 
 {block 'script'}
 

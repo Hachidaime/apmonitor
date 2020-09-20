@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\helper\Functions;
 use app\models\PackageDetailModel;
 use app\models\PackageModel;
 
@@ -29,13 +30,37 @@ class PackageDetailController extends Controller
             ['pkgs_id', $detail['pkgs_id']],
         ]);
 
+        foreach ($list as $idx => $row) {
+            if (!is_null($row['pkgd_last_prog_date'])) {
+                $list[$idx]['pkgd_last_prog_date'] = Functions::dateFormat(
+                    'Y-m-d',
+                    'd/m/Y',
+                    $row['pkgd_last_prog_date'],
+                );
+            }
+
+            $list[$idx]['pkgd_sum_prog_physical'] = number_format(
+                $row['pkgd_sum_prog_physical'],
+                2,
+                ',',
+                '.',
+            );
+
+            $list[$idx]['pkgd_sum_prog_finance'] = number_format(
+                $row['pkgd_sum_prog_finance'],
+                2,
+                ',',
+                '.',
+            );
+        }
+
         echo json_encode($list);
         exit();
     }
 
-    public function detail(int $pkgd_no)
+    public function detail()
     {
-        list($detail) = $this->packageModel->get([['pkgd_no', $pkgd_no]]);
+        list($detail) = $this->packageDetailModel->singlearray($_POST['id']);
         echo json_encode($detail);
         exit();
     }

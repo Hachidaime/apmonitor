@@ -94,7 +94,7 @@
     pkgdRowEmpty()
 
     btnRemoveClick()
-    detailSearch()
+    pkgdSearch()
 
     $('#detailAddBtn').click(() => {
       $('#detailFormModal').modal('show')
@@ -104,7 +104,7 @@
 
   let tBody = document.getElementById('result_data')
 
-  let detailSearch = () => {
+  let pkgdSearch = () => {
     $.post(
       `${base_url}/packagedetail/search`,
       { pkg_id: $('#my_form #id').val() },
@@ -163,7 +163,7 @@
       pkgdAdvancedYear = createPkgdAdvancedYear(
         params != null ? params.pkgd_advanced_year : ''
       ),
-      action = createAction()
+      action = createAction(params.id)
 
     tRow.appendChild(no)
     tRow.appendChild(pkgdNo)
@@ -171,6 +171,13 @@
     tRow.appendChild(pkgdPeriodType)
     tRow.appendChild(pkgdAdvancedYear)
     tRow.appendChild(action)
+
+    let detail = document.createElement('input')
+    detail.setAttribute('type', 'hidden')
+    $.each(params, (key, value) => {
+      detail.dataset[camelCase(key)] = value
+    })
+    tRow.appendChild(detail)
 
     tBody.appendChild(tRow)
   }
@@ -209,7 +216,7 @@
     return pkgdAdvancedYear
   }
 
-  let createAction = () => {
+  let createAction = (id) => {
     let partnerBtn = document.createElement('a')
     partnerBtn.classList.add('btn', 'btn-info', 'btn-sm')
     partnerBtn.href = 'javascript:void(0)'
@@ -223,6 +230,7 @@
     let progressBtn = document.createElement('a')
     progressBtn.classList.add('btn', 'btn-info', 'btn-sm')
     progressBtn.href = 'javascript:void(0)'
+    progressBtn.setAttribute('onclick', `getProgress(${id})`)
     progressBtn.innerHTML = 'Progres'
 
     let imageBtn = document.createElement('a')
@@ -265,6 +273,17 @@
     tRow.setAttribute('id', 'emptyRow')
     tRow.appendChild(tCol)
     tBody.appendChild(tRow)
+  }
+
+  let getProgress = (id) => {
+    let data = $(`input[data-id=${id}]`).data()
+
+    $('#progressModal').modal('show')
+    $('#progressModalLabel').text(`Progres ${data.pkgdNo}`)
+
+    $('#pkgdLastProgDate').val(data.pkgdLastProgDate)
+    $('#pkgdSumProgPhysical').val(`${data.pkgdSumProgPhysical} %`)
+    $('#pkgdSumProgFinance').val(`Rp ${data.pkgdSumProgFinance}`)
   }
 </script>
 {/literal} {/block}
