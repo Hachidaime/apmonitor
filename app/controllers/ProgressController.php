@@ -188,6 +188,8 @@ class ProgressController extends Controller
 
                 $this->progressModel->save($update);
 
+                $this->updatePackageDetail($data['pkgd_id']);
+
                 Flasher::setFlash(
                     "Berhasil {$tag} {$this->title}.",
                     $this->name,
@@ -268,5 +270,22 @@ class ProgressController extends Controller
             ]);
         }
         exit();
+    }
+
+    private function updatePackageDetail($pkgd_id)
+    {
+        $query = "SELECT SUM(prog_finance) as pkgd_sum_prog_finance, 
+            MAX(prog_physical) as pkgd_sum_prog_physical,
+            MAX(prog_date) as pkgd_last_prog_date,
+            pkgd_id as id
+            FROM {$this->progressModel->getTable()} 
+            WHERE pkgd_id = ?";
+        $data = $this->progressModel->db
+            ->query($query, [$pkgd_id])
+            ->first()
+            ->toArray();
+
+        $this->packageDetailModel->save($data);
+        // var_dump($this->packageDetailModel->db);
     }
 }
