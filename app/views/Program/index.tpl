@@ -69,6 +69,11 @@
     $('#searchBtn').click(() => {
       search()
     })
+
+    /* Delete Button */
+    $(document).on('click', '.btn-delete', function (event) {
+      deleteData($(this).data('id'))
+    })
   })
 
   let search = (page = 1) => {
@@ -129,11 +134,6 @@
         }
 
         createPagination(page, paging, 'pagination')
-
-        /* Tombol Hapus */
-        $('.btn-delete').click(function () {
-          deleteData($(this).data('id'))
-        })
       },
       'JSON'
     )
