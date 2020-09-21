@@ -21,6 +21,7 @@ $master = [
     'Activity',
     'Package',
     'PackageDetail',
+    'Partner',
     'Progress',
 ];
 
