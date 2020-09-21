@@ -2,6 +2,15 @@
 {extends file='Templates/mainlayout.tpl'}
 {include 'Templates/pagination.tpl'}
 
+{block 'style'}
+<!-- Ekko Lightbox -->
+<link
+  rel="stylesheet"
+  href="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.css"
+/>
+<!-- prettier-ignore -->
+{/block}
+
 {block name='content'}
 <div class="row mb-3">
   <div class="col-12">
@@ -68,6 +77,10 @@
 {/block} 
 
 {block 'script'}
+<!-- Ekko Lightbox -->
+<script src="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
+
+<!-- prettier-ignore -->
 {block 'paginationJS'}{/block}
 {literal}
 <script>
@@ -78,6 +91,13 @@
 
     $('#searchBtn').click(() => {
       search()
+    })
+
+    $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+      event.preventDefault()
+      $(this).ekkoLightbox({
+        alwaysShowClose: false,
+      })
     })
   })
 
@@ -107,37 +127,76 @@
           action = null
 
         for (let index in list) {
+          //#region Number
           no = document.createElement('td')
           no.classList.add('text-right')
           no.innerHTML =
             Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
             Number(index) +
             1
+          //#endregion
 
+          //#region Package Fiscal Year
           progFiscalYear = document.createElement('td')
           progFiscalYear.innerHTML = list[index].prog_fiscal_year
+          //#endregion
 
+          //#region Package Detail Name
           pkgdName = document.createElement('td')
           pkgdName.innerHTML = list[index].pkgd_name
+          //#endregion
 
+          //#region Progress Date
           progDate = document.createElement('td')
           progDate.innerHTML = list[index].prog_date
+          //#endregion
 
+          //#region Physical Progress
           progPhysical = document.createElement('td')
           progPhysical.classList.add('text-right')
           progPhysical.innerHTML = list[index].prog_physical
+          //#endregion
 
+          //#endregion Finance Progress
           progFinance = document.createElement('td')
           progFinance.classList.add('text-right')
           progFinance.innerHTML = list[index].prog_finance
+          //#endregion
 
-          let editBtn = createEditBtn(list[index].id)
-          let deleteBtn = createDeleteBtn(list[index].id)
+          //#region Action
+          let imgBtn = null,
+            docBtn = null
+
+          //#region Image Button
+          imgBtn = document.createElement('a')
+          imgBtn.classList.add('badge', 'badge-info', 'badge-pill')
+          imgBtn.dataset.toggle = 'lightbox'
+          imgBtn.href =
+            list[index].prog_img != '' && list[index].prog_img != null
+              ? `${base_url}/upload/img/progress/${list[index].id}/${list[index].prog_img}`
+              : 'javascript:void(0)'
+          imgBtn.innerHTML = 'Foto'
+          //#endregion
+
+          //#region Document Button
+          docBtn = document.createElement('a')
+          docBtn.classList.add('badge', 'badge-secondary', 'badge-pill')
+          docBtn.href = 'javascript:void(0)'
+          if (list[index].prog_doc != '' && list[index].prog_doc != null) {
+            docBtn.setAttribute('target', 'blank_')
+            docBtn.href = `${base_url}/upload/pdf/progress/${list[index].id}/${list[index].prog_doc}`
+          }
+          docBtn.innerHTML = 'PDF'
+          //#endregion
 
           action = document.createElement('td')
-          action.appendChild(editBtn)
-          action.appendChild(deleteBtn)
+          action.appendChild(createEditBtn(list[index].id))
+          action.appendChild(createDeleteBtn(list[index].id))
+          action.appendChild(imgBtn)
+          action.appendChild(docBtn)
+          //#endregion
 
+          //#region Row
           tRow = document.createElement('tr')
           tRow.appendChild(no)
           tRow.appendChild(progFiscalYear)
@@ -146,6 +205,7 @@
           tRow.appendChild(progPhysical)
           tRow.appendChild(progFinance)
           tRow.appendChild(action)
+          //#endregion
 
           tBody.appendChild(tRow)
         }
