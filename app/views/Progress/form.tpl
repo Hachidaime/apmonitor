@@ -7,22 +7,6 @@
   rel="stylesheet"
   href="{$smarty.const.BASE_URL}/assets/plugins/ekko-lightbox/ekko-lightbox.css"
 />
-
-{literal}
-<style>
-  /* Chrome, Safari, Edge, Opera */
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  /* Firefox */
-  input[type='number'] {
-    -moz-appearance: textfield;
-  }
-</style>
-{/literal}
 <!-- prettier-ignore -->
 {/block}
 
