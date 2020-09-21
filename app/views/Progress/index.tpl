@@ -93,6 +93,11 @@
       search()
     })
 
+    /* Delete Button */
+    $(document).on('click', '.btn-delete', function (event) {
+      deleteData($(this).data('id'))
+    })
+
     $(document).on('click', '[data-toggle="lightbox"]', function (event) {
       event.preventDefault()
       $(this).ekkoLightbox({
@@ -211,11 +216,6 @@
         }
 
         createPagination(page, paging, 'pagination')
-
-        /* Tombol Hapus */
-        $('.btn-delete').click(function () {
-          deleteData($(this).data('id'))
-        })
       },
       'JSON'
     )
