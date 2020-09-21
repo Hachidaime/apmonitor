@@ -31,13 +31,55 @@ class PackageDetailController extends Controller
         ]);
 
         foreach ($list as $idx => $row) {
-            if (!is_null($row['pkgd_last_prog_date'])) {
-                $list[$idx]['pkgd_last_prog_date'] = Functions::dateFormat(
+            $list[$idx]['pkgd_contract_date'] = !is_null(
+                $row['pkgd_contract_date'],
+            )
+                ? Functions::dateFormat(
+                    'Y-m-d',
+                    'd/m/Y',
+                    $row['pkgd_contract_date'],
+                )
+                : null;
+
+            $list[$idx]['pkgd_contract_end_date'] = !is_null(
+                $row['pkgd_contract_end_date'],
+            )
+                ? Functions::dateFormat(
+                    'Y-m-d',
+                    'd/m/Y',
+                    $row['pkgd_contract_end_date'],
+                )
+                : null;
+
+            $list[$idx]['pkgd_addendum_date'] = !is_null(
+                $row['pkgd_addendum_date'],
+            )
+                ? Functions::dateFormat(
+                    'Y-m-d',
+                    'd/m/Y',
+                    $row['pkgd_addendum_date'],
+                )
+                : null;
+
+            $list[$idx]['pkgd_addendum_end_date'] = !is_null(
+                $row['pkgd_addendum_end_date'],
+            )
+                ? Functions::dateFormat(
+                    'Y-m-d',
+                    'd/m/Y',
+                    $row['pkgd_addendum_end_date'],
+                )
+                : null;
+
+            $list[$idx]['pkgd_last_prog_date'] = !is_null(
+                $row['pkgd_last_prog_date'],
+            )
+                ? Functions::dateFormat(
                     'Y-m-d',
                     'd/m/Y',
                     $row['pkgd_last_prog_date'],
-                );
-            }
+                )
+                : null;
 
             $list[$idx]['pkgd_sum_prog_physical'] = number_format(
                 $row['pkgd_sum_prog_physical'],

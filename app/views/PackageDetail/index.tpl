@@ -344,7 +344,15 @@
     $('#partnerFormModal').modal('show')
     $('#partnerFormModalLabel').text(`Rekanan ${data.pkgdNo}`)
 
-    $(`#partner_form #id`).val(id)
+    $.each(data, (key, value) => {
+      key = key
+        .replace(/\.?([A-Z]+)/g, function (x, y) {
+          return '_' + y.toLowerCase()
+        })
+        .replace(/^_/, '')
+
+      $(`#partner_form #${key}`).val(value)
+    })
   }
 </script>
 {/literal} {/block}

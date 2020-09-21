@@ -19,13 +19,6 @@ class PartnerController extends Controller
         }
     }
 
-    public function detail()
-    {
-        list($detail) = $this->packageDetailModel->singlearray($_POST['id']);
-        echo json_encode($detail);
-        exit();
-    }
-
     public function submit()
     {
         $data = $_POST;
