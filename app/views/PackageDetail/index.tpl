@@ -113,6 +113,14 @@
       $('#detailFormModalLabel').text('Tambah Paket')
     })
 
+    $(document).on('click', '.btn-progress', function () {
+      showProgress(this.dataset.id)
+    })
+
+    $(document).on('click', '.btn-partner', function () {
+      showPartner(this.dataset.id)
+    })
+
     $(document).on('click', '[data-toggle="lightbox"]', function (event) {
       event.preventDefault()
       $(this).ekkoLightbox({
@@ -224,7 +232,8 @@
 
     //#region Partner Button
     partnerBtn = document.createElement('a')
-    partnerBtn.classList.add('btn', 'btn-info', 'btn-sm')
+    partnerBtn.classList.add('btn', 'btn-info', 'btn-sm', 'btn-partner')
+    partnerBtn.dataset.id = params.id
     partnerBtn.href = 'javascript:void(0)'
     partnerBtn.innerHTML = 'Rekanan'
     //#endregion
@@ -238,9 +247,9 @@
 
     //#region Progress Button
     progressBtn = document.createElement('a')
-    progressBtn.classList.add('btn', 'btn-info', 'btn-sm')
+    progressBtn.classList.add('btn', 'btn-info', 'btn-sm', 'btn-progress')
     progressBtn.href = 'javascript:void(0)'
-    progressBtn.setAttribute('onclick', `showProgress(${params.id})`)
+    progressBtn.dataset.id = params.id
     progressBtn.innerHTML = 'Progres'
     //#endregion
 
@@ -329,8 +338,13 @@
     $('#pkgdSumProgFinance').val(`Rp ${data.pkgdSumProgFinance}`)
   }
 
-  let showImage = (id) => {
-    // Code
+  let showPartner = (id) => {
+    const data = $(`input[data-id=${id}]`).data()
+
+    $('#partnerFormModal').modal('show')
+    $('#partnerFormModalLabel').text(`Rekanan ${data.pkgdNo}`)
+
+    $(`#partner_form #id`).val(id)
   }
 </script>
 {/literal} {/block}

@@ -3,6 +3,7 @@
 {include 'PackageDetail/index.tpl'}
 {include 'PackageDetail/form.tpl'}
 {include 'PackageDetail/progress.tpl'}
+{include 'Partner/form.tpl'}
 
 {block 'style'}
 {block 'detailStyle'}{/block}
@@ -127,11 +128,13 @@
 <!-- prettier-ignore -->
 {block 'detailForm'}{/block}
 {block 'progressForm'}{/block}
+{block 'partnerForm'}{/block}
 {/block} 
 {block 'script'}
 
 {block 'detailFormJS'}{/block}
 {block 'detailJS'}{/block}
+{block 'partnerScript'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
