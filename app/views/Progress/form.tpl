@@ -330,7 +330,7 @@
           showFileAction('prog_img', prog_img)
         }
 
-        if (res.prog_img != '') {
+        if (res.prog_doc != '') {
           const prog_doc = {
             filename: res.prog_doc,
             source: `${base_url}/upload/pdf/progress/${res.id}/${res.prog_doc}`,
