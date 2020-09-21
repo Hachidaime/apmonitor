@@ -80,16 +80,9 @@
       search()
     })
 
-    $('#page').change(function () {
-      search(this.value)
-    })
-
-    $('#previousBtn').click(function () {
-      search(this.dataset.id)
-    })
-
-    $('#nextBtn').click(function () {
-      search(this.dataset.id)
+    /* Delete Button */
+    $(document).on('click', '.btn-delete', function (event) {
+      deleteData($(this).data('id'))
     })
   })
 
@@ -167,11 +160,6 @@
         }
 
         createPagination(page, paging, 'pagination')
-
-        /* Tombol Hapus */
-        $('.btn-delete').click(function () {
-          deleteData($(this).data('id'))
-        })
       },
       'JSON'
     )
