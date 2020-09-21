@@ -162,97 +162,90 @@
   }
 
   let pkgdRow = (params = null) => {
-    let tRow = document.createElement('tr')
+    let tRow = null
+    let no = null,
+      pkgdNo = null,
+      pkgdName = null,
+      pkgdPeriodType = null,
+      pkgdAdvancedYear = null,
+      action = null,
+      detail = null
 
-    let no = null
+    //#region Number
     no = document.createElement('td')
     no.classList.add('text-right')
-    no.style.backgroundColor = '#ffffff'
-    no.style.left = '0'
-    no.style.position = 'sticky'
-    no.style.zIndex = '10'
-    no.style.outline = '1px solid #e9ecef'
-    no.innerHTML = params != null ? params.no : tBody.childElementCount + 1
-
-    let pkgdNo = createPkgdNo(params != null ? params.pkgd_no : ''),
-      pkgdName = createPkgdName(params != null ? params.pkgd_name : ''),
-      pkgdPeriodType = createPkgdPeriodType(
-        params != null ? params.pkgd_period_type : ''
-      ),
-      pkgdAdvancedYear = createPkgdAdvancedYear(
-        params != null ? params.pkgd_advanced_year : ''
-      ),
-      action = createAction(params)
-
-    tRow.appendChild(no)
-    tRow.appendChild(pkgdNo)
-    tRow.appendChild(pkgdName)
-    tRow.appendChild(pkgdPeriodType)
-    tRow.appendChild(pkgdAdvancedYear)
-    tRow.appendChild(action)
-
-    let detail = document.createElement('input')
-    detail.setAttribute('type', 'hidden')
-    $.each(params, (key, value) => {
-      detail.dataset[camelCase(key)] = value
+    Object.assign(no.style, {
+      backgroundColor: '#ffffff',
+      left: '0',
+      position: 'sticky',
+      zIndex: '10',
+      outline: '1px solid #e9ecef',
     })
-    tRow.appendChild(detail)
+    no.innerHTML = params != null ? params.no : tBody.childElementCount + 1
+    //#endregion
 
-    tBody.appendChild(tRow)
-  }
+    //#region Package Number
+    pkgdNo = document.createElement('td')
+    Object.assign(pkgdNo.style, {
+      backgroundColor: '#ffffff',
+      left: '40px',
+      position: 'sticky',
+      zIndex: '10',
+      outline: '1px solid #e9ecef',
+    })
+    pkgdNo.innerHTML = params.pkgd_no
+    //#endregion
 
-  let createPkgdNo = (param) => {
-    let pkgdNo = document.createElement('td')
-    pkgdNo.style.backgroundColor = '#ffffff'
-    pkgdNo.style.left = '40px'
-    pkgdNo.style.position = 'sticky'
-    pkgdNo.style.zIndex = '10'
-    pkgdNo.style.outline = '1px solid #e9ecef'
-    pkgdNo.innerHTML = param
+    //#region Package Name
+    pkgdName = document.createElement('td')
+    pkgdName.innerHTML = params.pkgd_name
+    //#endregion
 
-    return pkgdNo
-  }
+    //#region Package Period Type
+    pkgdPeriodType = document.createElement('td')
+    pkgdPeriodType.innerHTML = params.pkgd_period_type
+    //#endregion
 
-  let createPkgdName = (param) => {
-    let pkgdName = document.createElement('td')
-    pkgdName.innerHTML = param
-
-    return pkgdName
-  }
-
-  let createPkgdPeriodType = (param) => {
-    let pkgdPeriodType = document.createElement('td')
-    pkgdPeriodType.innerHTML = param
-
-    return pkgdPeriodType
-  }
-
-  let createPkgdAdvancedYear = (param) => {
-    let pkgdAdvancedYear = document.createElement('td')
+    //#region Package Advanced Year
+    pkgdAdvancedYear = document.createElement('td')
     pkgdAdvancedYear.classList.add('text-center')
-    pkgdAdvancedYear.innerHTML = param == 1 ? yesText : noText
+    pkgdAdvancedYear.innerHTML =
+      params.pkgd_advanced_year == 1 ? yesText : noText
+    //#endregion
 
-    return pkgdAdvancedYear
-  }
+    //#region Action
+    let actionBtns = null,
+      partnerBtn = null,
+      targetBtn = null,
+      progressBtn = null,
+      imageBtn = null,
+      editBtn = null,
+      removeBtn = null
 
-  let createAction = (params) => {
-    let partnerBtn = document.createElement('a')
+    //#region Partner Button
+    partnerBtn = document.createElement('a')
     partnerBtn.classList.add('btn', 'btn-info', 'btn-sm')
     partnerBtn.href = 'javascript:void(0)'
     partnerBtn.innerHTML = 'Rekanan'
+    //#endregion
 
-    let targetBtn = document.createElement('a')
+    //#region Target Button
+    targetBtn = document.createElement('a')
     targetBtn.classList.add('btn', 'btn-info', 'btn-sm')
     targetBtn.href = 'javascript:void(0)'
     targetBtn.innerHTML = 'Target'
+    //#endregion
 
-    let progressBtn = document.createElement('a')
+    //#region Progress Button
+    progressBtn = document.createElement('a')
     progressBtn.classList.add('btn', 'btn-info', 'btn-sm')
     progressBtn.href = 'javascript:void(0)'
     progressBtn.setAttribute('onclick', `showProgress(${params.id})`)
     progressBtn.innerHTML = 'Progres'
+    //#endregion
 
-    let imageBtn = document.createElement('a')
+    //#region Image Button
+    imageBtn = document.createElement('a')
     imageBtn.classList.add('btn', 'btn-info', 'btn-sm')
     imageBtn.dataset.toggle = 'lightbox'
     imageBtn.href =
@@ -260,30 +253,57 @@
         ? `${base_url}/upload/${params.pkgd_last_prog_img}`
         : 'javascript:void(0)'
     imageBtn.innerHTML = 'Foto'
+    //#endregion
 
-    let editBtn = document.createElement('a')
+    //#region Edit Button
+    editBtn = document.createElement('a')
     editBtn.classList.add('btn', 'btn-info', 'btn-sm')
     editBtn.href = 'javascript:void(0)'
     editBtn.innerHTML = 'Ubah'
+    //#endregion
 
-    let removeBtn = document.createElement('a')
+    //#region Remove Button
+    removeBtn = document.createElement('a')
     removeBtn.classList.add('btn', 'btn-info', 'btn-sm', 'btn-remove')
     removeBtn.href = 'javascript:void(0)'
     removeBtn.innerHTML = 'Hapus'
+    //#endregion
 
-    let actionBtn = document.createElement('div')
-    actionBtn.classList.add('btn-group')
-    actionBtn.appendChild(partnerBtn)
-    actionBtn.appendChild(targetBtn)
-    actionBtn.appendChild(progressBtn)
-    actionBtn.appendChild(imageBtn)
-    // actionBtn.appendChild(editBtn)
-    // actionBtn.appendChild(removeBtn)
+    //#region Action Buttons
+    actionBtns = document.createElement('div')
+    actionBtns.classList.add('btn-group')
+    actionBtns.appendChild(partnerBtn)
+    actionBtns.appendChild(targetBtn)
+    actionBtns.appendChild(progressBtn)
+    actionBtns.appendChild(imageBtn)
+    // actionBtns.appendChild(editBtn)
+    // actionBtns.appendChild(removeBtn)
+    //#endregion
 
-    let action = document.createElement('td')
-    action.appendChild(actionBtn)
+    action = document.createElement('td')
+    action.appendChild(actionBtns)
+    //#endregion
 
-    return action
+    //#region Detail
+    detail = document.createElement('input')
+    detail.setAttribute('type', 'hidden')
+    $.each(params, (key, value) => {
+      detail.dataset[camelCase(key)] = value
+    })
+    //#endregion
+
+    //#region Row
+    tRow = document.createElement('tr')
+    tRow.appendChild(no)
+    tRow.appendChild(pkgdNo)
+    tRow.appendChild(pkgdName)
+    tRow.appendChild(pkgdPeriodType)
+    tRow.appendChild(pkgdAdvancedYear)
+    tRow.appendChild(action)
+    tRow.appendChild(detail)
+    //#endregion
+
+    tBody.appendChild(tRow)
   }
 
   let pkgdRowEmpty = () => {

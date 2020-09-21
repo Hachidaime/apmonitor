@@ -24,45 +24,45 @@
       </div>
 
       <div class="modal-body">
-        <div class="form-group">
-          <label for="pkgd_no">
+        <div class="form-group row">
+          <label class="col-form-label col-sm-6" for="pkgd_no">
             Tanggal Terakhir Update
+            <span class="float-sm-right d-sm-inline d-none">:</span>
           </label>
-          <input
-            type="text"
-            class="form-control-plaintext text-right"
-            id="pkgdLastProgDate"
-          />
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control-plaintext border px-2"
+              id="pkgdLastProgDate"
+            />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="pkgd_name">
+        <div class="form-group row">
+          <label class="col-form-label col-sm-6" for="pkgd_name">
             Total Progres Fisik
+            <span class="float-sm-right d-sm-inline d-none">:</span>
           </label>
-          <input
-            type="text"
-            class="form-control-plaintext text-right"
-            id="pkgdSumProgPhysical"
-          />
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control-plaintext text-right border px-2"
+              id="pkgdSumProgPhysical"
+            />
+          </div>
         </div>
-        <div class="form-group">
-          <label for="pkgd_name">
+        <div class="form-group row">
+          <label class="col-form-label col-sm-6" for="pkgd_name">
             Total Progres Keuangan
+            <span class="float-sm-right d-sm-inline d-none">:</span>
           </label>
-          <input
-            type="text"
-            class="form-control-plaintext text-right"
-            id="pkgdSumProgFinance"
-          />
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control-plaintext text-right border px-2"
+              id="pkgdSumProgFinance"
+            />
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-light btn-flat"
-          data-dismiss="modal"
-        >
-          Close
-        </button>
       </div>
     </div>
   </div>
