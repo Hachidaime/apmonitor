@@ -46,23 +46,6 @@
           <div class="invalid-feedback"></div>
         </div>
       </div>
-
-      <div class="form-group row">
-        <label for="prg_desc" class="col-lg-3 col-sm-4 col-form-label">
-          Deskripsi Program
-          <span class="float-sm-right d-sm-inline d-none">:</span>
-        </label>
-        <div class="col-lg-9 col-sm-8">
-          <input
-            type="text"
-            class="form-control rounded-0"
-            id="prg_desc"
-            name="prg_desc"
-            autocomplete="off"
-          />
-          <div class="invalid-feedback"></div>
-        </div>
-      </div>
     </div>
     <!-- /.card-body -->
 

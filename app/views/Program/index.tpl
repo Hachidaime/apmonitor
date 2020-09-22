@@ -34,13 +34,59 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
-        <table class="table table-bordered table-sm text-nowrap">
+        <table
+          class="table table-bordered table-sm text-nowrap"
+          style="min-width: 576px;"
+        >
           <thead>
             <tr>
-              <th class="text-right" width="50px">#</th>
-              <th class="text-center" width="150px">Kode Program</th>
-              <th class="text-center" width="200px">Nama Program</th>
-              <th class="text-center" width="*">Deskripsi Program</th>
+              <th
+                class="text-right"
+                width="40px"
+                style="
+                  /* Background color */
+                  background-color: #ffffff;
+
+                  /* Outline */
+                  outline: 1px solid #e9ecef;
+
+                  /* Stick to the left */
+                  left: 0px;
+                  position: sticky;
+
+                  /* Displayed on top of other rows when scrolling */
+                  z-index: 10;
+
+                  /* Box Shadow */
+                  /* box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.4); */
+                "
+              >
+                #
+              </th>
+              <th
+                class="text-center"
+                width="120px"
+                style="
+                  /* Background color */
+                  background-color: #ffffff;
+
+                  /* Outline */
+                  outline: 1px solid #e9ecef;
+
+                  /* Stick to the left */
+                  left: 40px;
+                  position: sticky;
+
+                  /* Displayed on top of other rows when scrolling */
+                  z-index: 10;
+
+                  /* Box Shadow */
+                  /* box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.4); */
+                "
+              >
+                Kode Program
+              </th>
+              <th class="text-center" width="*">Nama Program</th>
               <th width="130px">&nbsp;</th>
             </tr>
           </thead>
@@ -96,25 +142,35 @@
         let no = null,
           prgCode = null,
           prgName = null,
-          prgDesc = null,
           action = null
 
         for (let index in list) {
           no = document.createElement('td')
           no.classList.add('text-right')
+          Object.assign(no.style, {
+            backgroundColor: '#ffffff',
+            left: '0',
+            position: 'sticky',
+            zIndex: '10',
+            outline: '1px solid #e9ecef',
+          })
           no.innerHTML =
             Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
             Number(index) +
             1
 
           prgCode = document.createElement('td')
+          Object.assign(prgCode.style, {
+            backgroundColor: '#ffffff',
+            left: '40px',
+            position: 'sticky',
+            zIndex: '10',
+            outline: '1px solid #e9ecef',
+          })
           prgCode.innerHTML = list[index].prg_code
 
           prgName = document.createElement('td')
           prgName.innerHTML = list[index].prg_name
-
-          prgDesc = document.createElement('td')
-          prgDesc.innerHTML = list[index].prg_desc
 
           let editBtn = createEditBtn(list[index].id)
           let deleteBtn = createDeleteBtn(list[index].id)
@@ -127,7 +183,6 @@
           tRow.appendChild(no)
           tRow.appendChild(prgCode)
           tRow.appendChild(prgName)
-          tRow.appendChild(prgDesc)
           tRow.appendChild(action)
 
           tBody.appendChild(tRow)

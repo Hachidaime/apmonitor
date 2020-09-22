@@ -140,13 +140,11 @@ class ProgramController extends Controller
         $validation = $this->validator->make($data, [
             'prg_code' => "required|max:20|min:3|unique:{$this->programModel->getTable()},id,{$data['id']}",
             'prg_name' => 'required|max:100|min:6',
-            'prg_desc' => 'max:250',
         ]);
 
         $validation->setAliases([
             'prg_code' => 'Kode Program',
             'prg_name' => 'Nama Program',
-            'prg_desc' => 'Deskripsi Program',
         ]);
 
         $validation->setMessages([
