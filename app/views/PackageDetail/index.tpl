@@ -27,6 +27,7 @@
       <table
         class="table table-bordered table-sm text-nowrap mb-1 ml-0"
         style="min-width: 768px;"
+        id="detailList"
       >
         <thead>
           <tr>
@@ -129,7 +130,7 @@
     })
   })
 
-  let tBody = document.getElementById('result_data')
+  let tBody = document.querySelector('#detailList #result_data')
 
   let pkgdSearch = () => {
     $.post(
