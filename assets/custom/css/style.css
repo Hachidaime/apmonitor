@@ -42,3 +42,35 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/*#region Sticky Column */
+.sticky-no {
+  /* Background color */
+  background-color: #ffffff;
+
+  /* Outline */
+  outline: 1px solid #e9ecef;
+
+  /* Stick to the left */
+  left: 0px;
+  position: sticky;
+
+  /* Displayed on top of other rows when scrolling */
+  z-index: 10;
+}
+
+.sticky-first {
+  /* Background color */
+  background-color: #ffffff;
+
+  /* Outline */
+  outline: 1px solid #e9ecef;
+
+  /* Stick to the left */
+  left: 40px;
+  position: sticky;
+
+  /* Displayed on top of other rows when scrolling */
+  z-index: 10;
+}
+/* #endregion */
