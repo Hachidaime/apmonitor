@@ -9,7 +9,7 @@
   aria-labelledby="partnerFormModalLabel"
   aria-hidden="true"
 >
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="partnerFormModalLabel"></h5>
@@ -22,9 +22,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="partner_form" role="form" method="POST">
-        <input type="hidden" id="id" name="id" value="" />
-        <div class="modal-body">
+      <div class="modal-body">
+        <form id="partner_form" role="form" method="POST">
+          <input type="hidden" id="id" name="id" value="" />
           <div class="form-group row">
             <label
               for="pkgd_partner_name"
@@ -262,28 +262,28 @@
               <div class="invalid-feedback"></div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn bg-gradient-light btn-flat m-0"
-            data-dismiss="modal"
-            style="width: 125px;"
-          >
-            <i class="fas fa-window-close mr-2"></i>
-            Batal
-          </button>
-          <button
-            type="button"
-            class="btn bg-gradient-success btn-flat m-0"
-            style="width: 125px;"
-            id="btn_save"
-          >
-            <i class="fas fa-save mr-2"></i>
-            Simpan
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn bg-gradient-light btn-flat m-0"
+          data-dismiss="modal"
+          style="width: 125px;"
+        >
+          <i class="fas fa-window-close mr-2"></i>
+          Batal
+        </button>
+        <button
+          type="button"
+          class="btn bg-gradient-success btn-flat m-0"
+          style="width: 125px;"
+          id="btn_save"
+        >
+          <i class="fas fa-save mr-2"></i>
+          Simpan
+        </button>
+      </div>
     </div>
   </div>
 </div>
