@@ -34,11 +34,58 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
-        <table class="table table-bordered table-sm text-nowrap">
+        <table
+          class="table table-bordered table-sm text-nowrap"
+          style="min-width: 576px;"
+        >
           <thead>
             <tr>
-              <th class="align-middle text-right" width="50px">#</th>
-              <th class="align-middle text-center" width="*">Nama</th>
+              <th
+                class="align-middle text-right"
+                width="40px"
+                style="
+                  /* Background color */
+                  background-color: #ffffff;
+
+                  /* Outline */
+                  outline: 1px solid #e9ecef;
+
+                  /* Stick to the left */
+                  left: 0px;
+                  position: sticky;
+
+                  /* Displayed on top of other rows when scrolling */
+                  z-index: 10;
+
+                  /* Box Shadow */
+                  /* box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.4); */
+                "
+              >
+                #
+              </th>
+              <th
+                class="align-middle text-center"
+                width="*"
+                style="
+                  /* Background color */
+                  background-color: #ffffff;
+
+                  /* Outline */
+                  outline: 1px solid #e9ecef;
+
+                  /* Stick to the left */
+                  left: 40px;
+                  position: sticky;
+
+                  /* Displayed on top of other rows when scrolling */
+                  z-index: 10;
+
+                  /* Box Shadow */
+                  /* box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.4); */
+                "
+              >
+                Nama
+              </th>
               <th class="align-middle text-center" width="180px">
                 Username
               </th>
@@ -114,10 +161,24 @@
         for (let index in list) {
           no = document.createElement('td')
           no.classList.add('text-right')
+          Object.assign(no.style, {
+            backgroundColor: '#ffffff',
+            left: '0',
+            position: 'sticky',
+            zIndex: '10',
+            outline: '1px solid #e9ecef',
+          })
           no.innerHTML =
             Number(ROWS_PER_PAGE * (paging.currentPage - 1)) + Number(index) + 1
 
           usrName = document.createElement('td')
+          Object.assign(usrName.style, {
+            backgroundColor: '#ffffff',
+            left: '40px',
+            position: 'sticky',
+            zIndex: '10',
+            outline: '1px solid #e9ecef',
+          })
           usrName.innerHTML = list[index].usr_name
 
           usrUsername = document.createElement('td')
