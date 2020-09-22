@@ -17,40 +17,52 @@
         method="post"
         id="login_form"
       >
-        <div class="form-group">
-          <label for="fiscal_year">Tahun Anggaran</label>
-          <input
-            type="text"
-            class="form-control rounded-0"
-            id="fiscal_year"
-            name="fiscal_year"
-            autocomplete="off"
-            data-toggle="datetimepicker"
-            data-target="#fiscal_year"
-          />
-          <div class="invalid-feedback"></div>
+        <div class="form-group row">
+          <label for="fiscal_year" class="col-5 col-form-label">
+            Tahun Anggaran
+          </label>
+          <div class="col-4">
+            <input
+              type="text"
+              class="form-control rounded-0 text-center"
+              id="fiscal_year"
+              name="fiscal_year"
+              autocomplete="off"
+              data-toggle="datetimepicker"
+              data-target="#fiscal_year"
+            />
+            <div class="invalid-feedback"></div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="usr_username">Username</label>
-          <input
-            type="text"
-            class="form-control rounded-0"
-            id="usr_username"
-            name="usr_username"
-          />
-          <div class="invalid-feedback"></div>
+        <div class="form-group row">
+          <label for="usr_username" class="col-5 col-form-label">
+            Username
+          </label>
+          <div class="col-7">
+            <input
+              type="text"
+              class="form-control rounded-0"
+              id="usr_username"
+              name="usr_username"
+            />
+            <div class="invalid-feedback"></div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label for="usr_password">Password</label>
-          <input
-            type="password"
-            class="form-control rounded-0"
-            id="usr_password"
-            name="usr_password"
-          />
-          <div class="invalid-feedback"></div>
+        <div class="form-group row">
+          <label for="usr_password" class="col-5 col-form-label">
+            Password
+          </label>
+          <div class="col-7">
+            <input
+              type="password"
+              class="form-control rounded-0"
+              id="usr_password"
+              name="usr_password"
+            />
+            <div class="invalid-feedback"></div>
+          </div>
         </div>
 
         <div class="row">
@@ -84,15 +96,6 @@
       viewMode: 'years',
       format: 'YYYY',
     })
-    // .datepicker({
-    //   format: 'yyyy', // Notice the Extra space at the beginning
-    //   viewMode: 'years',
-    //   minViewMode: 'years',
-    //   startView: 'decade',
-    //   minView: 'decade',
-    //   viewSelect: 'decade',
-    //   autoclose: true,
-    // })
 
     $('#btn_login').click(() => {
       let data = $('#login_form').serialize()
