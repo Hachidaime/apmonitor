@@ -42,8 +42,11 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <div class="card-body table-responsive p-0 border-bottom">
-        <table class="table table-bordered table-sm" style="min-width: 576px;">
+      <div class="card-body table-responsive p-0 border">
+        <table
+          class="table table-bordered text-nowrap table-sm"
+          style="min-width: 576px;"
+        >
           <thead>
             <tr>
               <th class="align-middle text-right sticky-no" width="40px">#</th>
