@@ -145,7 +145,7 @@
 
   let saveDetail = () => {
     $.post(
-      `${base_url}/packagedetail/submit`,
+      `${BASE_URL}/packagedetail/submit`,
       $('#detail_form').serialize() + `&pkg_id=${$('#my_form #id').val()}`,
       (res) => {
         if (!res.success) {

@@ -325,7 +325,7 @@
 
   let savePartner = (id) => {
     $.post(
-      `${base_url}/partner/submit`,
+      `${BASE_URL}/partner/submit`,
       $('#partner_form').serialize(),
       (res) => {
         if (!res.success) {

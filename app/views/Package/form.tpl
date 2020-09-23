@@ -4,6 +4,8 @@
 {include 'PackageDetail/form.tpl'}
 {include 'PackageDetail/progress.tpl'}
 {include 'Partner/form.tpl'}
+{include 'Target/index.tpl'}
+{include 'Target/form.tpl'}
 
 {block 'style'}
 {block 'detailStyle'}{/block}
@@ -129,12 +131,16 @@
 {block 'detailForm'}{/block}
 {block 'progressForm'}{/block}
 {block 'partnerForm'}{/block}
+{block 'targetList'}{/block}
+{block 'targetForm'}{/block}
 {/block} 
-{block 'script'}
 
+{block 'script'}
 {block 'detailFormJS'}{/block}
 {block 'detailJS'}{/block}
 {block 'partnerScript'}{/block}
+{block 'targetScript'}{/block}
+{block 'targetFormScript'}{/block}
 {literal}
 <script>
   $(document).ready(function () {
@@ -180,7 +186,7 @@
 
   let getDetail = (data_id) => {
     $.post(
-      `${main_url}/detail`,
+      `${MAIN_URL}/detail`,
       { id: data_id },
       function (res) {
         $.each(res, (id, value) => {
@@ -195,7 +201,7 @@
 
   let save = () => {
     $.post(
-      `${main_url}/submit`,
+      `${MAIN_URL}/submit`,
       $('#my_form').serialize(),
       (res) => {
         if (!res.success) {
@@ -204,7 +210,7 @@
               showErrorMessage(id, message)
             })
           } else flash(res.msg, 'error')
-        } else window.location = main_url
+        } else window.location = MAIN_URL
       },
       'JSON'
     )

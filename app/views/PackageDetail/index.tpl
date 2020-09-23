@@ -118,6 +118,10 @@
       showProgress(this.dataset.id)
     })
 
+    $(document).on('click', '.btn-target', function () {
+      showTarget(this.dataset.id)
+    })
+
     $(document).on('click', '.btn-partner', function () {
       showPartner(this.dataset.id)
     })
@@ -134,7 +138,7 @@
 
   let pkgdSearch = () => {
     $.post(
-      `${base_url}/packagedetail/search`,
+      `${BASE_URL}/packagedetail/search`,
       { pkg_id: $('#my_form #id').val() },
       (res) => {
         if (res.length > 0) {
@@ -241,8 +245,9 @@
 
     //#region Target Button
     targetBtn = document.createElement('a')
-    targetBtn.classList.add('btn', 'btn-info', 'btn-sm')
+    targetBtn.classList.add('btn', 'btn-info', 'btn-sm', 'btn-target')
     targetBtn.href = 'javascript:void(0)'
+    targetBtn.dataset.id = params.id
     targetBtn.innerHTML = 'Target'
     //#endregion
 
@@ -260,7 +265,7 @@
     imageBtn.dataset.toggle = 'lightbox'
     imageBtn.href =
       params.pkgd_last_prog_img != '' && params.pkgd_last_prog_img != null
-        ? `${base_url}/upload/${params.pkgd_last_prog_img}`
+        ? `${BASE_URL}/upload/${params.pkgd_last_prog_img}`
         : 'javascript:void(0)'
     imageBtn.innerHTML = 'Foto'
     //#endregion
@@ -354,6 +359,13 @@
 
       $(`#partner_form #${key}`).val(value)
     })
+  }
+
+  let showTarget = (id) => {
+    const data = $(`input[data-id=${id}]`).data()
+
+    $('#targetModal').modal('show')
+    $('#targetModalLabel').text(`Target ${data.pkgdNo}`)
   }
 </script>
 {/literal} {/block}

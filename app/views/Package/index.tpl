@@ -87,7 +87,7 @@
     const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
 
     $.post(
-      `${main_url}/search`,
+      `${MAIN_URL}/search`,
       params,
       (res) => {
         let paging = res.info
