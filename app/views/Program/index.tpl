@@ -33,7 +33,7 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <div class="card-body table-responsive p-0 border-bottom">
+      <div class="card-body table-responsive p-0 border-top-0 border">
         <table
           class="table table-bordered table-sm text-nowrap"
           style="min-width: 576px;"
