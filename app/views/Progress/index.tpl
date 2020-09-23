@@ -42,12 +42,12 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <div class="card-body table-responsive p-0">
-        <table class="table table-bordered table-sm">
+      <div class="card-body table-responsive p-0 border-bottom">
+        <table class="table table-bordered table-sm" style="min-width: 576px;">
           <thead>
             <tr>
-              <th class="align-middle text-right" width="50px">#</th>
-              <th class="align-middle text-center" width="80px">
+              <th class="align-middle text-right sticky-no" width="40px">#</th>
+              <th class="align-middle text-center sticky-first" width="80px">
                 Tahun Anggaran
               </th>
               <th class="align-middle text-center" width="*">Nama Paket</th>
@@ -114,7 +114,7 @@
     const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
 
     $.post(
-      `${main_url}/search`,
+      `${MAIN_URL}/search`,
       params,
       (res) => {
         let paging = res.info
@@ -133,16 +133,12 @@
 
         for (let index in list) {
           //#region Number
-          no = document.createElement('td')
-          no.classList.add('text-right')
-          no.innerHTML =
-            Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
-            Number(index) +
-            1
+          no = numberColumn(index, paging.currentPage)
           //#endregion
 
           //#region Package Fiscal Year
           progFiscalYear = document.createElement('td')
+          progFiscalYear.classList.add('sticky-first')
           progFiscalYear.innerHTML = list[index].prog_fiscal_year
           //#endregion
 
@@ -178,7 +174,7 @@
           imgBtn.dataset.toggle = 'lightbox'
           imgBtn.href =
             list[index].prog_img != '' && list[index].prog_img != null
-              ? `${base_url}/upload/img/progress/${list[index].id}/${list[index].prog_img}`
+              ? `${BASE_URL}/upload/img/progress/${list[index].id}/${list[index].prog_img}`
               : 'javascript:void(0)'
           imgBtn.innerHTML = 'Foto'
           //#endregion
@@ -189,7 +185,7 @@
           docBtn.href = 'javascript:void(0)'
           if (list[index].prog_doc != '' && list[index].prog_doc != null) {
             docBtn.setAttribute('target', 'blank_')
-            docBtn.href = `${base_url}/upload/pdf/progress/${list[index].id}/${list[index].prog_doc}`
+            docBtn.href = `${BASE_URL}/upload/pdf/progress/${list[index].id}/${list[index].prog_doc}`
           }
           docBtn.innerHTML = 'PDF'
           //#endregion

@@ -298,7 +298,7 @@
 
   let getDetail = (data_id) => {
     $.post(
-      `${main_url}/detail`,
+      `${MAIN_URL}/detail`,
       { id: data_id },
       function (res) {
         $.each(res, (id, value) => {
@@ -308,7 +308,7 @@
         if (res.prog_img != '') {
           const prog_img = {
             filename: res.prog_img,
-            source: `${base_url}/upload/img/progress/${res.id}/${res.prog_img}`,
+            source: `${BASE_URL}/upload/img/progress/${res.id}/${res.prog_img}`,
           }
           showPreview('prog_img', prog_img)
           showFileAction('prog_img', prog_img)
@@ -317,7 +317,7 @@
         if (res.prog_doc != '') {
           const prog_doc = {
             filename: res.prog_doc,
-            source: `${base_url}/upload/pdf/progress/${res.id}/${res.prog_doc}`,
+            source: `${BASE_URL}/upload/pdf/progress/${res.id}/${res.prog_doc}`,
           }
           showFileAction('prog_doc', prog_doc)
         }
@@ -328,7 +328,7 @@
 
   let save = () => {
     $.post(
-      `${main_url}/submit`,
+      `${MAIN_URL}/submit`,
       $('#my_form').serialize(),
       (res) => {
         if (!res.success) {
@@ -337,7 +337,7 @@
               showErrorMessage(id, message)
             })
           } else flash(res.msg, 'error')
-        } else window.location = main_url
+        } else window.location = MAIN_URL
       },
       'JSON'
     )
