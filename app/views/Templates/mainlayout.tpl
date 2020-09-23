@@ -111,9 +111,10 @@
     <!-- Custom JavaScript -->
     {literal}
     <script>
-      let base_url = '{/literal}{$smarty.const.BASE_URL}{literal}'
-      let active_name = '{/literal}{$smarty.session.ACTIVE.name}{literal}'
-      let main_url = `${base_url}/${active_name}`
+      let BASE_URL = '{/literal}{$smarty.const.BASE_URL}{literal}'
+      let ACTIVE_NAME = '{/literal}{$smarty.session.ACTIVE.name}{literal}'
+      let MAIN_URL = `${BASE_URL}/${ACTIVE_NAME}`
+      const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
     </script>
     {/literal}
     <script src="{$smarty.const.BASE_URL}/assets/custom/js/script.js?t={$smarty.now}"></script>
