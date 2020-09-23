@@ -22,6 +22,7 @@ $master = [
     'Package',
     'PackageDetail',
     'Partner',
+    'Target',
     'Progress',
 ];
 
