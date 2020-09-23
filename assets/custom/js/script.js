@@ -104,13 +104,13 @@ let deleteData = (id) => {
     .then((result) => {
       if (result.value) {
         let data = `id=${id}`
-        let url = `${main_url}/remove`
+        let url = `${MAIN_URL}/remove`
         $.post(
           url,
           data,
           (res) => {
             if (res.success) {
-              window.location = main_url
+              window.location = MAIN_URL
             } else {
               flash(res.msg, 'error')
             }
@@ -134,7 +134,7 @@ let upload = (param) => {
   let id = input.data('id') // ? field id
   let files = input[0].files[0]
   let accept = input.attr('accept')
-  let url = `${base_url}/file/upload`
+  let url = `${BASE_URL}/file/upload`
 
   /**
    * * Mendefinisikan Input Data
@@ -217,7 +217,7 @@ let createEditBtn = (id) => {
   let editBtn = document.createElement('a')
   editBtn.innerHTML = 'Ubah'
   editBtn.classList.add('badge', 'badge-warning', 'badge-pill')
-  editBtn.href = `${main_url}/edit/${id}`
+  editBtn.href = `${MAIN_URL}/edit/${id}`
 
   return editBtn
 }
@@ -285,4 +285,12 @@ let camelCase = (str, delimeter = '_') => {
   return str
     .split(delimeter)
     .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1))
+}
+
+let numberColumn = (index, currentPage) => {
+  let no = document.createElement('td')
+  no.classList.add('text-right', 'sticky-no')
+  no.innerHTML =
+    Number(ROWS_PER_PAGE) * (Number(currentPage) - 1) + Number(index) + 1
+  return no
 }
