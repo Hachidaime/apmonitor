@@ -76,7 +76,7 @@
 
   let getDetail = (data_id) => {
     $.post(
-      `${main_url}/detail`,
+      `${MAIN_URL}/detail`,
       { id: data_id },
       function (res) {
         $.each(res, (id, value) => {
@@ -89,7 +89,7 @@
 
   let saveData = () => {
     $.post(
-      `${main_url}/submit`,
+      `${MAIN_URL}/submit`,
       $('#my_form').serialize(),
       (res) => {
         if (!res.success) {
@@ -98,7 +98,7 @@
               showErrorMessage(id, message)
             })
           } else flash(res.msg, 'error')
-        } else window.location = main_url
+        } else window.location = MAIN_URL
       },
       'JSON'
     )
