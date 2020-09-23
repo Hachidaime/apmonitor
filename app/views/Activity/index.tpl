@@ -34,13 +34,17 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0">
-        <table class="table table-bordered table-sm text-nowrap">
+        <table
+          class="table table-bordered table-sm text-nowrap"
+          style="min-width: 576px;"
+        >
           <thead>
             <tr>
-              <th class="text-right" width="50px">#</th>
-              <th class="text-center" width="150px">Kode Kegiatan</th>
-              <th class="text-center" width="200px">Nama Kegiatan</th>
-              <th class="text-center" width="*">Deskripsi Kegiatan</th>
+              <th class="text-right sticky-no" width="40px">#</th>
+              <th class="text-center sticky-first" width="120px">
+                Kode Kegiatan
+              </th>
+              <th class="text-center" width="*">Nama Kegiatan</th>
               <th width="120px">&nbsp;</th>
             </tr>
           </thead>
@@ -84,7 +88,7 @@
     const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
 
     $.post(
-      `${main_url}/search`,
+      `${MAIN_URL}/search`,
       params,
       (res) => {
         let paging = res.info
@@ -96,23 +100,17 @@
         let no = null,
           actCode = null,
           actName = null,
-          actDesc = null,
           action = null
 
         for (let index in list) {
-          no = document.createElement('td')
-          no.classList.add('text-right')
-          no.innerHTML =
-            Number(ROWS_PER_PAGE * (paging.currentPage - 1)) + Number(index) + 1
+          no = numberColumn(index, paging.currentPage)
 
           actCode = document.createElement('td')
+          actCode.classList.add('sticky-first')
           actCode.innerHTML = list[index].act_code
 
           actName = document.createElement('td')
           actName.innerHTML = list[index].act_name
-
-          actDesc = document.createElement('td')
-          actDesc.innerHTML = list[index].act_desc
 
           let editBtn = createEditBtn(list[index].id)
           let deleteBtn = createDeleteBtn(list[index].id)
@@ -125,7 +123,6 @@
           tRow.appendChild(no)
           tRow.appendChild(actCode)
           tRow.appendChild(actName)
-          tRow.appendChild(actDesc)
           tRow.appendChild(action)
 
           tBody.appendChild(tRow)

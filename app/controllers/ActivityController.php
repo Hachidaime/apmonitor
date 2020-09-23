@@ -141,14 +141,12 @@ class ActivityController extends Controller
     {
         $validation = $this->validator->make($data, [
             'act_code' => "required|max:20|min:3|unique:{$this->activityModel->getTable()},id,{$data['id']}",
-            'act_desc' => 'required|max:100|min:6',
-            'act_desc' => 'max:250',
+            'act_name' => 'required|max:100|min:6',
         ]);
 
         $validation->setAliases([
             'act_code' => 'Kode Kegiatan',
-            'act_code' => 'Nama Kegiatan',
-            'act_desc' => 'Deskripsi Kegiatan',
+            'act_name' => 'Nama Kegiatan',
         ]);
 
         $validation->setMessages([
