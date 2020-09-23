@@ -40,50 +40,8 @@
         >
           <thead>
             <tr>
-              <th
-                class="text-right"
-                width="40px"
-                style="
-                  /* Background color */
-                  background-color: #ffffff;
-
-                  /* Outline */
-                  outline: 1px solid #e9ecef;
-
-                  /* Stick to the left */
-                  left: 0px;
-                  position: sticky;
-
-                  /* Displayed on top of other rows when scrolling */
-                  z-index: 10;
-
-                  /* Box Shadow */
-                  /* box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.4); */
-                "
-              >
-                #
-              </th>
-              <th
-                class="text-center"
-                width="120px"
-                style="
-                  /* Background color */
-                  background-color: #ffffff;
-
-                  /* Outline */
-                  outline: 1px solid #e9ecef;
-
-                  /* Stick to the left */
-                  left: 40px;
-                  position: sticky;
-
-                  /* Displayed on top of other rows when scrolling */
-                  z-index: 10;
-
-                  /* Box Shadow */
-                  /* box-shadow: 0 0 2px -1px rgba(0, 0, 0, 0.4); */
-                "
-              >
+              <th class="text-right sticky-no" width="40px">#</th>
+              <th class="text-center sticky-first" width="120px">
                 Kode Program
               </th>
               <th class="text-center" width="*">Nama Program</th>
@@ -127,10 +85,8 @@
     params['page'] = page
     params['keyword'] = $('#keyword').val()
 
-    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
-
     $.post(
-      `${main_url}/search`,
+      `${MAIN_URL}/search`,
       params,
       (res) => {
         let paging = res.info
@@ -145,28 +101,10 @@
           action = null
 
         for (let index in list) {
-          no = document.createElement('td')
-          no.classList.add('text-right')
-          Object.assign(no.style, {
-            backgroundColor: '#ffffff',
-            left: '0',
-            position: 'sticky',
-            zIndex: '10',
-            outline: '1px solid #e9ecef',
-          })
-          no.innerHTML =
-            Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
-            Number(index) +
-            1
+          no = numberColumn(index, paging.currentPage)
 
           prgCode = document.createElement('td')
-          Object.assign(prgCode.style, {
-            backgroundColor: '#ffffff',
-            left: '40px',
-            position: 'sticky',
-            zIndex: '10',
-            outline: '1px solid #e9ecef',
-          })
+          prgCode.classList.add('sticky-first')
           prgCode.innerHTML = list[index].prg_code
 
           prgName = document.createElement('td')
