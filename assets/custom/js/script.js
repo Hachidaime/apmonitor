@@ -213,25 +213,6 @@ let showFileAction = (id, data) => {
   fileAction.find('a').attr('href', data.source)
 }
 
-let createEditBtn = (id) => {
-  let editBtn = document.createElement('a')
-  editBtn.innerHTML = 'Ubah'
-  editBtn.classList.add('badge', 'badge-warning', 'badge-pill')
-  editBtn.href = `${MAIN_URL}/edit/${id}`
-
-  return editBtn
-}
-
-let createDeleteBtn = (id) => {
-  let deleteBtn = document.createElement('a')
-  deleteBtn.innerHTML = 'Hapus'
-  deleteBtn.classList.add('badge', 'badge-danger', 'badge-pill', 'btn-delete')
-  deleteBtn.href = 'javascript:void(0)'
-  deleteBtn.dataset.id = `${id}`
-
-  return deleteBtn
-}
-
 /**
  * @description Fungsi ini akan membuat pagination
  * @function createPagination
@@ -287,10 +268,40 @@ let camelCase = (str, delimeter = '_') => {
     .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1))
 }
 
-let numberColumn = (index, currentPage) => {
-  let no = document.createElement('td')
-  no.classList.add('text-right', 'sticky-no')
-  no.innerHTML =
-    Number(ROWS_PER_PAGE) * (Number(currentPage) - 1) + Number(index) + 1
-  return no
+let reArrange = (container, currentPage = 1) => {
+  let rowNo = 1
+  document.querySelectorAll(container).forEach(function (tr) {
+    tr.firstChild.innerHTML =
+      Number(ROWS_PER_PAGE) * (Number(currentPage) - 1) + rowNo
+    rowNo++
+  })
+}
+
+let createElement = (params) => {
+  let element = document.createElement(params.element)
+
+  if (params.id !== undefined) element.id = params.id
+
+  if (params.class !== undefined)
+    params.class.forEach((value) => {
+      element.classList.add(value)
+    })
+
+  if (params.attribute !== undefined)
+    Object.entries(params.attribute).forEach(([key, value]) => {
+      element.setAttribute(key, value)
+    })
+
+  if (params.data !== undefined)
+    Object.entries(params.data).forEach(([key, value]) => {
+      element.dataset[key] = value
+    })
+
+  if (params.children !== undefined)
+    params.children.forEach((value) => {
+      if (typeof value == 'object') element.appendChild(value)
+      else element.innerHTML = value
+    })
+
+  return element
 }
