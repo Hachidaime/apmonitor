@@ -33,19 +33,18 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <div class="card-body table-responsive p-0 border">
-        <table
-          class="table table-bordered table-sm text-nowrap"
-          style="min-width: 576px;"
-        >
+      <div class="card-body table-responsive p-0">
+        <table class="table table-bordered table-sm">
           <thead>
             <tr>
-              <th class="text-right sticky-no" width="40px">#</th>
-              <th class="text-center sticky-first" width="120px">
+              <th class="text-right align-middle" style="max-width: 40px;">
+                #
+              </th>
+              <th class="text-center align-middle" style="max-width: 120px;">
                 Kode Program
               </th>
-              <th class="text-center" width="*">Nama Program</th>
-              <th width="130px">&nbsp;</th>
+              <th class="text-center align-middle" width="*">Nama Program</th>
+              <th style="max-width: 130px;">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -90,42 +89,69 @@
       params,
       (res) => {
         let paging = res.info
-
         let list = res.list
-        let tBody = document.getElementById('result_data')
+        let tBody = document.querySelector('#result_data')
         tBody.innerHTML = ''
-        let tRow = null
-        let no = null,
-          prgCode = null,
-          prgName = null,
-          action = null
-
         for (let index in list) {
-          no = numberColumn(index, paging.currentPage)
+          let tRow = null,
+            no = null,
+            prgCode = null,
+            prgName = null,
+            action = null
 
-          prgCode = document.createElement('td')
-          prgCode.classList.add('sticky-first')
-          prgCode.innerHTML = list[index].prg_code
+          no = createElement({
+            element: 'td',
+            class: ['text-right'],
+          })
 
-          prgName = document.createElement('td')
-          prgName.innerHTML = list[index].prg_name
+          prgCode = createElement({
+            element: 'td',
+            children: [list[index].prg_code],
+          })
 
-          let editBtn = createEditBtn(list[index].id)
-          let deleteBtn = createDeleteBtn(list[index].id)
+          prgName = createElement({
+            element: 'td',
+            children: [list[index].prg_name],
+          })
 
-          action = document.createElement('td')
-          action.appendChild(editBtn)
-          action.appendChild(deleteBtn)
+          let editBtn = null,
+            deleteBtn = null
 
-          tRow = document.createElement('tr')
-          tRow.appendChild(no)
-          tRow.appendChild(prgCode)
-          tRow.appendChild(prgName)
-          tRow.appendChild(action)
+          action = createElement({
+            element: 'td',
+            children: [
+              createElement({
+                // Edit Button
+                element: 'a',
+                class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
+                attribute: {
+                  href: `${MAIN_URL}/edit/${list[index].id}`,
+                },
+                children: ['Edit'],
+              }),
+              createElement({
+                // Delete Button
+                element: 'a',
+                class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
+                data: {
+                  id: list[index].id,
+                },
+                attribute: {
+                  href: `javascript:void(0)`,
+                },
+                children: ['Hapus'],
+              }),
+            ],
+          })
+
+          tRow = createElement({
+            element: 'tr',
+            children: [no, prgCode, prgName, action],
+          })
 
           tBody.appendChild(tRow)
         }
-
+        reArrange('#result_data tr', paging.currentPage)
         createPagination(page, paging, 'pagination')
       },
       'JSON'
