@@ -33,19 +33,16 @@
         </div>
       </div>
       <!-- /.card-header -->
-      <div class="card-body table-responsive p-0 border">
-        <table
-          class="table table-bordered table-sm text-nowrap"
-          style="min-width: 576px;"
-        >
+      <div class="card-body table-responsive p-0">
+        <table class="table table-bordered table-sm">
           <thead>
             <tr>
-              <th class="text-right sticky-no" width="40px">#</th>
-              <th class="text-center sticky-first" width="120px">
+              <th class="text-right align-middle" width="40px">#</th>
+              <th class="text-center align-middle" width="20%">
                 Kode Kegiatan
               </th>
-              <th class="text-center" width="*">Nama Kegiatan</th>
-              <th width="120px">&nbsp;</th>
+              <th class="text-center align-middle" width="*">Nama Kegiatan</th>
+              <th width="20%">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -85,8 +82,6 @@
     params['page'] = page
     params['keyword'] = $('#keyword').val()
 
-    const ROWS_PER_PAGE = '{/literal}{$smarty.const.ROWS_PER_PAGE}{literal}'
-
     $.post(
       `${MAIN_URL}/search`,
       params,
@@ -96,38 +91,67 @@
         let list = res.list
         let tBody = document.getElementById('result_data')
         tBody.innerHTML = ''
-        let tRow = null
-        let no = null,
-          actCode = null,
-          actName = null,
-          action = null
 
         for (let index in list) {
-          no = numberColumn(index, paging.currentPage)
+          let tRow = null
+          let no = null,
+            actCode = null,
+            actName = null,
+            action = null
 
-          actCode = document.createElement('td')
-          actCode.classList.add('sticky-first')
-          actCode.innerHTML = list[index].act_code
+          no = createElement({
+            element: 'td',
+            class: ['text-right'],
+          })
 
-          actName = document.createElement('td')
-          actName.innerHTML = list[index].act_name
+          actCode = createElement({
+            element: 'td',
+            children: [list[index].act_code],
+          })
 
-          let editBtn = createEditBtn(list[index].id)
-          let deleteBtn = createDeleteBtn(list[index].id)
+          actName = createElement({
+            element: 'td',
+            children: [list[index].act_name],
+          })
 
-          action = document.createElement('td')
-          action.appendChild(editBtn)
-          action.appendChild(deleteBtn)
+          let editBtn = null,
+            deleteBtn = null
 
-          tRow = document.createElement('tr')
-          tRow.appendChild(no)
-          tRow.appendChild(actCode)
-          tRow.appendChild(actName)
-          tRow.appendChild(action)
+          action = createElement({
+            element: 'td',
+            children: [
+              createElement({
+                // Edit Button
+                element: 'a',
+                class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
+                attribute: {
+                  href: `${MAIN_URL}/edit/${list[index].id}`,
+                },
+                children: ['Edit'],
+              }),
+              createElement({
+                // Delete Button
+                element: 'a',
+                class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
+                data: {
+                  id: list[index].id,
+                },
+                attribute: {
+                  href: `javascript:void(0)`,
+                },
+                children: ['Hapus'],
+              }),
+            ],
+          })
+
+          tRow = createElement({
+            element: 'tr',
+            children: [no, actCode, actName, action],
+          })
 
           tBody.appendChild(tRow)
         }
-
+        reArrange('#result_data tr', paging.currentPage)
         createPagination(page, paging, 'pagination')
       },
       'JSON'
