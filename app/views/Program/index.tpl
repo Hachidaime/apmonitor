@@ -37,14 +37,12 @@
         <table class="table table-bordered table-sm">
           <thead>
             <tr>
-              <th class="text-right align-middle" style="max-width: 40px;">
-                #
-              </th>
-              <th class="text-center align-middle" style="max-width: 120px;">
+              <th class="text-right align-middle" width="40px">#</th>
+              <th class="text-center align-middle" width="20%">
                 Kode Program
               </th>
               <th class="text-center align-middle" width="*">Nama Program</th>
-              <th style="max-width: 130px;">&nbsp;</th>
+              <th width="20%">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
