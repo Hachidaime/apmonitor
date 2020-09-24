@@ -119,7 +119,6 @@
             element: 'td',
             children: [
               createElement({
-                // Edit Button
                 element: 'a',
                 class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
                 attribute: {
@@ -128,7 +127,6 @@
                 children: ['Edit'],
               }),
               createElement({
-                // Delete Button
                 element: 'a',
                 class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
                 data: {
