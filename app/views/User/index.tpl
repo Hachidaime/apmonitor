@@ -34,29 +34,26 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0 border">
-        <table
-          class="table table-bordered table-sm text-nowrap"
-          style="min-width: 576px;"
-        >
+        <table class="table table-bordered table-sm">
           <thead>
             <tr>
               <th class="align-middle text-right sticky-no" width="40px">#</th>
-              <th class="align-middle text-center sticky-first" width="200px">
+              <th class="align-middle text-center sticky-first" width="*">
                 Nama
               </th>
-              <th class="align-middle text-center" width="180px">
+              <th class="align-middle text-center" width="20%">
                 Username
               </th>
-              <th class="align-middle text-center" width="100px">
+              <th class="align-middle text-center" width="10%">
                 Privilege<br />Master
               </th>
-              <th class="align-middle text-center" width="100px">
+              <th class="align-middle text-center" width="10%">
                 Privilege<br />Paket
               </th>
-              <th class="align-middle text-center" width="100px">
+              <th class="align-middle text-center" width="10%">
                 Privilege<br />Laporan
               </th>
-              <th class="align-middle text-center" width="130px">&nbsp;</th>
+              <th class="align-middle text-center" width="15%">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -108,60 +105,100 @@
         let tBody = document.getElementById('result_data')
         tBody.innerHTML = ''
         let tRow = null
-        let no = null,
-          usrUsername = null,
-          usrName = null,
-          userIsMaster = null,
-          userIsPackage = null,
-          userIsReport = null,
-          action = null
 
         for (let index in list) {
-          no = numberColumn(index, paging.currentPage)
+          let tRow = null
+          let no = null,
+            usrName = null,
+            usrUsername = null,
+            usrIsMaster = null,
+            usrIsPackage = null,
+            usrIsReport = null,
+            action = null
 
-          usrName = document.createElement('td')
-          usrName.classList.add('sticky-first')
-          usrName.innerHTML = list[index].usr_name
+          no = createElement({
+            element: 'td',
+            class: ['text-right'],
+          })
 
-          usrUsername = document.createElement('td')
-          usrUsername.innerHTML = list[index].usr_username
+          usrName = createElement({
+            element: 'td',
+            children: [list[index].usr_name],
+          })
 
-          userIsMaster = document.createElement('td')
-          userIsMaster.classList.add('text-center')
-          userIsMaster.innerHTML =
-            list[index].usr_is_master == 1 ? yesText : noText
+          usrUsername = createElement({
+            element: 'td',
+            children: [list[index].usr_username],
+          })
 
-          userIsPackage = document.createElement('td')
-          userIsPackage.classList.add('text-center')
-          userIsPackage.innerHTML =
-            list[index].usr_is_package == 1 ? yesText : noText
+          usrIsMaster = createElement({
+            element: 'td',
+            class: ['text-center'],
+            children: [list[index].usr_is_master == 1 ? yesText : noText],
+          })
 
-          userIsReport = document.createElement('td')
-          userIsReport.classList.add('text-center')
-          userIsReport.innerHTML =
-            list[index].usr_is_report == 1 ? yesText : noText
+          usrIsPackage = createElement({
+            element: 'td',
+            class: ['text-center'],
+            children: [list[index].usr_is_package == 1 ? yesText : noText],
+          })
 
-          let editBtn = createEditBtn(list[index].id)
-          let deleteBtn = createDeleteBtn(list[index].id)
+          usrIsReport = createElement({
+            element: 'td',
+            class: ['text-center'],
+            children: [list[index].usr_is_report == 1 ? yesText : noText],
+          })
 
-          action = document.createElement('td')
-          action.appendChild(editBtn)
+          let editBtn = null,
+            deleteBtn = null
+
+          editBtn = createElement({
+            // Edit Button
+            element: 'a',
+            class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
+            attribute: {
+              href: `${MAIN_URL}/edit/${list[index].id}`,
+            },
+            children: ['Edit'],
+          })
+
+          deleteBtn = createElement({
+            // Delete Button
+            element: 'a',
+            class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
+            data: {
+              id: list[index].id,
+            },
+            attribute: {
+              href: `javascript:void(0)`,
+            },
+            children: ['Hapus'],
+          })
 
           let sessionUserId = '{/literal}{$smarty.session.USER.id}{literal}'
+
+          action = createElement({
+            element: 'td',
+            children: [editBtn],
+          })
           if (list[index].id != sessionUserId) action.appendChild(deleteBtn)
 
-          tRow = document.createElement('tr')
-          tRow.appendChild(no)
-          tRow.appendChild(usrName)
-          tRow.appendChild(usrUsername)
-          tRow.appendChild(userIsMaster)
-          tRow.appendChild(userIsPackage)
-          tRow.appendChild(userIsReport)
-          tRow.appendChild(action)
+          tRow = createElement({
+            element: 'tr',
+            children: [
+              no,
+              usrName,
+              usrUsername,
+              usrIsMaster,
+              usrIsPackage,
+              usrIsReport,
+              action,
+            ],
+          })
 
           tBody.appendChild(tRow)
         }
-
+        reArrange('#result_data tr', paging.currentPage)
         createPagination(page, paging, 'pagination')
       },
       'JSON'
