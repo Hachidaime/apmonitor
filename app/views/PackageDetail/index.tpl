@@ -279,7 +279,7 @@
   }
 
   let showProgress = (id) => {
-    let data = $(`input[data-id=${id}]`).data()
+    let data = $(`#detailList input[data-id=${id}]`).data()
 
     $('#progressModal').modal('show')
     $('#progressModalLabel').text(`Progres ${data.pkgdNo}`)
@@ -290,7 +290,7 @@
   }
 
   let showPartner = (id) => {
-    const data = $(`input[data-id=${id}]`).data()
+    const data = $(`#detailList input[data-id=${id}]`).data()
 
     $('#partnerFormModal').modal('show')
     $('#partnerFormModalLabel').text(`Rekanan ${data.pkgdNo}`)
@@ -307,10 +307,13 @@
   }
 
   let showTarget = (id) => {
-    const data = $(`input[data-id=${id}]`).data()
+    const data = $(`#detailList input[data-id=${id}]`).data()
 
     $('#targetModal').modal('show')
     $('#targetModalLabel').text(`Target ${data.pkgdNo}`)
+    $('#target_form #pkgd_id').val(id)
+
+    searchTarget(id)
   }
 </script>
 {/literal} {/block}
