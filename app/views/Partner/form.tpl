@@ -144,7 +144,7 @@
               <sup class="fas fa-asterisk text-red"></sup>
               <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
-            <div class="col-lg-4 col-sm-6">
+            <div class="col-lg-3 col-sm-6">
               <input
                 type="text"
                 class="form-control rounded-0 money-format text-right"
@@ -165,7 +165,7 @@
               Nomor Addendum
               <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
-            <div class="col-lg-8 col-sm-6">
+            <div class="col-lg-3 col-sm-4">
               <input
                 type="text"
                 class="form-control rounded-0"
@@ -250,7 +250,7 @@
               Nilai Addendum
               <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
-            <div class="col-lg-4 col-sm-6">
+            <div class="col-lg-3 col-sm-6">
               <input
                 type="text"
                 class="form-control rounded-0 money-format text-right"
@@ -267,7 +267,7 @@
       <div class="modal-footer">
         <button
           type="button"
-          class="btn bg-gradient-light btn-flat m-0"
+          class="btn bg-gradient-light btn-flat mr-0"
           data-dismiss="modal"
           style="width: 125px;"
         >
@@ -276,7 +276,7 @@
         </button>
         <button
           type="button"
-          class="btn bg-gradient-success btn-flat m-0"
+          class="btn bg-gradient-success btn-flat ml-0"
           style="width: 125px;"
           id="btn_save"
         >
