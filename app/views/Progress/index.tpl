@@ -60,7 +60,7 @@
               <th class="align-middle text-center" width="150px">
                 Progres Keuangan
               </th>
-              <th width="10%">&nbsp;</th>
+              <th width="20%">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
