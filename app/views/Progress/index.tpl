@@ -43,18 +43,15 @@
       </div>
       <!-- /.card-header -->
       <div class="card-body table-responsive p-0 border">
-        <table
-          class="table table-bordered text-nowrap table-sm"
-          style="min-width: 576px;"
-        >
+        <table class="table table-bordered table-sm">
           <thead>
             <tr>
-              <th class="align-middle text-right sticky-no" width="40px">#</th>
-              <th class="align-middle text-center sticky-first" width="80px">
+              <th class="align-middle text-right" width="40px">#</th>
+              <th class="align-middle text-center" width="10%">
                 Tahun Anggaran
               </th>
               <th class="align-middle text-center" width="*">Nama Paket</th>
-              <th class="align-middle text-center" width="100px">
+              <th class="align-middle text-center" width="15%">
                 Tanggal Progres
               </th>
               <th class="align-middle text-center" width="80px">
@@ -63,7 +60,7 @@
               <th class="align-middle text-center" width="150px">
                 Progres Keuangan
               </th>
-              <th width="200pxpx">&nbsp;</th>
+              <th width="10%">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -125,95 +122,132 @@
         let list = res.list
         let tBody = document.getElementById('result_data')
         tBody.innerHTML = ''
-        let tRow = null
-        let no = null,
-          progFiscalYear = null,
-          pkgdName = null,
-          progDate = null,
-          progPhysical = null,
-          progFinance = null,
-          action = null
 
         for (let index in list) {
-          //#region Number
-          no = numberColumn(index, paging.currentPage)
-          //#endregion
+          let tRow = null
+          let no = null,
+            progFiscalYear = null,
+            pkgdName = null,
+            progDate = null,
+            progPhysical = null,
+            progFinance = null,
+            action = null
 
-          //#region Package Fiscal Year
-          progFiscalYear = document.createElement('td')
-          progFiscalYear.classList.add('sticky-first')
-          progFiscalYear.innerHTML = list[index].prog_fiscal_year
-          //#endregion
+          no = createElement({
+            element: 'td',
+            class: ['text-right'],
+          })
 
-          //#region Package Detail Name
-          pkgdName = document.createElement('td')
-          pkgdName.innerHTML = list[index].pkgd_name
-          //#endregion
+          progFiscalYear = createElement({
+            element: 'td',
+            children: [list[index].prog_fiscal_year],
+          })
 
-          //#region Progress Date
-          progDate = document.createElement('td')
-          progDate.innerHTML = list[index].prog_date
-          //#endregion
+          pkgdName = createElement({
+            element: 'td',
+            children: [list[index].pkgd_name],
+          })
 
-          //#region Physical Progress
-          progPhysical = document.createElement('td')
-          progPhysical.classList.add('text-right')
-          progPhysical.innerHTML = list[index].prog_physical
-          //#endregion
+          progDate = createElement({
+            element: 'td',
+            children: [list[index].prog_date],
+          })
 
-          //#endregion Finance Progress
-          progFinance = document.createElement('td')
-          progFinance.classList.add('text-right')
-          progFinance.innerHTML = list[index].prog_finance
-          //#endregion
+          progPhysical = createElement({
+            element: 'td',
+            class: ['text-right'],
+            children: [list[index].prog_physical],
+          })
 
-          //#region Action
-          let imgBtn = null,
+          progFinance = createElement({
+            element: 'td',
+            class: ['text-right'],
+            children: [list[index].prog_finance],
+          })
+
+          let editBtn = null,
+            deleteBtn = null,
+            imgBtn = null,
             docBtn = null
 
-          //#region Image Button
-          imgBtn = document.createElement('a')
-          imgBtn.classList.add('badge', 'badge-info', 'badge-pill')
-          imgBtn.dataset.toggle = 'lightbox'
-          imgBtn.href =
-            list[index].prog_img != '' && list[index].prog_img != null
-              ? `${BASE_URL}/upload/img/progress/${list[index].id}/${list[index].prog_img}`
-              : 'javascript:void(0)'
-          imgBtn.innerHTML = 'Foto'
-          //#endregion
+          editBtn = createElement({
+            element: 'a',
+            class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
+            attribute: {
+              href: `${MAIN_URL}/edit/${list[index].id}`,
+            },
+            children: ['Edit'],
+          })
 
-          //#region Document Button
-          docBtn = document.createElement('a')
-          docBtn.classList.add('badge', 'badge-secondary', 'badge-pill')
-          docBtn.href = 'javascript:void(0)'
-          if (list[index].prog_doc != '' && list[index].prog_doc != null) {
-            docBtn.setAttribute('target', 'blank_')
-            docBtn.href = `${BASE_URL}/upload/pdf/progress/${list[index].id}/${list[index].prog_doc}`
-          }
-          docBtn.innerHTML = 'PDF'
-          //#endregion
+          deleteBtn = createElement({
+            element: 'a',
+            class: [
+              'badge',
+              'badge-pill',
+              'badge-danger',
+              'mr-1',
+              'btn-delete',
+            ],
+            data: {
+              id: list[index].id,
+            },
+            attribute: {
+              href: `javascript:void(0)`,
+            },
+            children: ['Hapus'],
+          })
 
-          action = document.createElement('td')
-          action.appendChild(createEditBtn(list[index].id))
-          action.appendChild(createDeleteBtn(list[index].id))
-          action.appendChild(imgBtn)
-          action.appendChild(docBtn)
-          //#endregion
+          imgBtn = createElement({
+            element: 'a',
+            class: ['badge', 'badge-info', 'badge-pill', 'mr-1'],
+            data: {
+              toggle: 'lightbox',
+            },
+            attribute: {
+              href:
+                list[index].prog_img != '' && list[index].prog_img != null
+                  ? `${BASE_URL}/upload/img/progress/${list[index].id}/${list[index].prog_img}`
+                  : 'javascript:void(0)',
+            },
+            children: ['Foto'],
+          })
 
-          //#region Row
-          tRow = document.createElement('tr')
-          tRow.appendChild(no)
-          tRow.appendChild(progFiscalYear)
-          tRow.appendChild(pkgdName)
-          tRow.appendChild(progDate)
-          tRow.appendChild(progPhysical)
-          tRow.appendChild(progFinance)
-          tRow.appendChild(action)
-          //#endregion
+          docBtn = createElement({
+            element: 'a',
+            class: ['badge', 'badge-secondary', 'badge-pill'],
+            attribute:
+              list[index].prog_doc != '' && list[index].prog_doc != null
+                ? {
+                    href: `${BASE_URL}/upload/pdf/progress/${list[index].id}/${list[index].prog_doc}`,
+                    target: 'blank_',
+                  }
+                : {
+                    href: 'javascript:void(0)',
+                  },
+            children: ['PDF'],
+          })
+
+          action = createElement({
+            element: 'td',
+            children: [editBtn, deleteBtn, imgBtn, docBtn],
+          })
+
+          tRow = createElement({
+            element: 'tr',
+            children: [
+              no,
+              progFiscalYear,
+              pkgdName,
+              progDate,
+              progPhysical,
+              progFinance,
+              action,
+            ],
+          })
 
           tBody.appendChild(tRow)
         }
-
+        reArrange('#result_data tr', paging.currentPage)
         createPagination(page, paging, 'pagination')
       },
       'JSON'
