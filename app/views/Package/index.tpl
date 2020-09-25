@@ -46,9 +46,9 @@
               <th class="align-middle text-center" width="*">
                 Tahun Anggaran
               </th>
-              <th class="align-middle text-center" width="400px">Program</th>
-              <th class="align-middle text-center" width="400px">Kegiatan</th>
-              <th width="130px">&nbsp;</th>
+              <th class="align-middle text-center" width="35%">Program</th>
+              <th class="align-middle text-center" width="35%">Kegiatan</th>
+              <th width="15%px">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -95,48 +95,73 @@
         let list = res.list
         let tBody = document.getElementById('result_data')
         tBody.innerHTML = ''
-        let tRow = null
-        let no = null,
-          pkgFiscalYear = null,
-          prgName = null,
-          actName = null,
-          action = null
 
         for (let index in list) {
-          no = document.createElement('td')
-          no.classList.add('text-right')
-          no.innerHTML =
-            Number(ROWS_PER_PAGE) * (Number(paging.currentPage) - 1) +
-            Number(index) +
-            1
+          let tRow = null
+          let no = null,
+            pkgFiscalYear = null,
+            prgName = null,
+            actName = null,
+            action = null
 
-          pkgFiscalYear = document.createElement('td')
-          pkgFiscalYear.classList.add('text-center')
-          pkgFiscalYear.innerHTML = list[index].pkg_fiscal_year
+          no = createElement({
+            element: 'td',
+            class: ['text-right'],
+          })
 
-          prgName = document.createElement('td')
-          prgName.innerHTML = list[index].prg_name
+          pkgFiscalYear = createElement({
+            element: 'td',
+            class: ['text-center'],
+            children: [list[index].pkg_fiscal_year],
+          })
 
-          actName = document.createElement('td')
-          actName.innerHTML = list[index].act_name
+          prgName = createElement({
+            element: 'td',
+            children: [list[index].prg_name],
+          })
 
-          let editBtn = createEditBtn(list[index].id)
-          let deleteBtn = createDeleteBtn(list[index].id)
+          actName = createElement({
+            element: 'td',
+            children: [list[index].act_name],
+          })
 
-          action = document.createElement('td')
-          action.appendChild(editBtn)
-          action.appendChild(deleteBtn)
+          let editBtn = null,
+            deleteBtn = null
 
-          tRow = document.createElement('tr')
-          tRow.appendChild(no)
-          tRow.appendChild(pkgFiscalYear)
-          tRow.appendChild(prgName)
-          tRow.appendChild(actName)
-          tRow.appendChild(action)
+          editBtn = createElement({
+            element: 'a',
+            class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
+            attribute: {
+              href: `${MAIN_URL}/edit/${list[index].id}`,
+            },
+            children: ['Edit'],
+          })
+
+          deleteBtn = createElement({
+            element: 'a',
+            class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
+            data: {
+              id: list[index].id,
+            },
+            attribute: {
+              href: `javascript:void(0)`,
+            },
+            children: ['Hapus'],
+          })
+
+          action = createElement({
+            element: 'td',
+            children: [editBtn, deleteBtn],
+          })
+
+          tRow = createElement({
+            element: 'tr',
+            children: [no, pkgFiscalYear, prgName, actName, action],
+          })
 
           tBody.appendChild(tRow)
         }
-
+        reArrange('#result_data tr', paging.currentPage)
         createPagination(page, paging, 'pagination')
       },
       'JSON'
