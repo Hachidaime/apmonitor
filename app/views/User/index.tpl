@@ -37,8 +37,8 @@
         <table class="table table-bordered table-sm">
           <thead>
             <tr>
-              <th class="align-middle text-right sticky-no" width="40px">#</th>
-              <th class="align-middle text-center sticky-first" width="*">
+              <th class="align-middle text-right" width="40px">#</th>
+              <th class="align-middle text-center" width="*">
                 Nama
               </th>
               <th class="align-middle text-center" width="20%">
@@ -153,7 +153,6 @@
             deleteBtn = null
 
           editBtn = createElement({
-            // Edit Button
             element: 'a',
             class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
             attribute: {
@@ -162,26 +161,26 @@
             children: ['Edit'],
           })
 
-          deleteBtn = createElement({
-            // Delete Button
-            element: 'a',
-            class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
-            data: {
-              id: list[index].id,
-            },
-            attribute: {
-              href: `javascript:void(0)`,
-            },
-            children: ['Hapus'],
-          })
-
-          let sessionUserId = '{/literal}{$smarty.session.USER.id}{literal}'
-
           action = createElement({
             element: 'td',
             children: [editBtn],
           })
-          if (list[index].id != sessionUserId) action.appendChild(deleteBtn)
+
+          let sessionUserId = '{/literal}{$smarty.session.USER.id}{literal}'
+          if (list[index].id != sessionUserId) {
+            deleteBtn = createElement({
+              element: 'a',
+              class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
+              data: {
+                id: list[index].id,
+              },
+              attribute: {
+                href: `javascript:void(0)`,
+              },
+              children: ['Hapus'],
+            })
+            action.appendChild(deleteBtn)
+          }
 
           tRow = createElement({
             element: 'tr',
