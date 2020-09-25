@@ -121,8 +121,8 @@
 {/block}
 
 {block 'detailFormJS'}
+<script src="{$smarty.const.BASE_URL}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 {literal}
-<script src="{/literal}{$smarty.const.BASE_URL}{literal}/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
 
 <script>
   $(document).ready(function () {
@@ -137,7 +137,7 @@
       $('#pkgd_advanced_year').prop('checked')
     )
 
-    $('#btn_save').click(() => {
+    $('#detailFormModal #btn_save').click(() => {
       clearErrorMessage()
       saveDetail()
     })

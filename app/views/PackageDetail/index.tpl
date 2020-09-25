@@ -13,7 +13,7 @@
   <div class="col-12">
     <button
       type="button"
-      class="btn btn-flat btn-success btn-sm"
+      class="btn btn-flat btn-success"
       style="width: 100px;"
       id="detailAddBtn"
     >
