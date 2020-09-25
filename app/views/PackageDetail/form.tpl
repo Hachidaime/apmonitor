@@ -104,12 +104,20 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn btn-light btn-flat"
+            class="btn bg-gradient-light btn-flat mr-0"
             data-dismiss="modal"
+            style="width: 125px;"
           >
-            Close
+            <i class="fas fa-window-close mr-2"></i>
+            Batal
           </button>
-          <button type="button" class="btn btn-success btn-flat" id="btn_save">
+          <button
+            type="button"
+            class="btn bg-gradient-success btn-flat ml-0"
+            style="width: 125px;"
+            id="btn_save"
+          >
+            <i class="fas fa-save mr-2"></i>
             Simpan
           </button>
         </div>

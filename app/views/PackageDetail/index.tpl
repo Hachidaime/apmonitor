@@ -13,7 +13,7 @@
   <div class="col-12">
     <button
       type="button"
-      class="btn btn-flat btn-success"
+      class="btn btn-flat bg-gradient-success"
       style="width: 100px;"
       id="detailAddBtn"
     >
@@ -187,6 +187,11 @@
               },
               children: ['Foto'],
             })
+            imgBtn.disabled =
+              [index].pkgd_last_prog_img != '' &&
+              list[index].pkgd_last_prog_img != null
+                ? false
+                : true
 
             editBtn = createElement({
               element: 'a',

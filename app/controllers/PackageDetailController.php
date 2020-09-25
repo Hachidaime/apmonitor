@@ -1,7 +1,6 @@
 <?php
 
 use app\controllers\Controller;
-use app\helper\Flasher;
 use app\helper\Functions;
 use app\models\PackageDetailModel;
 use app\models\PackageModel;
@@ -26,8 +25,13 @@ class PackageDetailController extends Controller
         list($detail, $dcount) = $packageModel->singlearray($_POST['pkg_id']);
 
         list($list, $lcount) = $this->packageDetailModel->multiarray([
-            ['pkg_id', $detail['id']],
-            ['pkgs_id', $detail['pkgs_id']],
+            ['pkg_id', $detail['id'] > 0 ? $detail['id'] : 0],
+            [
+                'pkgs_id',
+                $detail['pkgs_id'] > 0
+                    ? $detail['pkgs_id']
+                    : $_SESSION['PKGS_ID'],
+            ],
         ]);
 
         foreach ($list as $idx => $row) {
