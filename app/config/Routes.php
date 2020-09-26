@@ -24,6 +24,7 @@ $master = [
     'Partner',
     'Target',
     'Progress',
+    'ProgressReport',
 ];
 
 foreach ($master as $value) {
