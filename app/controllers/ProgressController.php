@@ -140,11 +140,9 @@ class ProgressController extends Controller
     public function submit()
     {
         $data = $_POST;
-        $data['prog_date'] = Functions::dateFormat(
-            'd/m/Y',
-            'Y-m-d',
-            $data['prog_date'],
-        );
+        $data['prog_date'] = !empty($data['prog_date'])
+            ? Functions::dateFormat('d/m/Y', 'Y-m-d', $data['prog_date'])
+            : null;
         $data['prog_finance'] = !empty($data['prog_finance'])
             ? str_replace(',', '.', $data['prog_finance'])
             : 0;
@@ -216,7 +214,7 @@ class ProgressController extends Controller
             'prog_fiscal_year' => 'required',
             'prog_date' => 'required|date',
             'pkgd_id' => 'required',
-            'prog_physical' => 'required',
+            'prog_physical' => 'required|numeric',
             'prog_img' => 'required',
         ]);
 
@@ -232,6 +230,7 @@ class ProgressController extends Controller
             'required' => '<strong>:attribute</strong> harus diisi.',
             'unique' => '<strong>:attribute</strong> sudah ada di database.',
             'date' => 'Format <strong>:attribute</strong> tidak valid.',
+            'numeric' => '<strong>:attribute</strong> tidak valid.',
         ]);
 
         $validation->validate();
