@@ -101,12 +101,18 @@
             class="dropdown-menu border-0 shadow"
           >
             <li>
-              <a href="{$smarty.const.BASE_URL}/user" class="dropdown-item">
+              <a
+                href="{$smarty.const.BASE_URL}/progressreport"
+                class="dropdown-item"
+              >
                 Perkembangan Capaian Kinerja
               </a>
             </li>
             <li>
-              <a href="{$smarty.const.BASE_URL}/program" class="dropdown-item">
+              <a
+                href="{$smarty.const.BASE_URL}/performancereport"
+                class="dropdown-item"
+              >
                 Kinerja Pelaksanaan Paket Kegiatan
               </a>
             </li>
