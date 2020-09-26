@@ -66,6 +66,11 @@
 {literal}
 <script>
   $(document).ready(function () {
+    $('#targetFormModal').on('hidden.bs.modal', function (e) {
+      $('#target_form').trigger('reset')
+      clearErrorMessage()
+    })
+
     $('#targetAddBtn').click(() => {
       showTargetForm()
     })
