@@ -74,7 +74,7 @@ class TargetController extends Controller
     public function validate($data)
     {
         $validation = $this->validator->make($data, [
-            'trg_week' => 'required|min:1',
+            'trg_week' => "required|min:1|uniq_trg:{$data['pkgd_id']},{$data['id']}",
             'trg_physical' => 'required',
             'trg_finance' => 'required',
         ]);
@@ -88,6 +88,8 @@ class TargetController extends Controller
         $validation->setMessages([
             'required' => '<strong>:attribute</strong> harus diisi.',
             'trg_week:min' => '<strong>:attribute</strong> minimum :min.',
+            'trg_week:uniq_rrg' =>
+                '<strong>Minggu Ke-:attribute</strong> telah ada di database.',
         ]);
 
         $validation->validate();

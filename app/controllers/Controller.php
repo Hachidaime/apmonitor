@@ -9,6 +9,7 @@ use app\rules\UniqPkgActRule;
 use app\rules\UniqPkgdNoRule;
 use app\helper\Flasher;
 use app\helper\Functions;
+use app\rules\UniqTrgRule;
 
 /**
  * Class Controller
@@ -60,6 +61,7 @@ class Controller
         $this->validator->addValidator('login', new LoginRule());
         $this->validator->addValidator('uniq_pkg_act', new UniqPkgActRule());
         $this->validator->addValidator('uniq_pkgd_no', new UniqPkgdNoRule());
+        $this->validator->addValidator('uniq_trg', new UniqTrgRule());
 
         $this->smarty = &$smarty;
 
