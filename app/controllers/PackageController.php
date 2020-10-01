@@ -338,8 +338,9 @@ class PackageController extends Controller
         $writer = new Xlsx($spreadsheet);
         $t = time();
         $filename = "Pemaketan-{$t}.{$ext}";
-        $writer->save(DOC_ROOT . "download/{$filename}");
-        echo json_encode($filename);
+        $filepath = "download/{$filename}";
+        $writer->save(DOC_ROOT . $filepath);
+        echo json_encode($filepath);
     }
 
     public function searchAll()

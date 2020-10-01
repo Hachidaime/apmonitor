@@ -6,6 +6,14 @@
 <div class="row mb-3">
   <div class="col-12">
     {include 'Templates/buttons/add.tpl'}
+    <a
+      href="javascript:void(0)"
+      class="btn btn-flat bg-gradient-light btn-spreadsheet"
+      style="width: 150px;"
+    >
+      <i class="fas fa-download mr-2"></i>
+      Unduh XLS
+    </a>
   </div>
 </div>
 
@@ -26,7 +34,7 @@
                 name="keyword"
                 class="form-control float-right"
                 value="{$keyword}"
-                data-title="Cari Kode Paket"
+                data-title="Cari Tahun Anggaran"
               />
               <div class="input-group-append">
                 <button type="submit" class="btn btn-default">
@@ -72,6 +80,10 @@
     search()
 
     formTooltip('keyword', 'warning', 'top')
+
+    $('.btn-spreadsheet').click(() => {
+      spreadsheet()
+    })
 
     /* Delete Button */
     $(document).on('click', '.btn-delete', function (event) {
@@ -163,6 +175,19 @@
         }
         reArrange('#result_data tr', paging.currentPage)
         createPagination(page, paging, 'pagination')
+      },
+      'JSON'
+    )
+  }
+
+  let spreadsheet = () => {
+    let params = {}
+    params['keyword'] = $('#keyword').val()
+    $.post(
+      `${MAIN_URL}/spreadsheet`,
+      params,
+      (res) => {
+        download(res)
       },
       'JSON'
     )
