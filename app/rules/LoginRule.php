@@ -2,6 +2,7 @@
 namespace app\rules;
 use Rakit\Validation\Rule;
 use app\models\UserModel;
+use app\helper\Functions;
 
 class LoginRule extends Rule
 {
@@ -23,10 +24,12 @@ class LoginRule extends Rule
         $username = $this->parameter('usr_username');
         $password = $value;
 
-        list(, $count) = $this->userModel->singlearray([
+        list($detail) = $this->userModel->singlearray([
             ['usr_username', $username],
-            ['usr_password', $password],
         ]);
+
+        $count =
+            $password == Functions::decrypt($detail['usr_password']) ? 1 : 0;
 
         // true for valid, false for invalid
         return $count !== 0;

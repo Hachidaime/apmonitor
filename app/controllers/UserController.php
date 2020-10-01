@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\helper\Functions;
 use app\models\UserModel;
 
 /**
@@ -112,6 +113,12 @@ class UserController extends Controller
         $data['usr_is_master'] = $data['usr_is_master'] ?? 0;
         $data['usr_is_package'] = $data['usr_is_package'] ?? 0;
         $data['usr_is_report'] = $data['usr_is_report'] ?? 0;
+
+        $data['usr_password'] = !empty($data['usr_password'])
+            ? Functions::encrypt($data['usr_password'])
+            : '';
+        // var_dump($data);
+        // exit();
         if ($this->validate($data)) {
             if (empty($data['usr_password'])) {
                 unset($data['usr_password']);
