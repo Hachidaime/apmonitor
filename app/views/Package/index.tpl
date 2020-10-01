@@ -23,26 +23,21 @@
       <div class="card-header bg-gradient-navy rounded-0">
         <h3 class="card-title text-warning">{$subtitle}</h3>
         <div class="card-tools">
-          <form
-            action="{$smarty.const.BASE_URL}/{$smarty.session.ACTIVE.name}"
-            method="post"
-          >
-            <div class="input-group input-group-sm" style="width: 150px;">
-              <input
-                type="text"
-                id="keyword"
-                name="keyword"
-                class="form-control float-right"
-                value="{$keyword}"
-                data-title="Cari Tahun Anggaran"
-              />
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-default">
-                  <i class="fas fa-search"></i>
-                </button>
-              </div>
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input
+              type="text"
+              id="keyword"
+              name="keyword"
+              class="form-control float-right"
+              value="{$keyword}"
+              data-title="Cari Tahun Anggaran"
+            />
+            <div class="input-group-append">
+              <button type="button" class="btn btn-default" id="searchBtn">
+                <i class="fas fa-search"></i>
+              </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
       <!-- /.card-header -->
@@ -83,6 +78,10 @@
 
     $('.btn-spreadsheet').click(() => {
       spreadsheet()
+    })
+
+    $('#searchBtn').click(() => {
+      search()
     })
 
     /* Delete Button */

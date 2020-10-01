@@ -264,7 +264,7 @@ class PackageController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $list = $this->searchAll();
+        list($list, $list_count) = $this->searchAll();
 
         $spreadsheet
             ->getActiveSheet()
@@ -297,26 +297,28 @@ class PackageController extends Controller
                 ],
             ]);
 
-        foreach ($list as $idx => $rows) {
-            $row = $idx + 2;
-            $n = $idx + 1;
-            $sheet->setCellValue("A{$row}", $n);
-            $sheet->setCellValue("B{$row}", $rows['pkg_fiscal_year']);
-            $sheet->setCellValue("C{$row}", $rows['prg_name']);
-            $sheet->setCellValue("D{$row}", $rows['act_name']);
-        }
+        if ($list_count > 0) {
+            foreach ($list as $idx => $rows) {
+                $row = $idx + 2;
+                $n = $idx + 1;
+                $sheet->setCellValue("A{$row}", $n);
+                $sheet->setCellValue("B{$row}", $rows['pkg_fiscal_year']);
+                $sheet->setCellValue("C{$row}", $rows['prg_name']);
+                $sheet->setCellValue("D{$row}", $rows['act_name']);
+            }
 
-        $spreadsheet
-            ->getActiveSheet()
-            ->getStyle("A2:D{$row}")
-            ->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' =>
-                            \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+            $spreadsheet
+                ->getActiveSheet()
+                ->getStyle("A2:D{$row}")
+                ->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' =>
+                                \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
                     ],
-                ],
-            ]);
+                ]);
+        }
 
         $spreadsheet
             ->getActiveSheet()
@@ -381,6 +383,6 @@ class PackageController extends Controller
             $list[$idx]['act_name'] = $activityOptions[$row['act_code']];
         }
 
-        return $list;
+        return [$list, $list_count];
     }
 }
