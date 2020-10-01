@@ -140,5 +140,8 @@ app/config/Config.php
 # Upload Data
 upload/*
 
+# Download Data
+download/*
+
 # Smarty Cache
 app/views_c/
