@@ -217,7 +217,7 @@
                 rowspan: 2,
                 width: '15%',
               },
-              children: ['Nilai Contract'],
+              children: ['Nilai Contract (Rp)'],
             })
 
             let headWeek = createElement({
@@ -225,7 +225,7 @@
               class: ['text-center', 'align-middle'],
               attribute: {
                 rowspan: 2,
-                width: '10%',
+                width: '75px',
               },
               children: ['Minggu Ke'],
             })
