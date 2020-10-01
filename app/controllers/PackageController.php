@@ -9,6 +9,9 @@ use app\models\PackageModel;
 use app\models\PackageSessionModel;
 use app\models\ProgramModel;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * @desc this class will handle Uang controller
  *
@@ -252,5 +255,131 @@ class PackageController extends Controller
             ]);
         }
         exit();
+    }
+
+    public function downloadSpreadsheet()
+    {
+        $ext = $_POST['ext'] ?? 'xls';
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $list = $this->searchAll();
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->fromArray(
+                ['No.', "Tahun\nAnggaran", 'Program', 'Kegiatan'],
+                null,
+                'A1',
+            );
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getRowDimension('1')
+            ->setRowHeight(30);
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getStyle('A1:D1')
+            ->applyFromArray([
+                'alignment' => [
+                    'horizontal' =>
+                        \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' =>
+                        \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' =>
+                            \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ]);
+
+        foreach ($list as $idx => $rows) {
+            $row = $idx + 2;
+            $n = $idx + 1;
+            $sheet->setCellValue("A{$row}", $n);
+            $sheet->setCellValue("B{$row}", $rows['pkg_fiscal_year']);
+            $sheet->setCellValue("C{$row}", $rows['prg_name']);
+            $sheet->setCellValue("D{$row}", $rows['act_name']);
+        }
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getStyle("A2:D{$row}")
+            ->applyFromArray([
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' =>
+                            \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ]);
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('A')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('B')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('C')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('D')
+            ->setAutoSize(true);
+
+        $writer = new Xlsx($spreadsheet);
+        $t = time();
+        $filename = "Pemaketan-{$t}.{$ext}";
+        $writer->save(DOC_ROOT . "download/{$filename}");
+        echo json_encode($filename);
+    }
+
+    public function searchAll()
+    {
+        $keyword = $_POST['keyword'] ?? null;
+
+        $programModel = new ProgramModel();
+        list($program) = $programModel->multiarray(null, [['prg_code', 'ASC']]);
+
+        $programOptions = Functions::listToOptions(
+            $program,
+            'prg_code',
+            'prg_name',
+        );
+
+        $activityModel = new ActivityModel();
+        list($activity) = $activityModel->multiarray(null, [
+            ['act_code', 'ASC'],
+        ]);
+
+        $activityOptions = Functions::listToOptions(
+            $activity,
+            'act_code',
+            'act_name',
+        );
+
+        list($list, $list_count) = $this->packageModel->multiarray(
+            [['pkg_fiscal_year', 'LIKE', "%{$keyword}%"]],
+            [
+                ['pkg_fiscal_year', 'DESC'],
+                ['prg_code', 'ASC'],
+                ['act_code', 'ASC'],
+            ],
+        );
+
+        foreach ($list as $idx => $row) {
+            $list[$idx]['prg_name'] = $programOptions[$row['prg_code']];
+            $list[$idx]['act_name'] = $activityOptions[$row['act_code']];
+        }
+
+        return $list;
     }
 }

@@ -46,6 +46,11 @@ foreach ($master as $value) {
 $router->map('POST', '/file/upload', 'FileController::upload');
 
 $router->addRoutes([
+    [
+        'GET|POST',
+        '/package/spreadsheet',
+        'PackageController::downloadSpreadsheet',
+    ],
     ['GET', '/403', 'PageController::error403', '403'],
     ['GET', '/404', 'PageController::error404', '404'],
 ]);
