@@ -190,6 +190,19 @@ let upload = (param) => {
   })
 }
 
+let download = (filepath) => {
+  const url = `${BASE_URL}/${filepath}`
+  let hiddenIFrameID = 'hiddenDownloader',
+    iframe = document.getElementById(hiddenIFrameID)
+  if (iframe === null) {
+    iframe = document.createElement('iframe')
+    iframe.id = hiddenIFrameID
+    iframe.style.display = 'none'
+    document.body.appendChild(iframe)
+  }
+  iframe.src = url
+}
+
 let showPreview = (id, data) => {
   let preview = $(`#preview_${id}`) // ? file preview
 
