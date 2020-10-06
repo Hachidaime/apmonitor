@@ -40,17 +40,17 @@ foreach ($master as $value) {
         ['POST', "/{$route}/submit", "{$controller}Controller::submit"],
         ['POST', "/{$route}/search", "{$controller}Controller::search"],
         ['POST', "/{$route}/remove", "{$controller}Controller::remove"],
+        [
+            'GET|POST',
+            "/{$route}/spreadsheet",
+            "{$controller}Controller::downloadSpreadsheet",
+        ],
     ]);
 }
 
 $router->map('POST', '/file/upload', 'FileController::upload');
 
 $router->addRoutes([
-    [
-        'GET|POST',
-        '/package/spreadsheet',
-        'PackageController::downloadSpreadsheet',
-    ],
     ['GET', '/403', 'PageController::error403', '403'],
     ['GET', '/404', 'PageController::error404', '404'],
 ]);
