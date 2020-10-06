@@ -7,6 +7,9 @@ use app\helper\Functions;
 use app\models\ProgressModel;
 use app\models\PackageDetailModel;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 /**
  * @desc this class will handle Uang controller
  *
@@ -44,38 +47,9 @@ class ProgressController extends Controller
         $this->smarty->display("{$this->directory}/index.tpl");
     }
 
-    public function search(int $page = 1, string $keyword = null)
+    public function search()
     {
-        $page = $_POST['page'] ?? 1;
-        $keyword = $_POST['keyword'] ?? null;
-
-        list($packageDetail) = $this->packageDetailModel->multiarray();
-
-        $packageDetailOptions = Functions::listToOptions(
-            $packageDetail,
-            'id',
-            'pkgd_name',
-        );
-
-        list($list, $info) = $this->progressModel->paginate($page, null, [
-            ['prog_fiscal_year', 'ASC'],
-            ['id', 'DESC'],
-        ]);
-
-        foreach ($list as $idx => $row) {
-            $list[$idx]['prog_date'] = Functions::dateFormat(
-                'Y-m-d',
-                'd/m/Y',
-                $row['prog_date'],
-            );
-            $list[$idx]['pkgd_name'] = $packageDetailOptions[$row['pkgd_id']];
-            $list[$idx]['prog_finance'] = number_format(
-                $row['prog_finance'],
-                2,
-                ',',
-                '.',
-            );
-        }
+        list($list, $info) = $this->getList(true);
 
         echo json_encode([
             'list' => $list,
@@ -296,5 +270,152 @@ class ProgressController extends Controller
 
         $this->packageDetailModel->save($data);
         // var_dump($this->packageDetailModel->db);
+    }
+
+    public function downloadSpreadsheet()
+    {
+        $ext = $_POST['ext'] ?? 'xls';
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        list($list, $list_count) = $this->getList();
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->fromArray(
+                [
+                    'No.',
+                    "Tahun\nAnggaran",
+                    'Nama Paket',
+                    'Tanggal Progres',
+                    'Progres Fisik',
+                    'Progres Keuangan',
+                ],
+                null,
+                'A1',
+            );
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getRowDimension('1')
+            ->setRowHeight(30);
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getStyle('A1:F1')
+            ->applyFromArray([
+                'alignment' => [
+                    'horizontal' =>
+                        \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' =>
+                        \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' =>
+                            \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ]);
+
+        if ($list_count > 0) {
+            foreach ($list as $idx => $rows) {
+                $row = $idx + 2;
+                $n = $idx + 1;
+                $sheet->setCellValue("A{$row}", $n);
+                $sheet->setCellValue("B{$row}", $rows['prog_fiscal_year']);
+                $sheet->setCellValue("C{$row}", $rows['pkgd_name']);
+                $sheet->setCellValue("D{$row}", $rows['prog_date']);
+                $sheet->setCellValue("E{$row}", $rows['prog_physical']);
+                $sheet->setCellValue("F{$row}", $rows['prog_finance']);
+            }
+
+            $spreadsheet
+                ->getActiveSheet()
+                ->getStyle("A2:F{$row}")
+                ->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' =>
+                                \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        ],
+                    ],
+                ]);
+        }
+
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('A')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('B')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('C')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('D')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('E')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('F')
+            ->setAutoSize(true);
+
+        $writer = new Xlsx($spreadsheet);
+        $t = time();
+        $filename = "Progres-{$t}.{$ext}";
+        $filepath = "download/{$filename}";
+        $writer->save(DOC_ROOT . $filepath);
+        echo json_encode($filepath);
+    }
+
+    private function getList($paginate = false)
+    {
+        $page = $_POST['page'] ?? 1;
+        $keyword = $_POST['keyword'] ?? null;
+
+        list($packageDetail) = $this->packageDetailModel->multiarray();
+
+        $packageDetailOptions = Functions::listToOptions(
+            $packageDetail,
+            'id',
+            'pkgd_name',
+        );
+
+        $filter =
+            !is_null($keyword) && !empty($keyword) && $keyword != ''
+                ? [['pkg_fiscal_year', 'LIKE', "%{$keyword}%"]]
+                : null;
+
+        $sort = [['prog_fiscal_year', 'ASC'], ['id', 'DESC']];
+
+        list($list, $info) = $paginate
+            ? $this->progressModel->paginate($page, $filter, $sort)
+            : $this->progressModel->multiarray($filter, $sort);
+
+        foreach ($list as $idx => $row) {
+            $list[$idx]['prog_date'] = Functions::dateFormat(
+                'Y-m-d',
+                'd/m/Y',
+                $row['prog_date'],
+            );
+            $list[$idx]['pkgd_name'] = $packageDetailOptions[$row['pkgd_id']];
+            $list[$idx]['prog_finance'] = number_format(
+                $row['prog_finance'],
+                2,
+                ',',
+                '.',
+            );
+        }
+
+        return [$list, $info];
     }
 }
