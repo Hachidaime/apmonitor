@@ -83,7 +83,7 @@ class ProgressReportController extends Controller
         ]);
 
         if ($list_count > 0) {
-            foreach ($list as $index => $rows) {
+            foreach ($list as $rows) {
                 $prg_row = $prg_row ?? 5;
                 $act_row = $prg_row + 1;
 
@@ -160,7 +160,10 @@ class ProgressReportController extends Controller
                     $sheet->mergeCells("B{$detail_body}:C{$detail_body}");
 
                     $sheet->setCellValue("A{$detail_body}", $n);
-                    $sheet->setCellValue("B{$detail_body}", $row['pkgd_name']);
+                    $sheet->setCellValue(
+                        "B{$detail_body}",
+                        "{$row['pkgd_no']} - {$row['pkgd_name']}",
+                    );
                     $sheet->setCellValue(
                         "D{$detail_body}",
                         $row['pkgd_contract_value'],
@@ -216,7 +219,6 @@ class ProgressReportController extends Controller
 
         $sheet->getColumnDimension('A')->setAutoSize(true);
         $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
         $sheet->getColumnDimension('D')->setAutoSize(true);
         $sheet->getColumnDimension('E')->setAutoSize(true);
         $sheet->getColumnDimension('F')->setAutoSize(true);
