@@ -93,13 +93,19 @@
 {block 'script'}
 {literal}
 <script>
-  $('#pkg_fiscal_year').datetimepicker({
-    viewMode: 'years',
-    format: 'YYYY',
-  })
+  $(document).ready(function () {
+    $('#pkg_fiscal_year').datetimepicker({
+      viewMode: 'years',
+      format: 'YYYY',
+    })
 
-  $('#btn_search').click(() => {
-    search()
+    $('#btn_search').click(() => {
+      search()
+    })
+
+    $(document).on('click', '.btn-spreadsheet', function (event) {
+      spreadsheet()
+    })
   })
 
   let search = () => {
@@ -119,9 +125,29 @@
       params,
       (res) => {
         if (res.length > 0) {
-          let title1 = null,
+          let downloadBtn = null,
+            title1 = null,
             title2 = null,
             title3 = null
+
+          downloadBtn = createElement({
+            element: 'a',
+            class: [
+              'btn',
+              'btn-flat',
+              'bg-gradient-light',
+              'btn-spreadsheet',
+              'mb-3',
+            ],
+            attribute: {
+              href: 'javascript:void(0)',
+              style: 'width: 150px;',
+            },
+            children: [
+              /*html*/ `<i class="fas fa-download mr-2"></i>
+              Unduh XLS`,
+            ],
+          })
 
           title1 = createElement({
             element: 'h5',
@@ -141,7 +167,7 @@
             children: [`THN ANGGARAN: ${params.pkg_fiscal_year}`],
           })
 
-          resultWrapper.append(title1, title2, title3)
+          resultWrapper.append(downloadBtn, title1, title2, title3)
 
           for (index in res) {
             //#region Program
@@ -411,13 +437,13 @@
               let bodyDevnPhysical = createElement({
                 element: 'td',
                 class: ['text-right'],
-                children: [`${res[index].detail[idx].devn_physical}`],
+                // children: [`${res[index].detail[idx].devn_physical}`],
               })
 
               let bodyDevnFinance = createElement({
                 element: 'td',
                 class: ['text-right'],
-                children: [`${res[index].detail[idx].devn_finance}`],
+                // children: [`${res[index].detail[idx].devn_finance}`],
               })
 
               let bodyRow = createElement({
@@ -467,6 +493,24 @@
         } else {
           resultWrapper.innerHTML = /*html*/ `<h3 class="text-center">Data tidak ditemukan.</h3>`
         }
+      },
+      'JSON'
+    )
+  }
+
+  let spreadsheet = () => {
+    const data = $('#my_form').serializeArray()
+
+    let params = {}
+    $.map(data, function (n, i) {
+      params[n['name']] = n['value']
+    })
+
+    $.post(
+      `${MAIN_URL}/spreadsheet`,
+      params,
+      (res) => {
+        download(res)
       },
       'JSON'
     )
