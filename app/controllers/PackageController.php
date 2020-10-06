@@ -48,45 +48,9 @@ class PackageController extends Controller
         $this->smarty->display("{$this->directory}/index.tpl");
     }
 
-    public function search(int $page = 1, string $keyword = null)
+    public function search()
     {
-        $page = $_POST['page'] ?? 1;
-        $keyword = $_POST['keyword'] ?? null;
-
-        $programModel = new ProgramModel();
-        list($program) = $programModel->multiarray(null, [['prg_code', 'ASC']]);
-
-        $programOptions = Functions::listToOptions(
-            $program,
-            'prg_code',
-            'prg_name',
-        );
-
-        $activityModel = new ActivityModel();
-        list($activity) = $activityModel->multiarray(null, [
-            ['act_code', 'ASC'],
-        ]);
-
-        $activityOptions = Functions::listToOptions(
-            $activity,
-            'act_code',
-            'act_name',
-        );
-
-        list($list, $info) = $this->packageModel->paginate(
-            $page,
-            [['pkg_fiscal_year', 'LIKE', "%{$keyword}%"]],
-            [
-                ['pkg_fiscal_year', 'DESC'],
-                ['prg_code', 'ASC'],
-                ['act_code', 'ASC'],
-            ],
-        );
-
-        foreach ($list as $idx => $row) {
-            $list[$idx]['prg_name'] = $programOptions[$row['prg_code']];
-            $list[$idx]['act_name'] = $activityOptions[$row['act_code']];
-        }
+        list($list, $info) = $this->getList(true);
 
         echo json_encode([
             'list' => $list,
@@ -264,7 +228,7 @@ class PackageController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        list($list, $list_count) = $this->searchAll();
+        list($list, $list_count) = $this->getList();
 
         $spreadsheet
             ->getActiveSheet()
@@ -345,8 +309,9 @@ class PackageController extends Controller
         echo json_encode($filepath);
     }
 
-    public function searchAll()
+    private function getList($paginate = false)
     {
+        $page = $_POST['page'] ?? 1;
         $keyword = $_POST['keyword'] ?? null;
 
         $programModel = new ProgramModel();
@@ -369,20 +334,22 @@ class PackageController extends Controller
             'act_name',
         );
 
-        list($list, $list_count) = $this->packageModel->multiarray(
-            [['pkg_fiscal_year', 'LIKE', "%{$keyword}%"]],
-            [
-                ['pkg_fiscal_year', 'DESC'],
-                ['prg_code', 'ASC'],
-                ['act_code', 'ASC'],
-            ],
-        );
+        $filter = [['pkg_fiscal_year', 'LIKE', "%{$keyword}%"]];
+        $sort = [
+            ['pkg_fiscal_year', 'DESC'],
+            ['prg_code', 'ASC'],
+            ['act_code', 'ASC'],
+        ];
+
+        list($list, $info) = $paginate
+            ? $this->packageModel->paginate($page, $filter, $sort)
+            : $this->packageModel->multiarray($filter, $sort);
 
         foreach ($list as $idx => $row) {
             $list[$idx]['prg_name'] = $programOptions[$row['prg_code']];
             $list[$idx]['act_name'] = $activityOptions[$row['act_code']];
         }
 
-        return [$list, $list_count];
+        return [$list, $info];
     }
 }
