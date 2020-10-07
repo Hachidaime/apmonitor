@@ -64,14 +64,11 @@ class DB
 
         try {
             $this->dbh = new PDO(
-                'mysql:host=' .
-                    $config['host'] .
-                    ';dbname=' .
-                    $config['database'] .
-                    ';charset=utf8',
+                "mysql:host={$config['host']};dbname={$config['database']};charset=utf8",
                 $config['username'],
                 $config['password'],
             );
+
             $this->dbh->setAttribute(
                 PDO::ATTR_DEFAULT_FETCH_MODE,
                 PDO::FETCH_OBJ,
