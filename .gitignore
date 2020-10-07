@@ -145,3 +145,5 @@ download/*
 
 # Smarty Cache
 app/views_c/
+
+database/
