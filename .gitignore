@@ -147,3 +147,4 @@ download/*
 app/views_c/
 
 database/
+info.php
