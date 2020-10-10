@@ -30,7 +30,7 @@ class ProgressController extends Controller
         $this->progressModel = new ProgressModel();
         $this->packageDetailModel = new PackageDetailModel();
 
-        if (!$_SESSION['USER']['usr_is_package']) {
+        if (!$_SESSION['USER']['usr_is_progress']) {
             header('Location:' . BASE_URL . '/403');
         }
     }
