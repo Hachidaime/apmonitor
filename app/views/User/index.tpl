@@ -51,6 +51,9 @@
                 Privilege<br />Paket
               </th>
               <th class="align-middle text-center" width="10%">
+                Privilege<br />Progress Paket
+              </th>
+              <th class="align-middle text-center" width="10%">
                 Privilege<br />Laporan
               </th>
               <th class="align-middle text-center" width="15%">&nbsp;</th>
@@ -113,6 +116,7 @@
             usrUsername = null,
             usrIsMaster = null,
             usrIsPackage = null,
+            usrIsProgress = null,
             usrIsReport = null,
             action = null
 
@@ -141,6 +145,12 @@
             element: 'td',
             class: ['text-center'],
             children: [list[index].usr_is_package == 1 ? yesText : noText],
+          })
+
+          usrIsProgress = createElement({
+            element: 'td',
+            class: ['text-center'],
+            children: [list[index].usr_is_progress == 1 ? yesText : noText],
           })
 
           usrIsReport = createElement({
@@ -190,6 +200,7 @@
               usrUsername,
               usrIsMaster,
               usrIsPackage,
+              usrIsProgress,
               usrIsReport,
               action,
             ],

@@ -109,6 +109,26 @@
       </div>
 
       <div class="form-group row">
+        <label for="usr_is_progress" class="col-lg-3 col-sm-4 col-form-label">
+          Privilege Progress Paket
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-9 col-sm-8 pt-2">
+          <input
+            type="checkbox"
+            id="usr_is_progress"
+            name="usr_is_progress"
+            data-bootstrap-switch
+            data-off-color="danger"
+            data-on-color="success"
+            data-on-text="YES"
+            data-off-text="NO"
+            value="1"
+          />
+        </div>
+      </div>
+
+      <div class="form-group row">
         <label for="usr_is_report" class="col-lg-3 col-sm-4 col-form-label">
           Privilege Laporan
           <span class="float-sm-right d-sm-inline d-none">:</span>
@@ -166,7 +186,12 @@
       `${MAIN_URL}/detail`,
       { id: data_id },
       (res) => {
-        let switchField = ['usr_is_master', 'usr_is_package', 'usr_is_report']
+        let switchField = [
+          'usr_is_master',
+          'usr_is_package',
+          'usr_is_progress',
+          'usr_is_report',
+        ]
         $.each(res, (id, value) => {
           if (switchField.indexOf(id) < 0) $(`#${id}`).val(value)
           else {
