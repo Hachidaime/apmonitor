@@ -43,7 +43,7 @@
 
       <div class="form-group row">
         <label for="prog_date" class="col-lg-3 col-sm-4 col-form-label">
-          Tanggal Progres
+          Tanggal Periode
           <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>

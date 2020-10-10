@@ -288,7 +288,7 @@ class ProgressController extends Controller
                     'No.',
                     "Tahun\nAnggaran",
                     'Nama Paket',
-                    'Tanggal Progres',
+                    'Tanggal Periode',
                     'Progres Fisik',
                     'Progres Keuangan',
                 ],

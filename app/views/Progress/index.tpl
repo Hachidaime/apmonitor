@@ -60,7 +60,7 @@
               </th>
               <th class="align-middle text-center" width="*">Nama Paket</th>
               <th class="align-middle text-center" width="15%">
-                Tanggal Progres
+                Tanggal Periode
               </th>
               <th class="align-middle text-center" width="80px">
                 Progres Fisik
