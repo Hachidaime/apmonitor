@@ -63,7 +63,7 @@
             aria-expanded="false"
             class="nav-link dropdown-toggle"
           >
-            Paket Kegiatan
+            Paket Pekerjaan
           </a>
           <ul
             aria-labelledby="dropdownSubMenu1"
