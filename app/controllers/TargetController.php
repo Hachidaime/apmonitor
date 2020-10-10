@@ -89,8 +89,8 @@ class TargetController extends Controller
             'required' => '<strong>:attribute</strong> harus diisi.',
             'numeric' => '<strong>:attribute</strong> tidak valid.',
             'trg_week:min' => '<strong>:attribute</strong> minimum :min.',
-            'trg_week:uniq_rrg' =>
-                '<strong>Minggu Ke-:attribute</strong> telah ada di database.',
+            'trg_week:uniq_trg' =>
+                '<strong>:attribute:value</strong> telah ada di database.',
         ]);
 
         $validation->validate();
