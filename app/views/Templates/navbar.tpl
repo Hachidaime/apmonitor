@@ -58,7 +58,7 @@
         <!-- prettier-ignore -->
         {/if}
 
-        {if $smarty.session.USER.usr_is_package eq 1}
+        {if $smarty.session.USER.usr_is_package eq 1 || $smarty.session.USER.usr_is_progress eq 1}
         <li class="nav-item dropdown">
           <a
             id="dropdownSubMenu1"
@@ -74,16 +74,22 @@
             aria-labelledby="dropdownSubMenu1"
             class="dropdown-menu border-0 shadow"
           >
+            {if $smarty.session.USER.usr_is_package eq 1}
             <li>
               <a href="{$smarty.const.BASE_URL}/package" class="dropdown-item">
                 Pemaketan
               </a>
             </li>
+            <!-- prettier-ignore -->
+            {/if}
+            
+            {if $smarty.session.USER.usr_is_progress eq 1}
             <li>
               <a href="{$smarty.const.BASE_URL}/progress" class="dropdown-item">
                 Progres Paket
               </a>
             </li>
+            {/if}
           </ul>
         </li>
         <!-- prettier-ignore -->
