@@ -48,6 +48,11 @@
                 Kegiatan
               </a>
             </li>
+            <li>
+              <a href="{$smarty.const.BASE_URL}/location" class="dropdown-item">
+                Lokasi
+              </a>
+            </li>
           </ul>
         </li>
         <!-- prettier-ignore -->
