@@ -187,6 +187,7 @@ class ProgressController extends Controller
     {
         $validation = $this->validator->make($data, [
             'prog_fiscal_year' => 'required',
+            'prog_week' => 'required|min:1',
             'prog_date' => 'required|date',
             'pkgd_id' => 'required',
             'prog_physical' => 'required|numeric',
@@ -195,6 +196,7 @@ class ProgressController extends Controller
 
         $validation->setAliases([
             'prog_fiscal_year' => 'Tahun Anggaran',
+            'prog_week' => 'Minggu Ke',
             'prog_date' => 'Tanggal Progres',
             'pkgd_id' => 'Nama Paket',
             'prog_physical' => 'Progres Fisik',

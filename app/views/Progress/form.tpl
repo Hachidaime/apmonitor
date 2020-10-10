@@ -42,6 +42,25 @@
       </div>
 
       <div class="form-group row">
+        <label for="prog_week" class="col-lg-3 col-sm-4 col-form-label">
+          Minggu Ke
+          <sup class="fas fa-asterisk text-red"></sup>
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-1 col-sm-2 col-3">
+          <input
+            type="number"
+            class="form-control rounded-0 text-right"
+            id="prog_week"
+            name="prog_week"
+            min="1"
+            step="1"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
         <label for="prog_date" class="col-lg-3 col-sm-4 col-form-label">
           Tanggal Periode
           <sup class="fas fa-asterisk text-red"></sup>
