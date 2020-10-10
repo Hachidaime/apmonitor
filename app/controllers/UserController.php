@@ -112,6 +112,7 @@ class UserController extends Controller
         $data = $_POST;
         $data['usr_is_master'] = $data['usr_is_master'] ?? 0;
         $data['usr_is_package'] = $data['usr_is_package'] ?? 0;
+        $data['usr_is_progress'] = $data['usr_is_progress'] ?? 0;
         $data['usr_is_report'] = $data['usr_is_report'] ?? 0;
 
         $data['usr_password'] = !empty($data['usr_password'])

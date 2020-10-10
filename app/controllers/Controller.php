@@ -195,6 +195,7 @@ class Controller
                     'usr_name',
                     'usr_is_master',
                     'usr_is_package',
+                    'usr_is_progress',
                     'usr_is_report',
                 ])
             ) {
