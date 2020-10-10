@@ -20,6 +20,7 @@ $master = [
     'Program',
     'Activity',
     'Package',
+    'Location',
     'PackageDetail',
     'Partner',
     'Target',
