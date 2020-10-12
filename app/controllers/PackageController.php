@@ -124,10 +124,13 @@ class PackageController extends Controller
     {
         $data = $_POST;
         $data['pkgs_id'] = $_SESSION['PKGS_ID'];
-        $data['pkg_debt_ceiling'] = !empty($data['pkg_debt_ceiling'])
-            ? str_replace(',', '.', $data['pkg_debt_ceiling'])
-            : 0;
+        $data['pkg_debt_ceiling'] =
+            $data['pkg_debt_ceiling'] > 0 ? $data['pkg_debt_ceiling'] : '';
         if ($this->validate($data)) {
+            $data['pkg_debt_ceiling'] = !empty($data['pkg_debt_ceiling'])
+                ? str_replace(',', '.', $data['pkg_debt_ceiling'])
+                : 0;
+
             $result = $this->packageModel->save($data);
             if ($data['id'] > 0) {
                 $tag = 'Ubah';
@@ -170,12 +173,14 @@ class PackageController extends Controller
             'pkg_fiscal_year' => 'required|digits:4',
             'prg_code' => 'required',
             'act_code' => "required|uniq_pkg_act:{$data['pkg_fiscal_year']},{$data['prg_code']},{$data['id']}",
+            'pkg_debt_ceiling' => 'required',
         ]);
 
         $validation->setAliases([
             'pkg_fiscal_year' => 'Tahun Anggaran',
             'prg_code' => 'Kode Program',
             'act_code' => 'Kode Kegiatan',
+            'pkg_debt_ceiling' => 'Pagu Anggaran (Rp)',
         ]);
 
         $validation->setMessages([

@@ -83,7 +83,7 @@
       <div class="form-group row">
         <label for="pkg_debt_ceiling" class="col-lg-3 col-sm-4 col-form-label">
           Pagu Anggaran (Rp)
-          <!-- <sup class="fas fa-asterisk text-red"></sup> -->
+          <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
         <div class="col-lg-2 col-sm-3">
