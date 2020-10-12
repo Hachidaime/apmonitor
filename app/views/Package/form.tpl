@@ -48,34 +48,16 @@
           <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
-        <div class="col-lg-2 col-sm-3 col-8">
+        <div class="col-lg-9 col-sm-8">
           <select class="custom-select rounded-0" name="prg_code" id="prg_code">
             <option value="">-- Pilih --</option>
             {section inner $program}
-            <option
-              value="{$program[inner].prg_code}"
-              data-value="{$program[inner].prg_name}"
-            >
-              {$program[inner].prg_code}
+            <option value="{$program[inner].prg_code}">
+              {$program[inner].prg_name}
             </option>
             {/section}
           </select>
           <div class="invalid-feedback"></div>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="prg_name" class="col-lg-3 col-sm-4 col-form-label">
-          Nama Program
-          <span class="float-sm-right d-sm-inline d-none">:</span>
-        </label>
-        <div class="col-lg-9 col-sm-8">
-          <input
-            type="text"
-            class="form-control-plaintext rounded-0 border-bottom border-top-0 border-secondary"
-            id="prg_name"
-            readonly
-          />
         </div>
       </div>
 
@@ -85,34 +67,16 @@
           <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
-        <div class="col-lg-2 col-sm-3 col-8">
+        <div class="col-lg-9 col-sm-8">
           <select class="custom-select rounded-0" name="act_code" id="act_code">
             <option value="">-- Pilih --</option>
             {section inner $activity}
-            <option
-              value="{$activity[inner].act_code}"
-              data-value="{$activity[inner].act_name}"
-            >
-              {$activity[inner].act_code}
+            <option value="{$activity[inner].act_code}">
+              {$activity[inner].act_name}
             </option>
             {/section}
           </select>
           <div class="invalid-feedback"></div>
-        </div>
-      </div>
-
-      <div class="form-group row">
-        <label for="act_name" class="col-lg-3 col-sm-4 col-form-label">
-          Nama Kegiatan
-          <span class="float-sm-right d-sm-inline d-none">:</span>
-        </label>
-        <div class="col-lg-9 col-sm-8">
-          <input
-            type="text"
-            class="form-control-plaintext rounded-0 border-bottom border-top-0 border-secondary"
-            id="act_name"
-            readonly
-          />
         </div>
       </div>
 
@@ -153,30 +117,6 @@
       viewMode: 'years',
       format: 'YYYY',
     })
-
-    $('#prg_code')
-      .change(function () {
-        if ($(this).val()) {
-          $('#prg_name').val(
-            $(this)
-              .find(`option[value=${$(this).val()}]`)
-              .data('value')
-          )
-        }
-      })
-      .change()
-
-    $('#act_code')
-      .change(function () {
-        if ($(this).val()) {
-          $('#act_name').val(
-            $(this)
-              .find(`option[value=${$(this).val()}]`)
-              .data('value')
-          )
-        }
-      })
-      .change()
 
     $('#btn_submit').click(() => {
       clearErrorMessage()

@@ -346,8 +346,10 @@ class PackageController extends Controller
             : $this->packageModel->multiarray($filter, $sort);
 
         foreach ($list as $idx => $row) {
-            $list[$idx]['prg_name'] = $programOptions[$row['prg_code']];
-            $list[$idx]['act_name'] = $activityOptions[$row['act_code']];
+            $row['prg_name'] = $programOptions[$row['prg_code']];
+            $row['act_name'] = $activityOptions[$row['act_code']];
+
+            $list[$idx] = $row;
         }
 
         return [$list, $info];
