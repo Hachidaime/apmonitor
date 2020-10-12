@@ -259,6 +259,7 @@
     $('#progressModal').modal('show')
     $('#progressModalLabel').text(`Progres ${data.pkgdNo}`)
 
+    $('#pkgdLastProgWeek').val(data.pkgdLastProgWeek)
     $('#pkgdLastProgDate').val(data.pkgdLastProgDate)
     $('#pkgdSumProgPhysical').val(`${data.pkgdSumProgPhysical} %`)
     $('#pkgdSumProgFinance').val(`Rp ${data.pkgdSumProgFinance}`)

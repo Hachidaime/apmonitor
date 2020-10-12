@@ -25,7 +25,7 @@
 
       <div class="modal-body">
         <div class="form-group row">
-          <label class="col-form-label col-sm-6" for="progWeek">
+          <label class="col-form-label col-sm-6" for="pkgdLastProgWeek">
             Minggu Ke
             <span class="float-sm-right d-sm-inline d-none">:</span>
           </label>
@@ -33,7 +33,7 @@
             <input
               type="text"
               class="form-control-plaintext border px-2"
-              id="progWeek"
+              id="pkgdLastProgWeek"
               readonly
             />
           </div>
