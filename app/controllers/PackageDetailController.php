@@ -151,13 +151,11 @@ class PackageDetailController extends Controller
         $validation = $this->validator->make($data, [
             'pkgd_no' => "required|uniq_pkgd_no:{$data['pkgs_id']},{$data['id']}",
             'pkgd_name' => 'required',
-            'pkgd_period_type' => 'required',
         ]);
 
         $validation->setAliases([
             'pkgd_no' => 'Nomor Paket',
             'pkgd_name' => 'Nama Paket',
-            'pkgd_period_type' => 'Jenis Masa',
         ]);
 
         $validation->setMessages([

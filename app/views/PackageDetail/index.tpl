@@ -30,8 +30,6 @@
             <th class="align-middle text-right" width="40px">#</th>
             <th class="align-middle text-center" width="15%">Nomor Paket</th>
             <th class="align-middle text-center" width="*">Nama Paket</th>
-            <th class="align-middle text-center" width="10%">Jenis Masa</th>
-            <th class="align-middle text-center" width="10%">Tahun Lanjutan</th>
             <th width="20%px">&nbsp;</th>
           </tr>
         </thead>
@@ -95,8 +93,6 @@
             let no = null,
               pkgdNo = null,
               pkgdName = null,
-              pkgdPeriodType = null,
-              pkgdAdvancedYear = null,
               action = null,
               detail = null
 
@@ -113,19 +109,6 @@
             pkgdName = createElement({
               element: 'td',
               children: [list[index].pkgd_name],
-            })
-
-            pkgdPeriodType = createElement({
-              element: 'td',
-              children: [list[index].pkgd_period_type],
-            })
-
-            pkgdAdvancedYear = createElement({
-              element: 'td',
-              class: ['text-center'],
-              children: [
-                list[index].pkgd_advanced_year == 1 ? yesText : noText,
-              ],
             })
 
             let actionBtns = null,
@@ -237,15 +220,7 @@
 
             tRow = createElement({
               element: 'tr',
-              children: [
-                no,
-                pkgdNo,
-                pkgdName,
-                pkgdPeriodType,
-                pkgdAdvancedYear,
-                action,
-                detail,
-              ],
+              children: [no, pkgdNo, pkgdName, action, detail],
             })
 
             detailList.appendChild(tRow)

@@ -51,55 +51,6 @@
             />
             <div class="invalid-feedback"></div>
           </div>
-          <div class="form-group">
-            <p class="mb-1">
-              <strong>Jenis Masa</strong>
-              <sup class="fas fa-asterisk text-red"></sup>
-            </p>
-            <div
-              class="btn-group btn-group-toggle"
-              data-toggle="buttons"
-              id="pkgd_period_type"
-            >
-              <label class="btn btn-outline-info btn-flat btn-sm btn-radio">
-                <input
-                  type="radio"
-                  name="pkgd_period_type"
-                  id="yearly"
-                  autocomplete="off"
-                  value="TAHUNAN"
-                />
-                TAHUNAN
-              </label>
-              <label class="btn btn-outline-info btn-flat btn-sm btn-radio">
-                <input
-                  type="radio"
-                  name="pkgd_period_type"
-                  id="multiyear"
-                  autocomplete="off"
-                  value="TAHUN JAMAK"
-                />
-                TAHUN JAMAK
-              </label>
-            </div>
-            <div class="invalid-feedback"></div>
-          </div>
-          <div class="form-group">
-            <p class="mb-1">
-              <strong>Tahun Lanjutan</strong>
-            </p>
-            <input
-              type="checkbox"
-              id="pkgd_advanced_year"
-              name="pkgd_advanced_year"
-              data-bootstrap-switch
-              data-off-color="danger"
-              data-on-color="success"
-              data-on-text="YES"
-              data-off-text="NO"
-              value="1"
-            />
-          </div>
         </div>
         <div class="modal-footer">
           <button
