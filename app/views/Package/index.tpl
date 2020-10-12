@@ -49,12 +49,12 @@
               <th class="align-middle text-center" width="*">
                 Tahun Anggaran
               </th>
-              <th class="align-middle text-center" width="30%">Program</th>
-              <th class="align-middle text-center" width="30%">Kegiatan</th>
+              <th class="align-middle text-center" width="25%">Program</th>
+              <th class="align-middle text-center" width="25%">Kegiatan</th>
               <th class="align-middle text-center" width="15%">
                 Pagu Anggaran<br />(Rp)
               </th>
-              <th width="15%px">&nbsp;</th>
+              <th width="20%px">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -67,11 +67,100 @@
     <!-- /.card -->
   </div>
 </div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="expiresFormModal"
+  data-backdrop="static"
+  data-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="expiresFormModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="expiresFormModalLabel"></h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="expires_form" role="form" method="POST">
+          <input type="hidden" id="pkgd_id" name="pkgd_id" value="" />
+          <input type="hidden" id="id" name="id" value="" />
+
+          <div class="form-group row">
+            <label for="pkg_pho_date" class="col-5 col-form-label">
+              Tanggal Periode
+              <sup class="fas fa-asterisk text-red"></sup>
+            </label>
+            <div class="col-4">
+              <input
+                type="text"
+                class="form-control rounded-0"
+                id="pkg_pho_date"
+                name="pkg_pho_date"
+                autocomplete="off"
+                data-toggle="datetimepicker"
+                data-target="#pkg_pho_date"
+              />
+              <div class="invalid-feedback"></div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="pkg_contract_fv" class="col-5 col-form-label">
+              Keuangan
+              <sup class="fas fa-asterisk text-red"></sup>
+            </label>
+            <div class="col-7">
+              <input
+                class="form-control rounded-0 money-format"
+                id="pkg_contract_fv"
+                name="pkg_contract_fv"
+                autocomplete="off"
+                placeholder="0,00"
+              />
+              <div class="invalid-feedback"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-light btn-flat"
+          data-dismiss="modal"
+          style="width: 125px;"
+        >
+          Batal
+        </button>
+        <button
+          type="button"
+          class="btn btn-success btn-flat"
+          id="btn_save"
+          style="width: 125px;"
+        >
+          Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- prettier-ignore -->
 {/block} 
 
 {block 'script'} 
 {block 'paginationJS'}{/block}
+
+<script src="{$smarty.const.BASE_URL}/assets/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
 {literal}
 <script>
   $(document).ready(function () {
@@ -90,6 +179,25 @@
     /* Delete Button */
     $(document).on('click', '.btn-delete', function (event) {
       deleteData($(this).data('id'))
+    })
+
+    $(document).on('click', '.btn-expires', function () {
+      showExpiresForm()
+    })
+
+    $('#pkg_pho_date').datetimepicker({
+      format: 'DD/MM/YYYY',
+      locale: 'id',
+    })
+
+    $('.money-format').inputmask({
+      alias: 'numeric',
+      groupSeparator: '.',
+      radixPoint: ',',
+      placeholder: '0,00',
+      numericInput: true,
+      autoGroup: true,
+      autoUnmask: true,
     })
   })
 
@@ -116,8 +224,8 @@
             pkgFiscalYear = null,
             prgName = null,
             actName = null,
-            action = null,
-            pkgDebtCeiling = null
+            pkgDebtCeiling = null,
+            action = null
 
           no = createElement({
             element: 'td',
@@ -147,7 +255,8 @@
           })
 
           let editBtn = null,
-            deleteBtn = null
+            deleteBtn = null,
+            expiresBtn = null
 
           editBtn = createElement({
             element: 'a',
@@ -170,9 +279,21 @@
             children: ['Hapus'],
           })
 
+          expiresBtn = createElement({
+            element: 'a',
+            class: ['badge', 'badge-pill', 'badge-light', 'btn-expires'],
+            data: {
+              id: list[index].id,
+            },
+            attribute: {
+              href: `javascript:void(0)`,
+            },
+            children: ['Kontrak Berakhir'],
+          })
+
           action = createElement({
             element: 'td',
-            children: [editBtn, deleteBtn],
+            children: [editBtn, deleteBtn, expiresBtn],
           })
 
           tRow = createElement({
@@ -207,6 +328,11 @@
       },
       'JSON'
     )
+  }
+
+  let showExpiresForm = () => {
+    $('#expiresFormModal').modal('show')
+    $('#expiresFormModalLabel').text('Kontrak Berakhir')
   }
 </script>
 <!-- prettier-ignore -->
