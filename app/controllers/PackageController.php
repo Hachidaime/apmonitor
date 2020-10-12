@@ -124,6 +124,9 @@ class PackageController extends Controller
     {
         $data = $_POST;
         $data['pkgs_id'] = $_SESSION['PKGS_ID'];
+        $data['pkg_debt_ceiling'] = !empty($data['pkg_debt_ceiling'])
+            ? str_replace(',', '.', $data['pkg_debt_ceiling'])
+            : 0;
         if ($this->validate($data)) {
             $result = $this->packageModel->save($data);
             if ($data['id'] > 0) {
@@ -230,36 +233,34 @@ class PackageController extends Controller
 
         list($list, $list_count) = $this->getList();
 
-        $spreadsheet
-            ->getActiveSheet()
-            ->fromArray(
-                ['No.', "Tahun\nAnggaran", 'Program', 'Kegiatan'],
-                null,
-                'A1',
-            );
+        $sheet->fromArray(
+            [
+                'No.',
+                "Tahun\nAnggaran",
+                'Program',
+                'Kegiatan',
+                "Pagu Anggaran\n(Rp)",
+            ],
+            null,
+            'A1',
+        );
 
-        $spreadsheet
-            ->getActiveSheet()
-            ->getRowDimension('1')
-            ->setRowHeight(30);
+        $sheet->getRowDimension('1')->setRowHeight(30);
 
-        $spreadsheet
-            ->getActiveSheet()
-            ->getStyle('A1:D1')
-            ->applyFromArray([
-                'alignment' => [
-                    'horizontal' =>
-                        \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' =>
-                        \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+        $sheet->getStyle('A1:E1')->applyFromArray([
+            'alignment' => [
+                'horizontal' =>
+                    \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' =>
+                    \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' =>
+                        \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ],
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' =>
-                            \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                    ],
-                ],
-            ]);
+            ],
+        ]);
 
         if ($list_count > 0) {
             foreach ($list as $idx => $rows) {
@@ -269,11 +270,19 @@ class PackageController extends Controller
                 $sheet->setCellValue("B{$row}", $rows['pkg_fiscal_year']);
                 $sheet->setCellValue("C{$row}", $rows['prg_name']);
                 $sheet->setCellValue("D{$row}", $rows['act_name']);
+                $sheet->setCellValue("E{$row}", $rows['pkg_debt_ceiling']);
+
+                $sheet->getStyle("E{$row}")->applyFromArray([
+                    'alignment' => [
+                        'horizontal' =>
+                            \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                    ],
+                ]);
             }
 
             $spreadsheet
                 ->getActiveSheet()
-                ->getStyle("A2:D{$row}")
+                ->getStyle("A2:E{$row}")
                 ->applyFromArray([
                     'borders' => [
                         'allBorders' => [
@@ -284,22 +293,11 @@ class PackageController extends Controller
                 ]);
         }
 
-        $spreadsheet
-            ->getActiveSheet()
-            ->getColumnDimension('A')
-            ->setAutoSize(true);
-        $spreadsheet
-            ->getActiveSheet()
-            ->getColumnDimension('B')
-            ->setAutoSize(true);
-        $spreadsheet
-            ->getActiveSheet()
-            ->getColumnDimension('C')
-            ->setAutoSize(true);
-        $spreadsheet
-            ->getActiveSheet()
-            ->getColumnDimension('D')
-            ->setAutoSize(true);
+        $sheet->getColumnDimension('A')->setAutoSize(true);
+        $sheet->getColumnDimension('B')->setAutoSize(true);
+        $sheet->getColumnDimension('C')->setAutoSize(true);
+        $sheet->getColumnDimension('D')->setAutoSize(true);
+        $sheet->getColumnDimension('E')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $t = time();
@@ -348,6 +346,12 @@ class PackageController extends Controller
         foreach ($list as $idx => $row) {
             $row['prg_name'] = $programOptions[$row['prg_code']];
             $row['act_name'] = $activityOptions[$row['act_code']];
+            $row['pkg_debt_ceiling'] = number_format(
+                $row['pkg_debt_ceiling'],
+                2,
+                ',',
+                '.',
+            );
 
             $list[$idx] = $row;
         }

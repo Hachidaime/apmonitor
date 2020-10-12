@@ -80,6 +80,24 @@
         </div>
       </div>
 
+      <div class="form-group row">
+        <label for="pkg_debt_ceiling" class="col-lg-3 col-sm-4 col-form-label">
+          Pagu Anggaran (Rp)
+          <!-- <sup class="fas fa-asterisk text-red"></sup> -->
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-2 col-sm-3">
+          <input
+            class="form-control rounded-0 text-right"
+            id="pkg_debt_ceiling"
+            name="pkg_debt_ceiling"
+            autocomplete="off"
+            placeholder="0,00"
+          />
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
       {block 'detailList'}{/block}
     </div>
     <!-- /.card-body -->
@@ -118,6 +136,16 @@
       format: 'YYYY',
     })
 
+    $('#pkg_debt_ceiling').inputmask({
+      alias: 'numeric',
+      groupSeparator: '.',
+      radixPoint: ',',
+      placeholder: '0,00',
+      numericInput: true,
+      autoGroup: true,
+      autoUnmask: true,
+    })
+
     $('#btn_submit').click(() => {
       clearErrorMessage()
       save()
@@ -132,8 +160,6 @@
         $.each(res, (id, value) => {
           $(`#my_form #${id}`).val(value)
         })
-        $('#my_form #prg_code').change()
-        $('#my_form #act_code').change()
       },
       'JSON'
     )

@@ -49,8 +49,11 @@
               <th class="align-middle text-center" width="*">
                 Tahun Anggaran
               </th>
-              <th class="align-middle text-center" width="35%">Program</th>
-              <th class="align-middle text-center" width="35%">Kegiatan</th>
+              <th class="align-middle text-center" width="30%">Program</th>
+              <th class="align-middle text-center" width="30%">Kegiatan</th>
+              <th class="align-middle text-center" width="15%">
+                Pagu Anggaran<br />(Rp)
+              </th>
               <th width="15%px">&nbsp;</th>
             </tr>
           </thead>
@@ -113,7 +116,8 @@
             pkgFiscalYear = null,
             prgName = null,
             actName = null,
-            action = null
+            action = null,
+            pkgDebtCeiling = null
 
           no = createElement({
             element: 'td',
@@ -134,6 +138,12 @@
           actName = createElement({
             element: 'td',
             children: [list[index].act_name],
+          })
+
+          pkgDebtCeiling = createElement({
+            element: 'td',
+            class: ['text-right'],
+            children: [list[index].pkg_debt_ceiling],
           })
 
           let editBtn = null,
@@ -167,7 +177,14 @@
 
           tRow = createElement({
             element: 'tr',
-            children: [no, pkgFiscalYear, prgName, actName, action],
+            children: [
+              no,
+              pkgFiscalYear,
+              prgName,
+              actName,
+              pkgDebtCeiling,
+              action,
+            ],
           })
 
           tBody.appendChild(tRow)
