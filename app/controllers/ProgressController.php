@@ -291,6 +291,7 @@ class ProgressController extends Controller
                 [
                     'No.',
                     "Tahun\nAnggaran",
+                    'Minggu Ke',
                     'Nama Paket',
                     'Tanggal Periode',
                     'Progres Fisik',
@@ -307,7 +308,7 @@ class ProgressController extends Controller
 
         $spreadsheet
             ->getActiveSheet()
-            ->getStyle('A1:F1')
+            ->getStyle('A1:G1')
             ->applyFromArray([
                 'alignment' => [
                     'horizontal' =>
@@ -329,15 +330,16 @@ class ProgressController extends Controller
                 $n = $idx + 1;
                 $sheet->setCellValue("A{$row}", $n);
                 $sheet->setCellValue("B{$row}", $rows['prog_fiscal_year']);
-                $sheet->setCellValue("C{$row}", $rows['pkgd_name']);
-                $sheet->setCellValue("D{$row}", $rows['prog_date']);
-                $sheet->setCellValue("E{$row}", $rows['prog_physical']);
-                $sheet->setCellValue("F{$row}", $rows['prog_finance']);
+                $sheet->setCellValue("C{$row}", $rows['prog_week']);
+                $sheet->setCellValue("D{$row}", $rows['pkgd_name']);
+                $sheet->setCellValue("E{$row}", $rows['prog_date']);
+                $sheet->setCellValue("F{$row}", $rows['prog_physical']);
+                $sheet->setCellValue("G{$row}", $rows['prog_finance']);
             }
 
             $spreadsheet
                 ->getActiveSheet()
-                ->getStyle("A2:F{$row}")
+                ->getStyle("A2:G{$row}")
                 ->applyFromArray([
                     'borders' => [
                         'allBorders' => [
@@ -371,6 +373,10 @@ class ProgressController extends Controller
         $spreadsheet
             ->getActiveSheet()
             ->getColumnDimension('F')
+            ->setAutoSize(true);
+        $spreadsheet
+            ->getActiveSheet()
+            ->getColumnDimension('G')
             ->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);

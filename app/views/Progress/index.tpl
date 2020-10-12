@@ -58,6 +58,9 @@
               <th class="align-middle text-center" width="10%">
                 Tahun Anggaran
               </th>
+              <th class="align-middle text-center" width="5%">
+                Minggu Ke
+              </th>
               <th class="align-middle text-center" width="*">Nama Paket</th>
               <th class="align-middle text-center" width="15%">
                 Tanggal Periode
@@ -139,6 +142,7 @@
           let tRow = null
           let no = null,
             progFiscalYear = null,
+            progWeek = null,
             pkgdName = null,
             progDate = null,
             progPhysical = null,
@@ -153,6 +157,12 @@
           progFiscalYear = createElement({
             element: 'td',
             children: [list[index].prog_fiscal_year],
+          })
+
+          progWeek = createElement({
+            element: 'td',
+            class: ['text-right'],
+            children: [list[index].prog_week],
           })
 
           pkgdName = createElement({
@@ -249,6 +259,7 @@
             children: [
               no,
               progFiscalYear,
+              progWeek,
               pkgdName,
               progDate,
               progPhysical,
