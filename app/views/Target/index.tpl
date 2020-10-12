@@ -42,6 +42,9 @@
                   <th class="align-middle text-center" width="10%">
                     Minggu Ke
                   </th>
+                  <th class="align-middle text-center" width="10%">
+                    Tanggal Periode
+                  </th>
                   <th class="align-middle text-center" width="15%">
                     Fisik<br />(%)
                   </th>
@@ -114,6 +117,7 @@
           for (let index in list) {
             let tRow = null
             let trgWeek = null,
+              trgDate = null,
               trgPhysical = null,
               trgFinance = null,
               action = null,
@@ -123,6 +127,11 @@
               element: 'td',
               class: ['text-right'],
               children: [list[index].trg_week],
+            })
+
+            trgDate = createElement({
+              element: 'td',
+              children: [list[index].trg_date],
             })
 
             trgPhysical = createElement({
@@ -187,7 +196,14 @@
 
             tRow = createElement({
               element: 'tr',
-              children: [trgWeek, trgPhysical, trgFinance, action, detail],
+              children: [
+                trgWeek,
+                trgDate,
+                trgPhysical,
+                trgFinance,
+                action,
+                detail,
+              ],
             })
 
             targetList.appendChild(tRow)

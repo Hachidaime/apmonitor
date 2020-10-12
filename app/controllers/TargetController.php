@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\models\TargetModel;
+use app\helper\Functions;
 
 class TargetController extends Controller
 {
@@ -24,12 +25,19 @@ class TargetController extends Controller
         ]);
 
         foreach ($list as $idx => $row) {
-            $list[$idx]['trg_finance'] = number_format(
+            $row['trg_date'] = Functions::dateFormat(
+                'Y-m-d',
+                'd/m/Y',
+                $row['trg_date'],
+            );
+            $row['trg_finance'] = number_format(
                 $row['trg_finance'],
                 2,
                 ',',
                 '.',
             );
+
+            $list[$idx] = $row;
         }
 
         echo json_encode($list);
@@ -39,6 +47,9 @@ class TargetController extends Controller
     public function submit()
     {
         $data = $_POST;
+        $data['trg_date'] = !empty($data['trg_date'])
+            ? Functions::dateFormat('d/m/Y', 'Y-m-d', $data['trg_date'])
+            : null;
         $data['trg_finance'] = !empty($data['trg_finance'])
             ? str_replace(',', '.', $data['trg_finance'])
             : null;
@@ -75,12 +86,14 @@ class TargetController extends Controller
     {
         $validation = $this->validator->make($data, [
             'trg_week' => "required|min:1|uniq_trg:{$data['pkgd_id']},{$data['id']}",
+            'trg_date' => 'required|date',
             'trg_physical' => 'required|numeric',
             'trg_finance' => 'required',
         ]);
 
         $validation->setAliases([
             'trg_week' => 'Minggu Ke-',
+            'trg_date' => 'Tanggal Periode',
             'trg_physical' => 'Target Fisik',
             'trg_finance' => 'Target Keuangan',
         ]);
@@ -88,6 +101,7 @@ class TargetController extends Controller
         $validation->setMessages([
             'required' => '<strong>:attribute</strong> harus diisi.',
             'numeric' => '<strong>:attribute</strong> tidak valid.',
+            'date' => 'Format <strong>:attribute</strong> tidak valid.',
             'trg_week:min' => '<strong>:attribute</strong> minimum :min.',
             'trg_week:uniq_trg' =>
                 '<strong>:attribute:value</strong> telah ada di database.',

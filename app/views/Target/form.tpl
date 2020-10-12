@@ -44,6 +44,24 @@
             </div>
           </div>
           <div class="form-group row">
+            <label for="trg_date" class="col-5 col-form-label">
+              Tanggal Periode
+              <sup class="fas fa-asterisk text-red"></sup>
+            </label>
+            <div class="col-4">
+              <input
+                type="text"
+                class="form-control rounded-0"
+                id="trg_date"
+                name="trg_date"
+                autocomplete="off"
+                data-toggle="datetimepicker"
+                data-target="#trg_date"
+              />
+              <div class="invalid-feedback"></div>
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="trg_physical" class="col-5 col-form-label">
               Fisik
               <sup class="fas fa-asterisk text-red"></sup>
@@ -106,6 +124,11 @@
 {literal}
 <script>
   $(document).ready(function () {
+    $('#trg_date').datetimepicker({
+      format: 'DD/MM/YYYY',
+      locale: 'id',
+    })
+
     $('#targetFormModal').on('hidden.bs.modal', function (e) {
       $('#detail_form').trigger('reset')
       $('.btn-radio').removeClass('active')
