@@ -129,23 +129,23 @@
             })
 
             let actionBtns = null,
-              partnerBtn = null,
+              contractorBtn = null,
               targetBtn = null,
               progressBtn = null,
               imgBtn = null,
               editBtn = null,
               deleteBtn = null
 
-            partnerBtn = createElement({
+            contractorBtn = createElement({
               element: 'a',
-              class: ['btn', 'btn-info', 'btn-sm', 'btn-partner'],
+              class: ['btn', 'btn-info', 'btn-sm', 'btn-contractor'],
               data: {
                 id: list[index].id,
               },
               attribute: {
                 href: 'javascript:void(0)',
               },
-              children: ['Rekanan'],
+              children: ['Kontraktor'],
             })
 
             targetBtn = createElement({
@@ -217,7 +217,7 @@
             actionBtns = createElement({
               element: 'div',
               class: ['btn-group'],
-              children: [partnerBtn, targetBtn, progressBtn, imgBtn],
+              children: [contractorBtn, targetBtn, progressBtn, imgBtn],
             })
 
             action = createElement({
