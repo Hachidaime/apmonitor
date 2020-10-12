@@ -28,8 +28,12 @@
         <thead>
           <tr>
             <th class="align-middle text-right" width="40px">#</th>
-            <th class="align-middle text-center" width="15%">Nomor Paket</th>
+            <th class="align-middle text-center" width="12%">Nomor Paket</th>
             <th class="align-middle text-center" width="*">Nama Paket</th>
+            <th class="align-middle text-center" width="10%">Sumber Dana</th>
+            <th class="align-middle text-center" width="15%">
+              Lokasi Pekerjaan
+            </th>
             <th width="20%px">&nbsp;</th>
           </tr>
         </thead>
@@ -93,6 +97,8 @@
             let no = null,
               pkgdNo = null,
               pkgdName = null,
+              pkgdSOF = null,
+              pkgdLocName = null,
               action = null,
               detail = null
 
@@ -109,6 +115,16 @@
             pkgdName = createElement({
               element: 'td',
               children: [list[index].pkgd_name],
+            })
+
+            pkgdSOF = createElement({
+              element: 'td',
+              children: [list[index].pkgd_sof],
+            })
+
+            pkgdLocName = createElement({
+              element: 'td',
+              children: [list[index].pkgd_loc_name],
             })
 
             let actionBtns = null,
@@ -220,7 +236,15 @@
 
             tRow = createElement({
               element: 'tr',
-              children: [no, pkgdNo, pkgdName, action, detail],
+              children: [
+                no,
+                pkgdNo,
+                pkgdName,
+                pkgdSOF,
+                pkgdLocName,
+                action,
+                detail,
+              ],
             })
 
             detailList.appendChild(tRow)

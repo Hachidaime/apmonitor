@@ -51,6 +51,47 @@
             />
             <div class="invalid-feedback"></div>
           </div>
+          <div class="form-group">
+            <label for="pkgd_sof">
+              Sumber Dana
+              <sup class="fas fa-asterisk text-red"></sup>
+            </label>
+            <select
+              class="custom-select rounded-0"
+              name="pkgd_sof"
+              id="pkgd_sof"
+            >
+              <option value="">-- Pilih --</option>
+              <!-- prettier-ignore -->
+              {$SOF_OPT = $smarty.const.SOF_OPT}
+              {foreach $SOF_OPT as $sof}
+              <option value="{$sof@key}">
+                {$sof}
+              </option>
+              {/foreach}
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
+          <div class="form-group">
+            <label for="pkgd_loc_id">
+              Lokasi Pekerjaan
+              <sup class="fas fa-asterisk text-red"></sup>
+            </label>
+            <select
+              class="custom-select rounded-0"
+              name="pkgd_loc_id"
+              id="pkgd_loc_id"
+            >
+              <option value="">-- Pilih --</option>
+              <!-- prettier-ignore -->
+              {section inner $location}
+              <option value="{$location[inner].id}">
+                {$location[inner].loc_name}
+              </option>
+              {/section}
+            </select>
+            <div class="invalid-feedback"></div>
+          </div>
         </div>
         <div class="modal-footer">
           <button

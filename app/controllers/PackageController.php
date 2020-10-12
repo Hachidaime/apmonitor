@@ -4,6 +4,7 @@ use app\controllers\Controller;
 use app\helper\Flasher;
 use app\helper\Functions;
 use app\models\ActivityModel;
+use app\models\LocationModel;
 use app\models\PackageDetailModel;
 use app\models\PackageModel;
 use app\models\PackageSessionModel;
@@ -95,6 +96,11 @@ class PackageController extends Controller
             ['act_code', 'ASC'],
         ]);
 
+        $locationModel = new LocationModel();
+        list($location) = $locationModel->multiarray(null, [
+            ['loc_code', 'ASC'],
+        ]);
+
         $this->smarty->assign('breadcrumb', [
             ['Master', ''],
             [$this->title, $this->lowerName],
@@ -104,6 +110,7 @@ class PackageController extends Controller
         $this->smarty->assign('subtitle', "{$tag} {$this->title}");
         $this->smarty->assign('program', $program);
         $this->smarty->assign('activity', $activity);
+        $this->smarty->assign('location', $location);
         $this->smarty->display("{$this->directory}/form.tpl");
     }
 

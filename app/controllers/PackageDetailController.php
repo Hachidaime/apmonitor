@@ -2,6 +2,7 @@
 
 use app\controllers\Controller;
 use app\helper\Functions;
+use app\models\LocationModel;
 use app\models\PackageDetailModel;
 use app\models\PackageModel;
 
@@ -24,6 +25,12 @@ class PackageDetailController extends Controller
         $packageModel = new PackageModel();
         list($detail, $dcount) = $packageModel->singlearray($_POST['pkg_id']);
 
+        $locationModel = new LocationModel();
+        list($location) = $locationModel->multiarray(null, [
+            ['loc_code', 'ASC'],
+        ]);
+        $location_opt = Functions::listToOptions($location, 'id', 'loc_name');
+
         list($list, $lcount) = $this->packageDetailModel->multiarray([
             ['pkg_id', $detail['id'] > 0 ? $detail['id'] : 0],
             [
@@ -35,9 +42,9 @@ class PackageDetailController extends Controller
         ]);
 
         foreach ($list as $idx => $row) {
-            $list[$idx]['pkgd_contract_date'] = !is_null(
-                $row['pkgd_contract_date'],
-            )
+            $row['pkgd_sof'] = SOF_OPT[$row['pkgd_sof']];
+            $row['pkgd_loc_name'] = $location_opt[$row['pkgd_loc_id']];
+            $row['pkgd_contract_date'] = !is_null($row['pkgd_contract_date'])
                 ? Functions::dateFormat(
                     'Y-m-d',
                     'd/m/Y',
@@ -45,7 +52,7 @@ class PackageDetailController extends Controller
                 )
                 : null;
 
-            $list[$idx]['pkgd_contract_end_date'] = !is_null(
+            $row['pkgd_contract_end_date'] = !is_null(
                 $row['pkgd_contract_end_date'],
             )
                 ? Functions::dateFormat(
@@ -55,9 +62,7 @@ class PackageDetailController extends Controller
                 )
                 : null;
 
-            $list[$idx]['pkgd_addendum_date'] = !is_null(
-                $row['pkgd_addendum_date'],
-            )
+            $row['pkgd_addendum_date'] = !is_null($row['pkgd_addendum_date'])
                 ? Functions::dateFormat(
                     'Y-m-d',
                     'd/m/Y',
@@ -65,7 +70,7 @@ class PackageDetailController extends Controller
                 )
                 : null;
 
-            $list[$idx]['pkgd_addendum_end_date'] = !is_null(
+            $row['pkgd_addendum_end_date'] = !is_null(
                 $row['pkgd_addendum_end_date'],
             )
                 ? Functions::dateFormat(
@@ -75,9 +80,7 @@ class PackageDetailController extends Controller
                 )
                 : null;
 
-            $list[$idx]['pkgd_last_prog_date'] = !is_null(
-                $row['pkgd_last_prog_date'],
-            )
+            $row['pkgd_last_prog_date'] = !is_null($row['pkgd_last_prog_date'])
                 ? Functions::dateFormat(
                     'Y-m-d',
                     'd/m/Y',
@@ -85,19 +88,21 @@ class PackageDetailController extends Controller
                 )
                 : null;
 
-            $list[$idx]['pkgd_sum_prog_physical'] = number_format(
+            $row['pkgd_sum_prog_physical'] = number_format(
                 $row['pkgd_sum_prog_physical'],
                 2,
                 ',',
                 '.',
             );
 
-            $list[$idx]['pkgd_sum_prog_finance'] = number_format(
+            $row['pkgd_sum_prog_finance'] = number_format(
                 $row['pkgd_sum_prog_finance'],
                 2,
                 ',',
                 '.',
             );
+
+            $list[$idx] = $row;
         }
 
         echo json_encode($list);
@@ -151,11 +156,15 @@ class PackageDetailController extends Controller
         $validation = $this->validator->make($data, [
             'pkgd_no' => "required|uniq_pkgd_no:{$data['pkgs_id']},{$data['id']}",
             'pkgd_name' => 'required',
+            'pkgd_sof' => 'required',
+            'pkgd_loc_id' => 'required',
         ]);
 
         $validation->setAliases([
             'pkgd_no' => 'Nomor Paket',
             'pkgd_name' => 'Nama Paket',
+            'pkgd_sof' => 'Sumber Dana',
+            'pkgd_loc_id' => 'Lokasi Pekerjaan',
         ]);
 
         $validation->setMessages([
