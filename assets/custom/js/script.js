@@ -312,7 +312,7 @@ let createElement = (params) => {
 
   if (params.children !== undefined)
     params.children.forEach((value) => {
-      if (typeof value == 'object') element.appendChild(value)
+      if (typeof value == 'object' && value != null) element.appendChild(value)
       else element.innerHTML = value
     })
 
