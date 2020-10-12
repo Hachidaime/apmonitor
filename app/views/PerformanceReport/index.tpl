@@ -152,7 +152,7 @@
           title1 = createElement({
             element: 'h5',
             class: ['text-center'],
-            children: ['LAPORAN KINERJA PELAKSANAAN PAKET KEGIATAN'],
+            children: ['LAPORAN CAPAIAN KINERJA BULANAN'],
           })
 
           title2 = createElement({

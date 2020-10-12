@@ -13,7 +13,7 @@ class PerformanceReportController extends Controller
     {
         parent::__construct();
         $this->setControllerAttribute(__CLASS__);
-        $this->title = 'Kinerja Pelaksanaan Paket Kegiatan';
+        $this->title = 'Capaian Kinerja Bulanan';
         $this->smarty->assign('title', $this->title);
         $this->performanceReportModel = new PerformanceReportModel();
 
@@ -62,7 +62,7 @@ class PerformanceReportController extends Controller
         $list = $this->performanceReportModel->getData($_POST);
         $list_count = count($list);
 
-        $sheet->setCellValue('A1', 'LAPORAN KINERJA PELAKSAAN PAKET KEGIATAN');
+        $sheet->setCellValue('A1', 'LAPORAN CAPAIAN KINERJA BULANAN');
         $sheet->setCellValue('A2', 'BINA MARGA KAB. SEMARANG');
         $sheet->setCellValue('A3', "THN ANGGARAN: {$_POST['pkg_fiscal_year']}");
 
@@ -243,7 +243,7 @@ class PerformanceReportController extends Controller
 
         $writer = new Xlsx($spreadsheet);
         $t = time();
-        $filename = "Laporan-Kinerja-Pelaksanaan-Paket-Kegiatan-{$t}.{$ext}";
+        $filename = "Laporan-Capaian-Kinerja-Bulanan-{$t}.{$ext}";
         $filepath = "download/{$filename}";
         $writer->save(DOC_ROOT . $filepath);
         echo json_encode($filepath);

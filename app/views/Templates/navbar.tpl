@@ -124,7 +124,7 @@
                 href="{$smarty.const.BASE_URL}/performancereport"
                 class="dropdown-item"
               >
-                Kinerja Pelaksanaan Paket Kegiatan
+                Capaian Kinerja Bulanan
               </a>
             </li>
           </ul>
