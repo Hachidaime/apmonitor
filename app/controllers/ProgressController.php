@@ -252,7 +252,9 @@ class ProgressController extends Controller
 
     private function updatePackageDetail($pkgd_id)
     {
-        $query = "SELECT SUM(prog_finance) as pkgd_sum_prog_finance, 
+        $query = "SELECT
+            MAX(prog_week) as pkgd_last_prog_week,
+            SUM(prog_finance) as pkgd_sum_prog_finance, 
             MAX(prog_physical) as pkgd_sum_prog_physical,
             MAX(prog_date) as pkgd_last_prog_date,
             (SELECT prog_img FROM {$this->progressModel->getTable()} 
