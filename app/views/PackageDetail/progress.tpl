@@ -25,7 +25,22 @@
 
       <div class="modal-body">
         <div class="form-group row">
-          <label class="col-form-label col-sm-6" for="pkgd_no">
+          <label class="col-form-label col-sm-6" for="progWeek">
+            Minggu Ke
+            <span class="float-sm-right d-sm-inline d-none">:</span>
+          </label>
+          <div class="col-sm-6">
+            <input
+              type="text"
+              class="form-control-plaintext border px-2"
+              id="progWeek"
+              readonly
+            />
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-form-label col-sm-6" for="pkgdLastProgDate">
             Tanggal Terakhir Update
             <span class="float-sm-right d-sm-inline d-none">:</span>
           </label>
@@ -34,6 +49,7 @@
               type="text"
               class="form-control-plaintext border px-2"
               id="pkgdLastProgDate"
+              readonly
             />
           </div>
         </div>
@@ -47,6 +63,7 @@
               type="text"
               class="form-control-plaintext text-right border px-2"
               id="pkgdSumProgPhysical"
+              readonly
             />
           </div>
         </div>
@@ -60,6 +77,7 @@
               type="text"
               class="form-control-plaintext text-right border px-2"
               id="pkgdSumProgFinance"
+              readonly
             />
           </div>
         </div>
