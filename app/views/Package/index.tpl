@@ -323,6 +323,10 @@
             ],
           })
 
+          if (list[index].pkg_pho_date != null) {
+            tRow.classList.add('bg-success')
+          }
+
           tBody.appendChild(tRow)
         }
         reArrange('#result_data tr', paging.currentPage)
