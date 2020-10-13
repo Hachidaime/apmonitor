@@ -128,6 +128,7 @@
   $(document).ready(function () {
     $('#detailFormModal').on('hidden.bs.modal', function (e) {
       $('#detail_form').trigger('reset')
+      $('#detail_form #id').val('')
       $('.btn-radio').removeClass('active')
       clearErrorMessage()
     })

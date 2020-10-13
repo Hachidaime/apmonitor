@@ -5,6 +5,8 @@ use app\helper\Functions;
 use app\models\LocationModel;
 use app\models\PackageDetailModel;
 use app\models\PackageModel;
+use app\models\ProgressModel;
+use app\models\TargetModel;
 
 class PackageDetailController extends Controller
 {
@@ -12,6 +14,7 @@ class PackageDetailController extends Controller
     {
         parent::__construct();
         $this->setControllerAttribute(__CLASS__);
+        $this->title = 'Detail Pemaketan';
 
         $this->packageDetailModel = new PackageDetailModel();
 
@@ -42,7 +45,7 @@ class PackageDetailController extends Controller
         ]);
 
         foreach ($list as $idx => $row) {
-            $row['pkgd_sof'] = SOF_OPT[$row['pkgd_sof']];
+            $row['pkgd_sof_name'] = SOF_OPT[$row['pkgd_sof']];
             $row['pkgd_loc_name'] = $location_opt[$row['pkgd_loc_id']];
             $row['pkgd_contract_date'] = !is_null($row['pkgd_contract_date'])
                 ? Functions::dateFormat(
@@ -182,5 +185,35 @@ class PackageDetailController extends Controller
             exit();
         }
         return true;
+    }
+
+    public function remove()
+    {
+        $id = (int) $_POST['id'];
+        $tag = 'Hapus';
+        $result = $this->packageDetailModel->delete($id);
+
+        if ($result) {
+            $targetModel = new TargetModel();
+            $targetModel->delete([['pkgd_id', $id]]);
+
+            $progressModel = new ProgressModel();
+            $progressModel->delete([['pkgd_id', $id]]);
+
+            $this->writeLog(
+                "{$tag} {$this->title}",
+                "{$tag} {$this->title} [{$id}] berhasil.",
+            );
+            echo json_encode([
+                'success' => true,
+                'msg' => "Berhasil {$tag} {$this->title}.",
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'msg' => "Gagal {$tag} {$this->title}.",
+            ]);
+        }
+        exit();
     }
 }

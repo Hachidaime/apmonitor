@@ -134,9 +134,9 @@ class Model
         return $result;
     }
 
-    public function delete(int $id)
+    public function delete($params)
     {
-        $result = $this->db->delete($this->table, $id);
+        $result = $this->db->delete($this->table, $params);
         return $result;
     }
 }

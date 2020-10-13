@@ -120,7 +120,7 @@
             let no = null,
               pkgdNo = null,
               pkgdName = null,
-              pkgdSOF = null,
+              pkgdSOFName = null,
               pkgdLocName = null,
               action = null,
               detail = null
@@ -140,9 +140,9 @@
               children: [list[index].pkgd_name],
             })
 
-            pkgdSOF = createElement({
+            pkgdSOFName = createElement({
               element: 'td',
-              children: [list[index].pkgd_sof],
+              children: [list[index].pkgd_sof_name],
             })
 
             pkgdLocName = createElement({
@@ -272,10 +272,9 @@
                 no,
                 pkgdNo,
                 pkgdName,
-                pkgdSOF,
+                pkgdSOFName,
                 pkgdLocName,
                 action,
-
                 detail,
               ],
             })
@@ -287,6 +286,52 @@
       },
       'JSON'
     )
+  }
+
+  let deleteDetail = (id) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn bg-gradient-danger ml-2',
+        cancelButton: 'btn bg-gradient-light',
+      },
+      buttonsStyling: false,
+    })
+
+    swalWithBootstrapButtons
+      .fire({
+        position: 'top',
+        title: 'Apakah Anda yakin?',
+        text: 'Anda tidak akan dapat mengembalikan data ini!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Hapus',
+        cancelButtonText: 'Batal',
+        reverseButtons: true,
+      })
+      .then((result) => {
+        if (result.value) {
+          let data = `id=${id}`
+          let url = `${BASE_URL}/packagedetail/remove`
+          $.post(
+            url,
+            data,
+            (res) => {
+              if (res.success) {
+                flash(res.msg, 'success')
+                pkgdSearch()
+              } else {
+                flash(res.msg, 'error')
+              }
+            },
+            'JSON'
+          )
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          flash('Hapus data batal.', 'error')
+        }
+      })
   }
 
   let pkgdRowEmpty = () => {
