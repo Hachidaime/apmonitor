@@ -49,6 +49,12 @@ foreach ($master as $value) {
     ]);
 }
 
+$router->map(
+    'POST',
+    '/package/submitexpires',
+    'PackageController::submitExpires',
+);
+
 $router->map('POST', '/file/upload', 'FileController::upload');
 
 $router->addRoutes([
