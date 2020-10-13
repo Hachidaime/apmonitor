@@ -57,8 +57,7 @@
     pkgdSearch()
 
     $('#detailAddBtn').click(() => {
-      $('#detailFormModal').modal('show')
-      $('#detailFormModalLabel').text('Tambah Paket')
+      showDetailForm()
     })
 
     $(document).on('click', '.btn-progress', function () {
@@ -79,9 +78,33 @@
         alwaysShowClose: false,
       })
     })
+
+    $(document).on('click', '#detailList .btn-edit', function () {
+      showDetailForm(this.dataset.id)
+    })
+
+    $(document).on('click', '#detailList .btn-delete', function () {
+      deleteDetail(this.dataset.id)
+    })
   })
 
   let detailList = document.querySelector('#detailList #result_data')
+
+  let showDetailForm = (id = 0) => {
+    $('#detailFormModal').modal('show')
+    $('#detailFormModalLabel').text(id > 0 ? 'Ubah Paket' : 'Tambah Paket')
+
+    const data = $(`#detailList input[data-id=${id}]`).data()
+    $.each(data, (key, value) => {
+      key = key
+        .replace(/\.?([A-Z]+)/g, function (x, y) {
+          return '_' + y.toLowerCase()
+        })
+        .replace(/^_/, '')
+
+      $(`#detail_form #${key}`).val(value)
+    })
+  }
 
   let pkgdSearch = () => {
     $.post(
@@ -194,9 +217,18 @@
 
             editBtn = createElement({
               element: 'a',
-              class: ['badge', 'badge-pill', 'badge-warning', 'mr-1'],
+              class: [
+                'badge',
+                'badge-pill',
+                'badge-warning',
+                'mr-1',
+                'btn-edit',
+              ],
+              data: {
+                id: list[index].id,
+              },
               attribute: {
-                href: `${MAIN_URL}/edit/${list[index].id}`,
+                href: `javascript:void(0)`,
               },
               children: ['Edit'],
             })
@@ -221,7 +253,7 @@
 
             action = createElement({
               element: 'td',
-              children: [actionBtns],
+              children: [actionBtns, editBtn, deleteBtn],
             })
 
             detail = createElement({
@@ -243,6 +275,7 @@
                 pkgdSOF,
                 pkgdLocName,
                 action,
+
                 detail,
               ],
             })
