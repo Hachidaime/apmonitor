@@ -364,10 +364,82 @@ class PackageController extends Controller
                 ',',
                 '.',
             );
+            $row['pkg_pho_date'] = !is_null($row['pkg_pho_date'])
+                ? Functions::dateFormat('Y-m-d', 'd/m/Y', $row['pkg_pho_date'])
+                : $row['pkg_pho_date'];
+            $row['pkg_contract_fv'] = !is_null($row['pkg_contract_fv'])
+                ? number_format($row['pkg_contract_fv'], 2, ',', '.')
+                : $row['pkg_contract_fv'];
 
             $list[$idx] = $row;
         }
 
         return [$list, $info];
+    }
+
+    public function submitExpires()
+    {
+        $data = $_POST;
+        $data['pkg_pho_date'] = !empty($data['pkg_pho_date'])
+            ? Functions::dateFormat('d/m/Y', 'Y-m-d', $data['pkg_pho_date'])
+            : null;
+        $data['pkg_contract_fv'] =
+            $data['pkg_contract_fv'] > 0 ? $data['pkg_contract_fv'] : '';
+
+        if ($this->validateExpires($data)) {
+            $data['pkg_contract_fv'] = !empty($data['pkg_contract_fv'])
+                ? str_replace(',', '.', $data['pkg_contract_fv'])
+                : 0;
+
+            $result = $this->packageModel->save($data);
+            $id = $data['id'];
+            $tag = 'Ubah';
+
+            if ($result) {
+                $this->writeLog(
+                    "{$tag} {$this->title}",
+                    "{$tag} {$this->title} [{$id}], Kontrak Berakhir berhasil.",
+                );
+                echo json_encode([
+                    'success' => true,
+                    'msg' => 'Berhasil Kontrak Berakhir.',
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'msg' => 'Gagal Kontrak Berakhir.',
+                ]);
+            }
+            exit();
+        }
+    }
+
+    private function validateExpires($data)
+    {
+        $validation = $this->validator->make($data, [
+            'pkg_pho_date' => 'required|date',
+            'pkg_contract_fv' => 'required',
+        ]);
+
+        $validation->setAliases([
+            'pkg_pho_date' => 'Tanggal PHO',
+            'pkg_contract_fv' => 'Nilai Akhir Kontrak',
+        ]);
+
+        $validation->setMessages([
+            'required' => '<strong>:attribute</strong> harus diisi.',
+            'date' => 'Format <strong>:attribute</strong> tidak valid.',
+        ]);
+
+        $validation->validate();
+
+        if ($validation->fails()) {
+            echo json_encode([
+                'success' => false,
+                'msg' => $validation->errors()->firstOfAll(),
+            ]);
+            exit();
+        }
+        return true;
     }
 }

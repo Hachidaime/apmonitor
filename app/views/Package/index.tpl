@@ -93,7 +93,6 @@
       </div>
       <div class="modal-body">
         <form id="expires_form" role="form" method="POST">
-          <input type="hidden" id="pkgd_id" name="pkgd_id" value="" />
           <input type="hidden" id="id" name="id" value="" />
 
           <div class="form-group row">
@@ -182,7 +181,7 @@
     })
 
     $(document).on('click', '.btn-expires', function () {
-      showExpiresForm()
+      showExpiresForm(this.dataset.id)
     })
 
     $('#pkg_pho_date').datetimepicker({
@@ -198,6 +197,10 @@
       numericInput: true,
       autoGroup: true,
       autoUnmask: true,
+    })
+
+    $('#btn_save').click(() => {
+      saveExpires()
     })
   })
 
@@ -225,7 +228,8 @@
             prgName = null,
             actName = null,
             pkgDebtCeiling = null,
-            action = null
+            action = null,
+            detail = null
 
           no = createElement({
             element: 'td',
@@ -296,6 +300,16 @@
             children: [editBtn, deleteBtn, expiresBtn],
           })
 
+          detail = createElement({
+            element: 'input',
+            attribute: {
+              type: 'hidden',
+            },
+          })
+          Object.entries(list[index]).forEach(([key, value]) => {
+            detail.dataset[camelCase(key)] = value
+          })
+
           tRow = createElement({
             element: 'tr',
             children: [
@@ -305,6 +319,7 @@
               actName,
               pkgDebtCeiling,
               action,
+              detail,
             ],
           })
 
@@ -330,9 +345,41 @@
     )
   }
 
-  let showExpiresForm = () => {
+  let showExpiresForm = (id) => {
     $('#expiresFormModal').modal('show')
     $('#expiresFormModalLabel').text('Kontrak Berakhir')
+
+    let data = $(`#result_data input[data-id=${id}]`).data()
+    $.each(data, (key, value) => {
+      key = key
+        .replace(/\.?([A-Z]+)/g, function (x, y) {
+          return '_' + y.toLowerCase()
+        })
+        .replace(/^_/, '')
+
+      $(`#expires_form #${key}`).val(value)
+    })
+  }
+
+  let saveExpires = () => {
+    $.post(
+      `${MAIN_URL}/submitexpires`,
+      $('#expires_form').serialize(),
+      (res) => {
+        if (!res.success) {
+          if (typeof res.msg === 'object') {
+            $.each(res.msg, (id, message) => {
+              showErrorMessage(id, message)
+            })
+          } else flash(res.msg, 'error')
+        } else {
+          flash(res.msg, 'success')
+          $('#expiresFormModal').modal('hide')
+          search()
+        }
+      },
+      'JSON'
+    )
   }
 </script>
 <!-- prettier-ignore -->
