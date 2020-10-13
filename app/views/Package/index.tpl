@@ -54,7 +54,7 @@
               <th class="align-middle text-center" width="15%">
                 Pagu Anggaran<br />(Rp)
               </th>
-              <th width="20%px">&nbsp;</th>
+              <th width="22%px">&nbsp;</th>
             </tr>
           </thead>
           <tbody id="result_data"></tbody>
@@ -273,7 +273,13 @@
 
           deleteBtn = createElement({
             element: 'a',
-            class: ['badge', 'badge-pill', 'badge-danger', 'btn-delete'],
+            class: [
+              'badge',
+              'badge-pill',
+              'badge-danger',
+              'mr-1',
+              'btn-delete',
+            ],
             data: {
               id: list[index].id,
             },
