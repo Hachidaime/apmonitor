@@ -4,6 +4,7 @@ use app\controllers\Controller;
 use app\helper\Functions;
 use app\models\PackageDetailModel;
 use app\models\ContractModel;
+use app\models\AddendumModel;
 
 class ContractController extends Controller
 {
@@ -15,6 +16,7 @@ class ContractController extends Controller
 
         $this->packageDetailModel = new PackageDetailModel();
         $this->contractModel = new ContractModel();
+        $this->addendumModel = new AddendumModel();
 
         if (!$_SESSION['USER']['usr_is_package']) {
             header('Location:' . BASE_URL . '/403');
@@ -53,6 +55,7 @@ class ContractController extends Controller
     public function submit()
     {
         $data = $_POST;
+
         $data['cnt_no'] = strtoupper($data['cnt_no']);
         $data['cnt_date'] = !empty($data['cnt_date'])
             ? Functions::dateFormat('d/m/Y', 'Y-m-d', $data['cnt_date'])
@@ -71,11 +74,18 @@ class ContractController extends Controller
             ? str_replace(',', '.', $data['cnt_value'])
             : 0;
 
+        $addendum = [];
         foreach ($data as $key => $value) {
-            if (empty($value)) {
+            if (is_array($value)) {
+                $addendum[$key] = $value;
                 unset($data[$key]);
+            } else {
+                if (empty($value)) {
+                    unset($data[$key]);
+                }
             }
         }
+
         if ($this->validate($data)) {
             $result = $this->contractModel->save($data);
 
@@ -83,6 +93,7 @@ class ContractController extends Controller
             $id = $data['id'];
 
             if ($result) {
+                $this->submitAddendum($addendum);
                 $this->writeLog(
                     "{$tag} {$this->title}",
                     "{$tag} {$this->title} [{$id}] berhasil.",
@@ -141,5 +152,28 @@ class ContractController extends Controller
             exit();
         }
         return true;
+    }
+
+    private function submitAddendum($data)
+    {
+        for ($i = 1; $i <= 8; $i++) {
+            $addendum = [
+                'pkgd_id' => $_POST['pkgd_id'],
+                'id' => $data['add_id'][$i],
+                'add_order' => $data['add_order'][$i],
+                'add_date' => $data['add_date'][$i],
+                'add_days' => $data['add_days'][$i],
+                'add_plan_pho_date' => $data['add_plan_pho_date'][$i],
+                'add_value' => $data['add_value'][$i],
+            ];
+
+            foreach ($addendum as $key => $value) {
+                if (empty($value)) {
+                    unset($addendum[$key]);
+                }
+            }
+
+            $this->addendumModel->save($addendum);
+        }
     }
 }

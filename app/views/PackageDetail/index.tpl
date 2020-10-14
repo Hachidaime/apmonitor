@@ -375,6 +375,7 @@
     $('#contractFormModalLabel').text(`Rekanan ${data.pkgdNo}`)
 
     $('#contract_form #pkgd_id').val(pkgd_id)
+    $('#addendum_form #pkgd_id').val(pkgd_id)
 
     getContractDetail(pkgd_id)
   }

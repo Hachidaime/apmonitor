@@ -23,6 +23,7 @@ $master = [
     'Location',
     'PackageDetail',
     'Contract',
+    'Addendum',
     'Target',
     'Progress',
     'ProgressReport',

@@ -33,7 +33,6 @@
             >
               Nama Kontraktor
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-8 col-sm-6">
               <input
@@ -51,7 +50,6 @@
             <label for="cnt_no" class="col-lg-4 col-sm-6 col-form-label">
               Nomor Kontrak
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-3 col-sm-4">
               <input
@@ -69,7 +67,6 @@
             <label for="cnt_date" class="col-lg-4 col-sm-6 col-form-label">
               Tanggal Kontrak
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-3 col-sm-4">
               <input
@@ -89,7 +86,6 @@
             <label for="cnt_wsw_date" class="col-lg-4 col-sm-6 col-form-label">
               Tanggal SPMK
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-3 col-sm-4">
               <input
@@ -109,7 +105,6 @@
             <label for="cnt_days" class="col-lg-4 col-sm-6 col-form-label">
               Waktu Pelaksanaan (hari)
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-2 col-sm-3 col-6">
               <input
@@ -131,7 +126,6 @@
             >
               Tanggal Rencana PHO
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-3 col-sm-4">
               <input
@@ -149,7 +143,6 @@
             <label for="cnt_value" class="col-lg-4 col-sm-6 col-form-label">
               Nilai Kontrak (Rp)
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-3 col-sm-6">
               <input
@@ -171,7 +164,6 @@
             >
               Nama Konsultan
               <sup class="fas fa-asterisk text-red"></sup>
-              <span class="float-sm-right d-sm-inline d-none">:</span>
             </label>
             <div class="col-lg-8 col-sm-6">
               <input
@@ -185,116 +177,124 @@
             </div>
           </div>
 
-          {*
-          <hr />
-          <div class="form-group row">
-            <label
-              for="pkgd_addendum_no"
-              class="col-lg-4 col-sm-6 col-form-label"
-            >
-              Nomor Addendum
-              <span class="float-sm-right d-sm-inline d-none">:</span>
-            </label>
-            <div class="col-lg-3 col-sm-4">
+          {for $order=1 to 8}
+          <div class="row {cycle values='bg-light,bg-white'} border-top">
+            <div class="col">
+              <legend>Addendum {$order}</legend>
+              <input type="hidden" name="add_id[{$order}]" value="" />
               <input
-                type="text"
-                class="form-control rounded-0"
-                id="pkgd_addendum_no"
-                name="pkgd_addendum_no"
-                autocomplete="off"
+                type="hidden"
+                name="add_order[{$order}]"
+                value="{$order}"
               />
-              <div class="invalid-feedback"></div>
-            </div>
-          </div>
+              <div class="form-group row">
+                <label
+                  for="add_no{$order}"
+                  class="col-lg-4 col-sm-6 col-form-label"
+                >
+                  Nomor Addendum
+                </label>
+                <div class="col-lg-3 col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control rounded-0 add-no"
+                    id="add_no{$order}"
+                    name="add_no[{$order}]"
+                    autocomplete="off"
+                    data-order="{$order}"
+                  />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
 
-          <div class="form-group row">
-            <label
-              for="pkgd_addendum_date"
-              class="col-lg-4 col-sm-6 col-form-label"
-            >
-              Tanggal Addendum
-              <span class="float-sm-right d-sm-inline d-none">:</span>
-            </label>
-            <div class="col-lg-3 col-sm-4">
-              <input
-                type="text"
-                class="form-control rounded-0 date-picker"
-                id="pkgd_addendum_date"
-                name="pkgd_addendum_date"
-                autocomplete="off"
-                data-toggle="datetimepicker"
-                data-target="#pkgd_addendum_date"
-              />
-              <div class="invalid-feedback"></div>
-            </div>
-          </div>
+              <div class="form-group row">
+                <label
+                  for="add_date{$order}"
+                  class="col-lg-4 col-sm-6 col-form-label"
+                >
+                  Tanggal Addendum
+                </label>
+                <div class="col-lg-3 col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control rounded-0 date-picker add-date"
+                    id="add_date{$order}"
+                    name="add_date[{$order}]"
+                    autocomplete="off"
+                    data-toggle="datetimepicker"
+                    data-target="#add_date{$order}"
+                    data-order="{$order}"
+                  />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
 
-          <div class="form-group row">
-            <label
-              for="pkgd_addendum_days"
-              class="col-lg-4 col-sm-6 col-form-label"
-            >
-              Masa Addendum
-              <span class="float-sm-right d-sm-inline d-none">:</span>
-            </label>
-            <div class="col-lg-2 col-sm-3 col-6">
-              <input
-                type="number"
-                class="form-control rounded-0 text-right"
-                id="pkgd_addendum_days"
-                name="pkgd_addendum_days"
-                autocomplete="off"
-                min="0"
-              />
-              <div class="invalid-feedback"></div>
-            </div>
-          </div>
+              <div class="form-group row">
+                <label
+                  for="add_days{$order}"
+                  class="col-lg-4 col-sm-6 col-form-label"
+                >
+                  Masa Addendum (hari)
+                </label>
+                <div class="col-lg-2 col-sm-3 col-6">
+                  <input
+                    type="number"
+                    class="form-control rounded-0 text-right add-days"
+                    id="add_days{$order}"
+                    name="add_days[{$order}]"
+                    autocomplete="off"
+                    min="0"
+                    data-order="{$order}"
+                  />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
 
-          <div class="form-group row">
-            <label
-              for="pkgd_addendum_end_date"
-              class="col-lg-4 col-sm-6 col-form-label"
-            >
-              Tanggal Selesai Addendum
-              <span class="float-sm-right d-sm-inline d-none">:</span>
-            </label>
-            <div class="col-lg-3 col-sm-4">
-              <input
-                type="text"
-                class="form-control rounded-0 date-picker"
-                id="pkgd_addendum_end_date"
-                name="pkgd_addendum_end_date"
-                autocomplete="off"
-                data-toggle="datetimepicker"
-                data-target="#pkgd_addendum_end_date"
-              />
-              <div class="invalid-feedback"></div>
-            </div>
-          </div>
+              <div class="form-group row">
+                <label
+                  for="add_plan_pho_date{$order}"
+                  class="col-lg-4 col-sm-6 col-form-label"
+                >
+                  Tanggal Rencana PHO Addendum
+                </label>
+                <div class="col-lg-3 col-sm-4">
+                  <input
+                    type="text"
+                    class="form-control rounded-0 add-plan-pho-date"
+                    id="add_plan_pho_date{$order}"
+                    name="add_plan_pho_date[{$order}]"
+                    data-order="{$order}"
+                    readonly
+                  />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
 
-          <div class="form-group row">
-            <label
-              for="pkgd_addendum_value"
-              class="col-lg-4 col-sm-6 col-form-label"
-            >
-              Nilai Addendum
-              <span class="float-sm-right d-sm-inline d-none">:</span>
-            </label>
-            <div class="col-lg-3 col-sm-6">
-              <input
-                type="text"
-                class="form-control rounded-0 money-format text-right"
-                id="pkgd_addendum_value"
-                name="pkgd_addendum_value"
-                autocomplete="off"
-                placeholder="0,00"
-              />
-              <div class="invalid-feedback"></div>
+              <div class="form-group row">
+                <label
+                  for="add_value{$order}"
+                  class="col-lg-4 col-sm-6 col-form-label"
+                >
+                  Nilai Addendum
+                </label>
+                <div class="col-lg-3 col-sm-6">
+                  <input
+                    type="text"
+                    class="form-control rounded-0 money-format text-right"
+                    id="add_value{$order}"
+                    name="add_value[{$order}]"
+                    autocomplete="off"
+                    placeholder="0,00"
+                  />
+                  <div class="invalid-feedback"></div>
+                </div>
+              </div>
             </div>
           </div>
-          *}
+          {/for}
         </form>
       </div>
+
       <div class="modal-footer">
         <button
           type="button"
@@ -351,14 +351,23 @@
       setPlanPHODate()
     })
 
+    $('.add-date').on('change.datetimepicker', function () {
+      setAddPlanPHODate(this.dataset.order)
+    })
+
+    $('.add-days').on('change', () => {
+      setAddPlanPHODate(this.dataset.order)
+    })
+
     $('#contractFormModal').on('hidden.bs.modal', function (e) {
       $('#contract_form').trigger('reset')
+      $('#addendum_form').trigger('reset')
       clearErrorMessage()
     })
 
     $('#contractFormModal #btn_save').click(function () {
       clearErrorMessage()
-      saveContract(this.dataset.id)
+      saveContract()
     })
   })
 
@@ -376,7 +385,21 @@
     $('#cnt_plan_pho_date').val(cntDate)
   }
 
-  let saveContract = (id) => {
+  let setAddPlanPHODate = (order) => {
+    let addDate = $(`#add_date${order}`).val()
+    const addDays = $(`#add_days${order}`).val()
+    const dateFormat = 'DD/MM/YYYY'
+
+    let dt = moment(addDate, dateFormat)
+    if (addDays > 0) {
+      dt.add(addDays, 'days')
+    }
+
+    addDate = dt.format(dateFormat)
+    $(`#add_plan_pho_date${order}`).val(addDate)
+  }
+
+  let saveContract = () => {
     $.post(
       `${BASE_URL}/contract/submit`,
       $('#contract_form').serialize(),
