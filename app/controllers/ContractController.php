@@ -53,6 +53,7 @@ class ContractController extends Controller
     public function submit()
     {
         $data = $_POST;
+        $data['cnt_no'] = strtoupper($data['cnt_no']);
         $data['cnt_date'] = !empty($data['cnt_date'])
             ? Functions::dateFormat('d/m/Y', 'Y-m-d', $data['cnt_date'])
             : null;
