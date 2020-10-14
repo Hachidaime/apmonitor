@@ -181,7 +181,12 @@
           <div class="row {cycle values='bg-light,bg-white'} border-top">
             <div class="col">
               <legend>Addendum {$order}</legend>
-              <input type="hidden" name="add_id[{$order}]" value="" />
+              <input
+                type="hidden"
+                id="add_id{$order}"
+                name="add_id[{$order}]"
+                value=""
+              />
               <input
                 type="hidden"
                 name="add_order[{$order}]"
@@ -355,7 +360,7 @@
       setAddPlanPHODate(this.dataset.order)
     })
 
-    $('.add-days').on('change', () => {
+    $('.add-days').on('change', function () {
       setAddPlanPHODate(this.dataset.order)
     })
 

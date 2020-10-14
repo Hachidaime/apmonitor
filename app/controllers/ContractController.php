@@ -30,23 +30,52 @@ class ContractController extends Controller
             ['pkgd_id', $pkgd_id],
         ]);
 
-        $detail['cnt_date'] = Functions::dateFormat(
-            'Y-m-d',
-            'd/m/Y',
-            $detail['cnt_date'],
-        );
+        $detail['cnt_date'] = !is_null($detail['cnt_date'])
+            ? Functions::dateFormat('Y-m-d', 'd/m/Y', $detail['cnt_date'])
+            : '';
 
-        $detail['cnt_wsw_date'] = Functions::dateFormat(
-            'Y-m-d',
-            'd/m/Y',
-            $detail['cnt_wsw_date'],
-        );
+        $detail['cnt_wsw_date'] = !is_null($detail['cnt_wsw_date'])
+            ? Functions::dateFormat('Y-m-d', 'd/m/Y', $detail['cnt_wsw_date'])
+            : '';
 
-        $detail['cnt_plan_pho_date'] = Functions::dateFormat(
-            'Y-m-d',
-            'd/m/Y',
-            $detail['cnt_plan_pho_date'],
-        );
+        $detail['cnt_plan_pho_date'] = !is_null($detail['cnt_plan_pho_date'])
+            ? Functions::dateFormat(
+                'Y-m-d',
+                'd/m/Y',
+                $detail['cnt_plan_pho_date'],
+            )
+            : '';
+
+        list($addendum, $addendum_c) = $this->addendumModel->multiarray([
+            ['pkgd_id', $pkgd_id],
+        ]);
+
+        $detail['addendum'] = [];
+        if ($addendum_c > 0) {
+            foreach ($addendum as $idx => $row) {
+                $row['add_date'] = !is_null($row['add_date'])
+                    ? Functions::dateFormat('Y-m-d', 'd/m/Y', $row['add_date'])
+                    : '';
+
+                $row['add_plan_pho_date'] = !is_null($row['add_plan_pho_date'])
+                    ? Functions::dateFormat(
+                        'Y-m-d',
+                        'd/m/Y',
+                        $row['add_plan_pho_date'],
+                    )
+                    : '';
+
+                $row['add_days'] = $row['add_days'] > 0 ? $row['add_days'] : '';
+
+                $row['add_value'] =
+                    $row['add_value'] > 0
+                        ? number_format($row['add_value'], 2, ',', '.')
+                        : '';
+
+                $addendum[$idx] = $row;
+            }
+            $detail['addendum'] = $addendum;
+        }
 
         echo json_encode($detail);
         exit();
@@ -160,11 +189,26 @@ class ContractController extends Controller
             $addendum = [
                 'pkgd_id' => $_POST['pkgd_id'],
                 'id' => $data['add_id'][$i],
+                'add_no' => strtoupper($data['add_no'][$i]),
                 'add_order' => $data['add_order'][$i],
-                'add_date' => $data['add_date'][$i],
+                'add_date' => !empty($data['add_date'][$i])
+                    ? Functions::dateFormat(
+                        'd/m/Y',
+                        'Y-m-d',
+                        $data['add_date'][$i],
+                    )
+                    : '',
                 'add_days' => $data['add_days'][$i],
-                'add_plan_pho_date' => $data['add_plan_pho_date'][$i],
-                'add_value' => $data['add_value'][$i],
+                'add_plan_pho_date' => !empty($data['add_plan_pho_date'][$i])
+                    ? Functions::dateFormat(
+                        'd/m/Y',
+                        'Y-m-d',
+                        $data['add_plan_pho_date'][$i],
+                    )
+                    : '',
+                'add_value' => !empty($data['add_value'][$i])
+                    ? str_replace(',', '.', $data['add_value'][$i])
+                    : '',
             ];
 
             foreach ($addendum as $key => $value) {

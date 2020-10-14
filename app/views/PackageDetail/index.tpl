@@ -388,6 +388,18 @@
         $.each(res, (id, value) => {
           $(`#contract_form #${id}`).val(value)
         })
+
+        if (res.addendum.length > 0) {
+          const addendum = res.addendum
+          let idx = 0
+          for (let order = 1; order <= 8; order++) {
+            $(`#contract_form #add_id${order}`).val(addendum[idx].id)
+            $.each(addendum[idx], (id, value) => {
+              $(`#contract_form #${id}${order}`).val(value)
+            })
+            idx++
+          }
+        }
       },
       'JSON'
     )
