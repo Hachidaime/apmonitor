@@ -22,7 +22,7 @@ $master = [
     'Package',
     'Location',
     'PackageDetail',
-    'Partner',
+    'Contract',
     'Target',
     'Progress',
     'ProgressReport',

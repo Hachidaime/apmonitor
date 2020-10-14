@@ -3,7 +3,7 @@
 {include 'PackageDetail/index.tpl'}
 {include 'PackageDetail/form.tpl'}
 {include 'PackageDetail/progress.tpl'}
-{include 'Partner/form.tpl'}
+{include 'Contract/form.tpl'}
 {include 'Target/index.tpl'}
 {include 'Target/form.tpl'}
 
@@ -112,7 +112,7 @@
 <!-- prettier-ignore -->
 {block 'detailForm'}{/block}
 {block 'progressForm'}{/block}
-{block 'partnerForm'}{/block}
+{block 'contractForm'}{/block}
 {block 'targetList'}{/block}
 {block 'targetForm'}{/block}
 {/block} 
@@ -120,7 +120,7 @@
 {block 'script'}
 {block 'detailFormJS'}{/block}
 {block 'detailJS'}{/block}
-{block 'partnerScript'}{/block}
+{block 'contractFormScript'}{/block}
 {block 'targetScript'}{/block}
 {block 'targetFormScript'}{/block}
 {literal}

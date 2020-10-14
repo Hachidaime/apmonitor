@@ -68,8 +68,8 @@
       showTarget(this.dataset.id)
     })
 
-    $(document).on('click', '.btn-partner', function () {
-      showPartner(this.dataset.id)
+    $(document).on('click', '.btn-contract', function () {
+      showContract(this.dataset.id)
     })
 
     $(document).on('click', '[data-toggle="lightbox"]', function (event) {
@@ -151,16 +151,16 @@
             })
 
             let actionBtns = null,
-              contractorBtn = null,
+              contractBtn = null,
               targetBtn = null,
               progressBtn = null,
               imgBtn = null,
               editBtn = null,
               deleteBtn = null
 
-            contractorBtn = createElement({
+            contractBtn = createElement({
               element: 'a',
-              class: ['btn', 'btn-info', 'btn-sm', 'btn-contractor'],
+              class: ['btn', 'btn-info', 'btn-sm', 'btn-contract'],
               data: {
                 id: list[index].id,
               },
@@ -248,7 +248,7 @@
             actionBtns = createElement({
               element: 'div',
               class: ['btn-group'],
-              children: [contractorBtn, targetBtn, progressBtn, imgBtn],
+              children: [contractBtn, targetBtn, progressBtn, imgBtn],
             })
 
             action = createElement({
@@ -368,21 +368,28 @@
     $('#pkgdSumProgFinance').val(`Rp ${data.pkgdSumProgFinance}`)
   }
 
-  let showPartner = (id) => {
-    const data = $(`#detailList input[data-id=${id}]`).data()
+  let showContract = (pkgd_id) => {
+    const data = $(`#detailList input[data-id=${pkgd_id}]`).data()
 
-    $('#partnerFormModal').modal('show')
-    $('#partnerFormModalLabel').text(`Rekanan ${data.pkgdNo}`)
+    $('#contractFormModal').modal('show')
+    $('#contractFormModalLabel').text(`Rekanan ${data.pkgdNo}`)
 
-    $.each(data, (key, value) => {
-      key = key
-        .replace(/\.?([A-Z]+)/g, function (x, y) {
-          return '_' + y.toLowerCase()
+    $('#contract_form #pkgd_id').val(pkgd_id)
+
+    getContractDetail(pkgd_id)
+  }
+
+  let getContractDetail = (pkgd_id) => {
+    $.post(
+      `${BASE_URL}/contract/detail`,
+      { pkgd_id: pkgd_id },
+      function (res) {
+        $.each(res, (id, value) => {
+          $(`#contract_form #${id}`).val(value)
         })
-        .replace(/^_/, '')
-
-      $(`#partner_form #${key}`).val(value)
-    })
+      },
+      'JSON'
+    )
   }
 
   let showTarget = (id) => {
