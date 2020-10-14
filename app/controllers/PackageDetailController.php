@@ -194,11 +194,8 @@ class PackageDetailController extends Controller
         $result = $this->packageDetailModel->delete($id);
 
         if ($result) {
-            $targetModel = new TargetModel();
-            $targetModel->delete([['pkgd_id', $id]]);
-
-            $progressModel = new ProgressModel();
-            $progressModel->delete([['pkgd_id', $id]]);
+            $this->removeTarget($id);
+            $this->removeProgress($id);
 
             $this->writeLog(
                 "{$tag} {$this->title}",
@@ -215,5 +212,33 @@ class PackageDetailController extends Controller
             ]);
         }
         exit();
+    }
+
+    private function removeTarget(int $pkdg_id)
+    {
+        $targetModel = new TargetModel();
+        $targetModel->delete([['pkgd_id', $pkdg_id]]);
+    }
+
+    private function removeProgress(int $pkgd_id)
+    {
+        $progressModel = new ProgressModel();
+        list($list, $count) = $progressModel->multiarray([
+            ['pkgd_id', $pkgd_id],
+        ]);
+
+        if ($count > 0) {
+            foreach ($list as $row) {
+                $imgdir = DOC_ROOT . "upload/img/progress/{$row['id']}";
+                array_map('unlink', glob("{$imgdir}/{$row['prog_img']}"));
+                rmdir($imgdir);
+
+                $pdfdir = DOC_ROOT . "upload/pdf/progress/{$row['id']}";
+                array_map('unlink', glob("{$pdfdir}/{$row['prog_doc']}"));
+                rmdir($pdfdir);
+            }
+        }
+
+        $progressModel->delete([['pkgd_id', $pkgd_id]]);
     }
 }

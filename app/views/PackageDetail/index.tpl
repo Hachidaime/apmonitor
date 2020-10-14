@@ -52,7 +52,7 @@
 {literal}
 <script>
   $(document).ready(function () {
-    pkgdRowEmpty()
+    // pkgdRowEmpty()
 
     pkgdSearch()
 
@@ -282,7 +282,7 @@
             detailList.appendChild(tRow)
           }
           reArrange('#detailList #result_data tr')
-        }
+        } else pkgdRowEmpty()
       },
       'JSON'
     )
@@ -335,6 +335,7 @@
   }
 
   let pkgdRowEmpty = () => {
+    detailList.innerHTML = ''
     const tCol = createElement({
       element: 'td',
       class: ['text-center'],
