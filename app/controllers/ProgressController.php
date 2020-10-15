@@ -168,9 +168,14 @@ class ProgressController extends Controller
                     $this->name,
                     'success',
                 );
+
+                list($packageDetail) = $this->packageDetailModel->singlearray(
+                    $data['pkgd_id'],
+                );
+
                 $this->writeLog(
                     "{$tag} {$this->title}",
-                    "{$tag} {$this->title} [{$id}] berhasil.",
+                    "{$tag} {$this->title} [{$packageDetail['pkgd_no']} - {$packageDetail['pkgd_name']}] berhasil.",
                 );
                 echo json_encode(['success' => true]);
             } else {
@@ -228,6 +233,7 @@ class ProgressController extends Controller
     {
         $id = (int) $_POST['id'];
         $tag = 'Hapus';
+        list($data) = $this->progressModel->singlearray($id);
         $result = $this->progressModel->delete($id);
 
         if ($result) {
@@ -236,9 +242,13 @@ class ProgressController extends Controller
                 $this->name,
                 'success',
             );
+
+            list($packageDetail) = $this->packageDetailModel->singlearray(
+                $data['pkgd_id'],
+            );
             $this->writeLog(
                 "{$tag} {$this->title}",
-                "{$tag} {$this->title} [{$id}] berhasil.",
+                "{$tag} {$this->title} [{$packageDetail['pkgd_no']} - {$packageDetail['pkgd_name']}] berhasil.",
             );
             echo json_encode(['success' => true]);
         } else {
