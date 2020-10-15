@@ -71,7 +71,11 @@ class ProgressReportModel extends Model
             $targetOpt = $this->getTargetOpt($pkgIdList, $data['pkgd_id']);
             $progressOpt = $this->getProgressOpt($pkgIdList, $data['pkgd_id']);
 
+            // var_dump($targetOpt);
+            // var_dump($progressOpt);
+
             foreach ($package as $idx => $row) {
+                // var_dump($row);
                 $row['prg_name'] = $programOptions[$row['prg_code']];
                 $row['act_name'] = $activityOptions[$row['act_code']];
 
@@ -94,16 +98,13 @@ class ProgressReportModel extends Model
                             $progressOpt[$row['id']][$key],
                         );
 
-                        if (
-                            $detail['pkgd_no'] ==
-                            $row['detail'][$key - 1]['pkgd_no']
-                        ) {
+                        $detail = $this->getDetail($detail);
+                        if ($detail['week'] > 1) {
                             $detail['pkgd_no'] = '';
                             $detail['pkgd_name'] = '';
                             $detail['cnt_value'] = '';
                         }
-
-                        $row['detail'][$key] = $this->getDetail($detail);
+                        $packageDetail[$detail['pkgd_id']][] = $detail;
                     }
                 } else {
                     foreach ($progressOpt[$row['id']] as $key => $value) {
@@ -118,19 +119,16 @@ class ProgressReportModel extends Model
                             $progressOpt[$row['id']][$key],
                         );
 
-                        if (
-                            $detail['pkgd_no'] ==
-                            $row['detail'][$key - 1]['pkgd_no']
-                        ) {
+                        $detail = $this->getDetail($detail);
+                        if ($detail['week'] > 1) {
                             $detail['pkgd_no'] = '';
                             $detail['pkgd_name'] = '';
                             $detail['cnt_value'] = '';
                         }
-
-                        $row['detail'][$key] = $this->getDetail($detail);
+                        $packageDetail[$detail['pkgd_id']][] = $detail;
                     }
                 }
-
+                $row['detail'] = $packageDetail;
                 $package[$idx] = $row;
             }
         }
@@ -146,6 +144,7 @@ class ProgressReportModel extends Model
             $detail['prog_finance'] - $detail['trg_finance'];
 
         return [
+            'pkgd_id' => $detail['id'],
             'pkgd_no' => $detail['pkgd_no'],
             'pkgd_name' => $detail['pkgd_name'],
             'cnt_value' =>
@@ -176,12 +175,16 @@ class ProgressReportModel extends Model
                 $detail['prog_finance'] > 0
                     ? number_format($detail['prog_finance'], 2, ',', '.')
                     : '',
-            'devn_physical' => !empty($detail['devn_physical'])
-                ? number_format($detail['devn_physical'], 2, ',', '.')
-                : '',
-            'devn_finance' => !empty($detail['devn_finance'])
-                ? number_format($detail['devn_finance'], 2, ',', '.')
-                : '',
+            'devn_physical' =>
+                !empty($detail['trg_physical']) ||
+                !empty($detail['prog_physical'])
+                    ? number_format($detail['devn_physical'], 2, ',', '.')
+                    : '',
+            'devn_finance' =>
+                !empty($detail['trg_finance']) ||
+                !empty($detail['prog_finance'])
+                    ? number_format($detail['devn_finance'], 2, ',', '.')
+                    : '',
         ];
     }
 

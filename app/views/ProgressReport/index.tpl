@@ -84,6 +84,18 @@
         </div>
       </div>
     </form>
+
+    <!-- <div style="width: 50%;">
+      <canvas
+        id="lineChart"
+        style="
+          min-height: 250px;
+          height: 250px;
+          max-height: 250px;
+          max-width: 100%;
+        "
+      ></canvas>
+    </div> -->
   </div>
   <!-- /.card-body -->
 
@@ -100,6 +112,8 @@
 {/block}
 
 {block 'script'}
+<!-- ChartJS -->
+<script src="{$smarty.const.BASE_URL}/assets/plugins/chart.js/Chart.min.js"></script>
 {literal}
 <script>
   $(document).ready(function () {
@@ -115,6 +129,8 @@
     $(document).on('click', '.btn-spreadsheet', function (event) {
       spreadsheet()
     })
+
+    // createChart()
   })
 
   let search = () => {
@@ -398,96 +414,103 @@
               element: 'tbody',
             })
 
+            // let labels = []
             let n = 1
+            // console.log(res[index].detail)
             for (idx in res[index].detail) {
-              n = res[index].detail[idx].pkgd_no != '' ? n : n - 1
-              let bodyNo = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [res[index].detail[idx].pkgd_no != '' ? n : `&nbsp;`],
-              })
-              n++
+              let packageDetail = res[index].detail[idx]
+              console.log(packageDetail)
+              for (pkgd in packageDetail) {
+                n = packageDetail[pkgd].pkgd_no != '' ? n : n - 1
+                let bodyNo = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [packageDetail[pkgd].pkgd_no != '' ? n : `&nbsp;`],
+                })
+                n++
 
-              let bodyPackage = createElement({
-                element: 'td',
-                children: [
-                  res[index].detail[idx].pkgd_no != ''
-                    ? `${res[index].detail[idx].pkgd_no} - ${res[index].detail[idx].pkgd_name}`
-                    : '',
-                ],
-              })
+                let bodyPackage = createElement({
+                  element: 'td',
+                  children: [
+                    packageDetail[pkgd].pkgd_no != ''
+                      ? `${packageDetail[pkgd].pkgd_no} - ${packageDetail[pkgd].pkgd_name}`
+                      : '',
+                  ],
+                })
 
-              let bodyCntValue = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].cnt_value}`],
-              })
+                let bodyCntValue = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].cnt_value}`],
+                })
 
-              let bodyWeek = createElement({
-                element: 'td',
-                class: ['text-center'],
-                children: [`${res[index].detail[idx].week}`],
-              })
+                let bodyWeek = createElement({
+                  element: 'td',
+                  class: ['text-center'],
+                  children: [`${packageDetail[pkgd].week}`],
+                })
+                // labels[idx] = packageDetail[pkgd].week
 
-              let bodyDate = createElement({
-                element: 'td',
-                children: [`${res[index].detail[idx].trg_date}`],
-              })
+                let bodyDate = createElement({
+                  element: 'td',
+                  children: [`${packageDetail[pkgd].trg_date}`],
+                })
 
-              let bodyTrgPhysical = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].trg_physical}`],
-              })
+                let bodyTrgPhysical = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].trg_physical}`],
+                })
 
-              let bodyTrgFinance = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].trg_finance}`],
-              })
+                let bodyTrgFinance = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].trg_finance}`],
+                })
 
-              let bodyProgPhysical = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].prog_physical}`],
-              })
+                let bodyProgPhysical = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].prog_physical}`],
+                })
 
-              let bodyProgFinance = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].prog_finance}`],
-              })
+                let bodyProgFinance = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].prog_finance}`],
+                })
 
-              let bodyDevnPhysical = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].devn_physical}`],
-              })
+                let bodyDevnPhysical = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].devn_physical}`],
+                })
 
-              let bodyDevnFinance = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].devn_finance}`],
-              })
+                let bodyDevnFinance = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].devn_finance}`],
+                })
 
-              let bodyRow = createElement({
-                element: 'tr',
-                children: [
-                  bodyNo,
-                  bodyPackage,
-                  bodyCntValue,
-                  bodyWeek,
-                  bodyDate,
-                  bodyTrgPhysical,
-                  bodyTrgFinance,
-                  bodyProgPhysical,
-                  bodyProgFinance,
-                  bodyDevnPhysical,
-                  bodyDevnFinance,
-                ],
-              })
+                let bodyRow = createElement({
+                  element: 'tr',
+                  children: [
+                    bodyNo,
+                    bodyPackage,
+                    bodyCntValue,
+                    bodyWeek,
+                    bodyDate,
+                    bodyTrgPhysical,
+                    bodyTrgFinance,
+                    bodyProgPhysical,
+                    bodyProgFinance,
+                    bodyDevnPhysical,
+                    bodyDevnFinance,
+                  ],
+                })
 
-              tbody.appendChild(bodyRow)
+                tbody.appendChild(bodyRow)
+              }
             }
             //#endregion
 
@@ -539,6 +562,70 @@
       },
       'JSON'
     )
+  }
+
+  let createChart = (params) => {
+    var chartData = {
+      labels: params.labels,
+      datasets: params.datasets,
+      // datasets: [
+      //   {
+      //     label: 'Digital Goods',
+      //     backgroundColor: params,
+      //     data: params.data,
+      //     lineTension: 0,
+      //   },
+      // ],
+    }
+
+    var chartOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      legend: {
+        display: false,
+      },
+      scales: {
+        xAxes: [
+          {
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: params.xLabel,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: params.yLabel,
+            },
+            ticks: {
+              suggestedMin: 0,
+              suggestedMax: 100,
+            },
+          },
+        ],
+      },
+    }
+
+    //-------------
+    //- LINE CHART -
+    //--------------
+    var lineChartCanvas = $(`#${params.id}`).get(0).getContext('2d')
+    var lineChartOptions = jQuery.extend(true, {}, chartOptions)
+    var lineChartData = jQuery.extend(true, {}, chartData)
+    for (let i = 0; i < params.datasets.length; i++) {
+      lineChartData.datasets[i].fill = false
+    }
+    lineChartOptions.datasetFill = false
+
+    var lineChart = new Chart(lineChartCanvas, {
+      type: 'line',
+      data: lineChartData,
+      options: lineChartOptions,
+    })
   }
 </script>
 <!-- prettier-ignore -->
