@@ -40,7 +40,7 @@ class PackageController extends Controller
     public function index()
     {
         $this->smarty->assign('breadcrumb', [
-            ['Master', ''],
+            ['Paket Pekerjaan', ''],
             [$this->title, ''],
         ]);
 
@@ -102,7 +102,7 @@ class PackageController extends Controller
         ]);
 
         $this->smarty->assign('breadcrumb', [
-            ['Master', ''],
+            ['Paket Pekerjaan', ''],
             [$this->title, $this->lowerName],
             [$tag, ''],
         ]);
