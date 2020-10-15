@@ -180,59 +180,76 @@ class ProgressReportController extends Controller
                         ],
                     ]);
 
-                foreach ($rows['detail'] as $idx => $row) {
-                    $n = $idx + 1;
-                    $detail_body = $detail_head2 + $n;
+                $n = 1;
+                $no = 1;
+                foreach ($rows['detail'] as $pkg) {
+                    // var_dump($pkg);
+                    foreach ($pkg as $idx => $row) {
+                        $detail_body = $detail_head2 + $n;
+                        $n++;
 
-                    $sheet->mergeCells("B{$detail_body}:C{$detail_body}");
+                        $sheet->mergeCells("B{$detail_body}:C{$detail_body}");
 
-                    $sheet->setCellValue("A{$detail_body}", $n);
-                    $sheet->setCellValue(
-                        "B{$detail_body}",
-                        "{$row['pkgd_no']} - {$row['pkgd_name']}",
-                    );
-                    $sheet->setCellValue("D{$detail_body}", $row['cnt_value']);
-                    $sheet->setCellValue("E{$detail_body}", $row['week']);
-                    $sheet->setCellValue("F{$detail_body}", $row['trg_date']);
-                    $sheet->setCellValue(
-                        "G{$detail_body}",
-                        $row['trg_physical'],
-                    );
-                    $sheet->setCellValue(
-                        "H{$detail_body}",
-                        $row['trg_finance'],
-                    );
-                    $sheet->setCellValue(
-                        "I{$detail_body}",
-                        $row['prog_physical'],
-                    );
-                    $sheet->setCellValue(
-                        "J{$detail_body}",
-                        $row['prog_finance'],
-                    );
-                    $sheet->setCellValue(
-                        "K{$detail_body}",
-                        $row['devn_physical'],
-                    );
-                    $sheet->setCellValue(
-                        "L{$detail_body}",
-                        $row['devn_finance'],
-                    );
+                        $number = '';
+                        if ($row['week'] == 1) {
+                            $number = $no;
+                            $no++;
+                        }
 
-                    $sheet->getStyle("D{$detail_body}")->applyFromArray([
-                        'alignment' => [
-                            'horizontal' =>
-                                \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
-                        ],
-                    ]);
-                    $sheet
-                        ->getStyle("G{$detail_body}:L{$detail_body}")
-                        ->applyFromArray([
+                        $sheet->setCellValue("A{$detail_body}", $number);
+                        $sheet->setCellValue(
+                            "B{$detail_body}",
+                            "{$row['pkgd_name']}",
+                        );
+                        $sheet->setCellValue(
+                            "D{$detail_body}",
+                            $row['cnt_value'],
+                        );
+                        $sheet->setCellValue("E{$detail_body}", $row['week']);
+                        $sheet->setCellValue(
+                            "F{$detail_body}",
+                            $row['trg_date'],
+                        );
+                        $sheet->setCellValue(
+                            "G{$detail_body}",
+                            $row['trg_physical'],
+                        );
+                        $sheet->setCellValue(
+                            "H{$detail_body}",
+                            $row['trg_finance'],
+                        );
+                        $sheet->setCellValue(
+                            "I{$detail_body}",
+                            $row['prog_physical'],
+                        );
+                        $sheet->setCellValue(
+                            "J{$detail_body}",
+                            $row['prog_finance'],
+                        );
+                        $sheet->setCellValue(
+                            "K{$detail_body}",
+                            $row['devn_physical'],
+                        );
+                        $sheet->setCellValue(
+                            "L{$detail_body}",
+                            $row['devn_finance'],
+                        );
+
+                        $sheet->getStyle("D{$detail_body}")->applyFromArray([
                             'alignment' => [
                                 'horizontal' =>
                                     \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
                             ],
                         ]);
+                        $sheet
+                            ->getStyle("G{$detail_body}:L{$detail_body}")
+                            ->applyFromArray([
+                                'alignment' => [
+                                    'horizontal' =>
+                                        \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT,
+                                ],
+                            ]);
+                    }
                 }
 
                 $sheet
