@@ -3,6 +3,7 @@
 use app\controllers\Controller;
 use app\models\TargetModel;
 use app\helper\Functions;
+use app\models\PackageDetailModel;
 
 class TargetController extends Controller
 {
@@ -12,6 +13,7 @@ class TargetController extends Controller
         $this->setControllerAttribute(__CLASS__);
 
         $this->targetModel = new TargetModel();
+        $this->packageDetailModel = new PackageDetailModel();
 
         if (!$_SESSION['USER']['usr_is_package']) {
             header('Location:' . BASE_URL . '/403');
@@ -64,9 +66,12 @@ class TargetController extends Controller
             }
 
             if ($result) {
+                list($packageDetail) = $this->packageDetailModel->singlearray(
+                    $data['pkgd_id'],
+                );
                 $this->writeLog(
                     "{$tag} {$this->title}",
-                    "{$tag} {$this->title} [{$id}] berhasil.",
+                    "{$tag} {$this->title} [{$packageDetail['pkgd_no']} - {$packageDetail['pkgd_name']}] berhasil.",
                 );
                 echo json_encode([
                     'success' => true,
@@ -123,12 +128,16 @@ class TargetController extends Controller
     {
         $id = (int) $_POST['id'];
         $tag = 'Hapus';
+        list($data) = $this->targetModel->singlearray($id);
         $result = $this->targetModel->delete($id);
 
         if ($result) {
+            list($packageDetail) = $this->packageDetailModel->singlearray(
+                $data['pkgd_id'],
+            );
             $this->writeLog(
                 "{$tag} {$this->title}",
-                "{$tag} {$this->title} [{$id}] berhasil.",
+                "{$tag} {$this->title} [{$packageDetail['pkgd_no']} - {$packageDetail['pkgd_name']}] berhasil.",
             );
             echo json_encode([
                 'success' => true,
