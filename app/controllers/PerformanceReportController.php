@@ -94,9 +94,9 @@ class PerformanceReportController extends Controller
         $sheet->setCellValue('A2', 'BINA MARGA KAB. SEMARANG');
         $sheet->setCellValue('A3', "THN ANGGARAN: {$_POST['pkg_fiscal_year']}");
 
-        $sheet->mergeCells('A1:K1');
-        $sheet->mergeCells('A2:K2');
-        $sheet->mergeCells('A3:K3');
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->mergeCells('A3:J3');
 
         $sheet->getStyle('A1:A3')->applyFromArray([
             'font' => [
@@ -129,12 +129,11 @@ class PerformanceReportController extends Controller
                 $sheet->mergeCells("A{$detail_head1}:B{$detail_head2}");
                 $sheet->mergeCells("C{$detail_head1}:C{$detail_head2}");
                 $sheet->mergeCells("D{$detail_head1}:D{$detail_head2}");
-                $sheet->mergeCells("E{$detail_head1}:E{$detail_head2}");
 
-                $sheet->mergeCells("F{$detail_head1}:G{$detail_head1}");
-                $sheet->mergeCells("H{$detail_head1}:I{$detail_head1}");
-                $sheet->mergeCells("J{$detail_head1}:K{$detail_head1}");
-                $sheet->mergeCells("L{$detail_head1}:L{$detail_head2}");
+                $sheet->mergeCells("E{$detail_head1}:F{$detail_head1}");
+                $sheet->mergeCells("G{$detail_head1}:H{$detail_head1}");
+                $sheet->mergeCells("I{$detail_head1}:J{$detail_head1}");
+                $sheet->mergeCells("K{$detail_head1}:K{$detail_head2}");
                 $sheet->getRowDimension($detail_head1)->setRowHeight(30);
 
                 $sheet->fromArray(
@@ -143,8 +142,7 @@ class PerformanceReportController extends Controller
                         'Paket Kegiatan',
                         '',
                         'Nilai Kontrak (Rp)',
-                        'Minggu Ke',
-                        'Tanggal Periode',
+                        "Tanggal Periode\nTerakhir",
                         'Target',
                         '',
                         'Realisasi',
@@ -170,7 +168,7 @@ class PerformanceReportController extends Controller
                 );
 
                 $sheet
-                    ->getStyle("A{$detail_head1}:L{$detail_head2}")
+                    ->getStyle("A{$detail_head1}:K{$detail_head2}")
                     ->applyFromArray([
                         'font' => [
                             'bold' => true,
@@ -201,35 +199,33 @@ class PerformanceReportController extends Controller
                         "{$row['pkgd_no']} - {$row['pkgd_name']}",
                     );
                     $sheet->setCellValue("C{$detail_body}", $row['cnt_value']);
-                    $sheet->setCellValue("D{$detail_body}", $row['week']);
-                    $sheet->setCellValue("E{$detail_body}", $row['trg_date']);
+                    $sheet->setCellValue("D{$detail_body}", $row['date']);
                     $sheet->setCellValue(
-                        "F{$detail_body}",
+                        "E{$detail_body}",
                         $row['trg_physical'],
                     );
                     $sheet->setCellValue(
-                        "G{$detail_body}",
+                        "F{$detail_body}",
                         $row['trg_finance'],
                     );
                     $sheet->setCellValue(
-                        "H{$detail_body}",
+                        "G{$detail_body}",
                         $row['prog_physical'],
                     );
                     $sheet->setCellValue(
-                        "I{$detail_body}",
+                        "H{$detail_body}",
                         $row['prog_finance'],
                     );
                     $sheet->setCellValue(
-                        "J{$detail_body}",
+                        "I{$detail_body}",
                         $row['devn_physical'],
                     );
                     $sheet->setCellValue(
-                        "K{$detail_body}",
+                        "J{$detail_body}",
                         $row['devn_finance'],
                     );
-
                     $sheet
-                        ->getStyle("L{$detail_body}")
+                        ->getStyle("K{$detail_body}")
                         ->getFill()
                         ->setFillType(
                             \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
@@ -244,7 +240,7 @@ class PerformanceReportController extends Controller
                         ],
                     ]);
                     $sheet
-                        ->getStyle("F{$detail_body}:K{$detail_body}")
+                        ->getStyle("F{$detail_body}:J{$detail_body}")
                         ->applyFromArray([
                             'alignment' => [
                                 'horizontal' =>
@@ -254,7 +250,7 @@ class PerformanceReportController extends Controller
                 }
 
                 $sheet
-                    ->getStyle("A{$detail_head2}:L{$detail_body}")
+                    ->getStyle("A{$detail_head2}:K{$detail_body}")
                     ->applyFromArray([
                         'borders' => [
                             'allBorders' => [
@@ -278,7 +274,6 @@ class PerformanceReportController extends Controller
         $sheet->getColumnDimension('I')->setAutoSize(true);
         $sheet->getColumnDimension('J')->setAutoSize(true);
         $sheet->getColumnDimension('K')->setAutoSize(true);
-        $sheet->getColumnDimension('L')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $t = time();

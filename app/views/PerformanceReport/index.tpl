@@ -264,15 +264,15 @@
               children: ['Nilai Contract (Rp)'],
             })
 
-            let headWeek = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                rowspan: 2,
-                width: '75px',
-              },
-              children: ['Minggu Ke'],
-            })
+            // let headWeek = createElement({
+            //   element: 'th',
+            //   class: ['text-center', 'align-middle'],
+            //   attribute: {
+            //     rowspan: 2,
+            //     width: '75px',
+            //   },
+            //   children: ['Minggu Ke'],
+            // })
 
             let headDate = createElement({
               element: 'th',
@@ -281,7 +281,7 @@
                 rowspan: 2,
                 width: '125px',
               },
-              children: ['Tanggal Periode'],
+              children: [/*html*/ `Tanggal Periode<br>Terakhir`],
             })
 
             let headTarget = createElement({
@@ -330,7 +330,7 @@
                 // headNo,
                 headPackage,
                 headCntValue,
-                headWeek,
+                // headWeek,
                 headDate,
                 headTarget,
                 headProgress,
@@ -444,15 +444,15 @@
                 children: [`${res[index].detail[idx].cnt_value}`],
               })
 
-              let bodyWeek = createElement({
-                element: 'td',
-                class: ['text-center'],
-                children: [`${res[index].detail[idx].week}`],
-              })
+              // let bodyWeek = createElement({
+              //   element: 'td',
+              //   class: ['text-center'],
+              //   children: [`${res[index].detail[idx].week}`],
+              // })
 
               let bodyDate = createElement({
                 element: 'td',
-                children: [`${res[index].detail[idx].trg_date}`],
+                children: [`${res[index].detail[idx].date}`],
               })
 
               let bodyTrgPhysical = createElement({
@@ -502,7 +502,7 @@
                   // bodyNo,
                   bodyPackage,
                   bodyCntValue,
-                  bodyWeek,
+                  // bodyWeek,
                   bodyDate,
                   bodyTrgPhysical,
                   bodyTrgFinance,

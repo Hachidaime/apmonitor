@@ -101,6 +101,7 @@ class PerformanceReportModel extends Model
                             $detail['pkgd_no'] = '';
                             $detail['pkgd_name'] = '';
                             $detail['cnt_value'] = '';
+                            $detail['pkgd_last_prog_date'] = '';
                         }
 
                         $row['detail'][$key] = $this->getDetail($detail);
@@ -125,6 +126,7 @@ class PerformanceReportModel extends Model
                             $detail['pkgd_no'] = '';
                             $detail['pkgd_name'] = '';
                             $detail['cnt_value'] = '';
+                            $detail['pkgd_last_prog_date'] = '';
                         }
 
                         $row['detail'][$key] = $this->getDetail($detail);
@@ -186,14 +188,15 @@ class PerformanceReportModel extends Model
                 $detail['cnt_value'] > 0
                     ? number_format($detail['cnt_value'], 2, ',', '.')
                     : '',
-            'week' => ($detail['trg_week'] > 0
-                    ? $detail['trg_week']
-                    : $detail['prog_week'] > 0)
-                ? $detail['prog_week']
-                : '',
-            'trg_date' => !is_null($detail['trg_date'])
-                ? Functions::dateFormat('Y-m-d', 'd/m/Y', $detail['trg_date'])
-                : '',
+            'date' =>
+                !is_null($detail['pkgd_last_prog_date']) &&
+                !empty($detail['pkgd_last_prog_date'])
+                    ? Functions::dateFormat(
+                        'Y-m-d',
+                        'd/m/Y',
+                        $detail['pkgd_last_prog_date'],
+                    )
+                    : '',
             'trg_physical' =>
                 $detail['trg_physical'] > 0
                     ? number_format($detail['trg_physical'], 2, ',', '.')
@@ -235,8 +238,7 @@ class PerformanceReportModel extends Model
             `{$table_left}`.`pkg_id`,
             `{$table_left}`.`pkgd_no`,
             `{$table_left}`.`pkgd_name`,
-            `{$table_right}`.`trg_week`,
-            `{$table_right}`.`trg_date`,
+            `{$table_left}`.`pkgd_last_prog_date`,
             `{$table_right}`.`trg_physical`,
             `{$table_right}`.`trg_finance`,
             `{$table_contract}`.`cnt_value`
@@ -283,7 +285,7 @@ class PerformanceReportModel extends Model
             `{$table_left}`.`pkg_id`,
             `{$table_left}`.`pkgd_no`,
             `{$table_left}`.`pkgd_name`,
-            `{$table_right}`.`prog_week`,
+            `{$table_left}`.`pkgd_last_prog_date`,
             `{$table_right}`.`prog_physical`,
             `{$table_right}`.`prog_finance`,
             `{$table_contract}`.`cnt_value`
