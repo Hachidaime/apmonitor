@@ -2,6 +2,9 @@
 
 use app\controllers\Controller;
 use app\helper\Flasher;
+use app\helper\Functions;
+use app\models\LogModel;
+use app\models\UserModel;
 
 class ProfileController extends Controller
 {
@@ -9,44 +12,73 @@ class ProfileController extends Controller
     {
         parent::__construct();
         $this->setControllerAttribute(__CLASS__);
-        $this->userModel = $this->model('UserModel');
         $this->smarty->assign('title', $this->title);
 
-        $this->id = $_SESSION['USER']['id'];
+        $this->userModel = new UserModel();
+        $this->logModel = new LogModel();
     }
 
     public function index()
     {
-        $detail = $this->getDetail($this->id);
+        $this->smarty->assign('breadcrumb', [[$this->title, '']]);
 
-        $this->smarty->assign('detail', $detail);
-        $this->smarty->assign('subtitle', "Detail {$this->title}");
-        $this->smarty->display("{$this->directory}/detail.tpl");
+        $this->smarty->display("{$this->directory}/index.tpl");
     }
 
+    public function search()
+    {
+        list($list, $info) = $this->logModel->userActivity($_POST);
+
+        foreach ($list as $idx => $row) {
+            $row['created_at'] = Functions::dateFormat(
+                'Y-m-d H:i:s',
+                'd/m/Y H.i.s',
+                $row['created_at'],
+            );
+
+            $list[$idx] = $row;
+        }
+
+        echo json_encode([
+            'list' => $list,
+            'info' => $info,
+        ]);
+        exit();
+    }
+
+    /**
+     * @desc this method will handle Data Uang form
+     *
+     * @method form
+     * @param int $id is mata uang id
+     */
     public function form()
     {
-        $detail = $this->getDetail($this->id);
-        $tag = 'Ubah';
-
-        $this->smarty->assign('detail', $detail);
-        $this->smarty->assign('subtitle', "{$tag} {$this->title}");
         $this->smarty->display("{$this->directory}/form.tpl");
     }
 
-    private function getDetail($params)
+    public function detail()
     {
-        list($detail, $count) = $this->userModel->get($params);
-        if (!$count) {
-            Flasher::setFlash('Data tidak ditemukan!', $this->name, 'error');
-            header('Location: ' . BASE_URL . "/{$this->lowerName}");
-        }
-        return $detail;
+        list($detail) = $this->userModel->singlearray($_POST['id']);
+        unset($detail['usr_password']);
+
+        echo json_encode($detail);
+        exit();
     }
 
     public function submit()
     {
         $data = $_POST;
+        $data['usr_is_master'] = $data['usr_is_master'] ?? 0;
+        $data['usr_is_package'] = $data['usr_is_package'] ?? 0;
+        $data['usr_is_progress'] = $data['usr_is_progress'] ?? 0;
+        $data['usr_is_report'] = $data['usr_is_report'] ?? 0;
+
+        $data['usr_password'] = !empty($data['usr_password'])
+            ? Functions::encrypt($data['usr_password'])
+            : '';
+        // var_dump($data);
+        // exit();
         if ($this->validate($data)) {
             if (empty($data['usr_password'])) {
                 unset($data['usr_password']);
@@ -62,7 +94,7 @@ class ProfileController extends Controller
             }
 
             if ($result) {
-                $detail = $this->getDetail($id);
+                list($detail) = $this->userModel->singlearray($id);
 
                 if ($id == $_SESSION['USER']['id']) {
                     $this->setUserSession($detail);
@@ -96,7 +128,7 @@ class ProfileController extends Controller
         ];
 
         if (empty($data['id'])) {
-            $rules['usr_password'] = 'required|max:20|min:3';
+            $rules['usr_password'] = 'required|max:20|min:6';
         }
 
         $validation = $this->validator->make($data, $rules);
@@ -126,4 +158,3 @@ class ProfileController extends Controller
         return true;
     }
 }
-?>

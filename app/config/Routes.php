@@ -28,6 +28,7 @@ $master = [
     'Progress',
     'ProgressReport',
     'PerformanceReport',
+    'Profile',
 ];
 
 foreach ($master as $value) {
@@ -50,11 +51,10 @@ foreach ($master as $value) {
     ]);
 }
 
-$router->map(
-    'POST',
-    '/package/submitexpires',
-    'PackageController::submitExpires',
-);
+$router->addRoutes([
+    ['POST', '/package/submitexpires', 'PackageController::submitExpires'],
+    ['GET', '/package/activity', 'ProfileController::activity'],
+]);
 
 $router->map('POST', '/file/upload', 'FileController::upload');
 
