@@ -109,11 +109,11 @@ class ProgressReportController extends Controller
 
                 $sheet->mergeCells("A{$prg_row}:B{$prg_row}");
                 $sheet->setCellValue("A{$prg_row}", 'Program:');
-                $sheet->setCellValue("C{$prg_row}", $rows['prg_code']);
+                $sheet->setCellValue("C{$prg_row}", $rows['prg_name']);
 
                 $sheet->mergeCells("A{$act_row}:B{$act_row}");
                 $sheet->setCellValue("A{$act_row}", 'Kegiatan:');
-                $sheet->setCellValue("C{$act_row}", $rows['act_code']);
+                $sheet->setCellValue("C{$act_row}", $rows['act_name']);
 
                 $detail_head1 = $act_row + 1;
                 $detail_head2 = $detail_head1 + 1;
