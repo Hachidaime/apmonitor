@@ -21,6 +21,7 @@ class ProgressReportModel extends Model
         $this->packageDetailModel = new PackageDetailModel();
         $this->targetModel = new TargetModel();
         $this->progressModel = new ProgressModel();
+        $this->contractModel = new ContractModel();
     }
 
     public function getData($data)
@@ -43,10 +44,13 @@ class ProgressReportModel extends Model
                 }, $package),
             );
 
-            $targetOpt = $this->getTargetOpt($pkgIdList);
-            $progressOpt = $this->getProgressOpt($pkgIdList);
+            $targetOpt = $this->getTargetOpt($pkgIdList, $data['pkgd_id']);
+            $progressOpt = $this->getProgressOpt($pkgIdList, $data['pkgd_id']);
 
             foreach ($package as $idx => $row) {
+                $targetOpt[$row['id']] = $targetOpt[$row['id']] ?? [];
+                $progressOpt[$row['id']] = $progressOpt[$row['id']] ?? [];
+
                 if (
                     count($targetOpt[$row['id']]) >
                     count($progressOpt[$row['id']])
@@ -67,14 +71,9 @@ class ProgressReportModel extends Model
                             $detail['pkgd_no'] ==
                             $row['detail'][$key - 1]['pkgd_no']
                         ) {
-                            $detail = [
-                                'pkgd_no' => '',
-                                'pkgd_name' => '',
-                                'pkgd_contract_value' => '',
-                            ];
                             $detail['pkgd_no'] = '';
                             $detail['pkgd_name'] = '';
-                            $detail['pkgd_contract_value'] = '';
+                            $detail['cnt_value'] = '';
                         }
 
                         $row['detail'][$key] = $this->getDetail($detail);
@@ -98,7 +97,7 @@ class ProgressReportModel extends Model
                         ) {
                             $detail['pkgd_no'] = '';
                             $detail['pkgd_name'] = '';
-                            $detail['pkgd_contract_value'] = '';
+                            $detail['cnt_value'] = '';
                         }
 
                         $row['detail'][$key] = $this->getDetail($detail);
@@ -117,11 +116,15 @@ class ProgressReportModel extends Model
         return [
             'pkgd_no' => $detail['pkgd_no'],
             'pkgd_name' => $detail['pkgd_name'],
-            'pkgd_contract_value' =>
-                $detail['pkgd_contract_value'] > 0
-                    ? number_format($detail['pkgd_contract_value'], 2, ',', '.')
+            'cnt_value' =>
+                $detail['cnt_value'] > 0
+                    ? number_format($detail['cnt_value'], 2, ',', '.')
                     : '',
-            'trg_week' => $detail['trg_week'] > 0 ? $detail['trg_week'] : '',
+            'week' => ($detail['trg_week'] > 0
+                    ? $detail['trg_week']
+                    : $detail['prog_week'] > 0)
+                ? $detail['prog_week']
+                : '',
             'trg_physical' =>
                 $detail['trg_physical'] > 0
                     ? number_format($detail['trg_physical'], 2, ',', '.')
@@ -141,34 +144,44 @@ class ProgressReportModel extends Model
         ];
     }
 
-    private function getTargetOpt($pkgIdList)
+    private function getTargetOpt($pkgIdList, $pkgd_id = null)
     {
-        $query = "SELECT
-            `{$this->packageDetailModel->getTable()}`.`pkg_id`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_no`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_name`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_contract_value`,
-            `{$this->targetModel->getTable()}`.`trg_week`,
-            `{$this->targetModel->getTable()}`.`trg_physical`,
-            `{$this->targetModel->getTable()}`.`trg_finance`
-            FROM `{$this->packageDetailModel->getTable()}`
-            LEFT JOIN `{$this->targetModel->getTable()}`
-                ON `{$this->targetModel->getTable()}`.pkgd_id = `{$this->packageDetailModel->getTable()}`.`id` 
-            UNION 
-            SELECT
-            `{$this->packageDetailModel->getTable()}`.`pkg_id`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_no`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_name`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_contract_value`,
-            `{$this->targetModel->getTable()}`.`trg_week`,
-            `{$this->targetModel->getTable()}`.`trg_physical`,
-            `{$this->targetModel->getTable()}`.`trg_finance`
-            FROM `{$this->packageDetailModel->getTable()}`
-            RIGHT JOIN `{$this->targetModel->getTable()}`
-                ON `{$this->targetModel->getTable()}`.pkgd_id = `{$this->packageDetailModel->getTable()}`.`id` 
-            WHERE `{$this->packageDetailModel->getTable()}`.`pkg_id` IN ({$pkgIdList})
+        $filter =
+            $pkgd_id > 0
+                ? "AND `{$this->packageDetailModel->getTable()}`.`id` = {$pkgd_id}"
+                : '';
+
+        $table_left = $this->packageDetailModel->getTable();
+        $table_right = $this->targetModel->getTable();
+        $table_contract = $this->contractModel->getTable();
+        $select = "
+            `{$table_left}`.`id`,
+            `{$table_left}`.`pkg_id`,
+            `{$table_left}`.`pkgd_no`,
+            `{$table_left}`.`pkgd_name`,
+            `{$table_right}`.`trg_week`,
+            `{$table_right}`.`trg_physical`,
+            `{$table_right}`.`trg_finance`,
+            `{$table_contract}`.`cnt_value`
         ";
+        $join = "`{$table_right}`
+            ON `{$table_right}`.`pkgd_id` = `{$table_left}`.`id`";
+        $join_contract = "`{$table_contract}`
+            ON `{$table_contract}`.`pkgd_id` = `{$table_left}`.`id`";
+        $where = "WHERE `{$table_left}`.`pkg_id` IN ({$pkgIdList})
+            {$filter}";
+
+        $query = "SELECT {$select} FROM `{$table_left}` 
+            LEFT JOIN {$join} 
+            LEFT JOIN {$join_contract}
+            {$where}
+            UNION 
+            SELECT {$select} FROM `{$table_left}` 
+            RIGHT JOIN {$join} 
+            LEFT JOIN {$join_contract}
+            {$where}";
         $target = $this->db->query($query)->toArray();
+        // echo nl2br($query);
 
         $targetOpt = [];
         foreach ($target as $row) {
@@ -178,31 +191,42 @@ class ProgressReportModel extends Model
         return $targetOpt;
     }
 
-    private function getProgressOpt($pkgIdList)
+    private function getProgressOpt($pkgIdList, $pkgd_id = null)
     {
-        $query = "SELECT
-            `{$this->packageDetailModel->getTable()}`.`pkg_id`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_no`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_name`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_contract_value`,
-            `{$this->progressModel->getTable()}`.`prog_physical`,
-            `{$this->progressModel->getTable()}`.`prog_finance`
-            FROM `{$this->packageDetailModel->getTable()}`
-            LEFT JOIN `{$this->progressModel->getTable()}`
-                ON `{$this->progressModel->getTable()}`.pkgd_id = `{$this->packageDetailModel->getTable()}`.`id`
-            UNION 
-            SELECT
-            `{$this->packageDetailModel->getTable()}`.`pkg_id`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_no`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_name`,
-            `{$this->packageDetailModel->getTable()}`.`pkgd_contract_value`,
-            `{$this->progressModel->getTable()}`.`prog_physical`,
-            `{$this->progressModel->getTable()}`.`prog_finance`
-            FROM `{$this->packageDetailModel->getTable()}`
-            RIGHT JOIN `{$this->progressModel->getTable()}`
-                ON `{$this->progressModel->getTable()}`.pkgd_id = `{$this->packageDetailModel->getTable()}`.`id`
-            WHERE `{$this->packageDetailModel->getTable()}`.`pkg_id` IN ({$pkgIdList})
+        $filter =
+            $pkgd_id > 0
+                ? "AND `{$this->packageDetailModel->getTable()}`.`id` = {$pkgd_id}"
+                : '';
+
+        $table_left = $this->packageDetailModel->getTable();
+        $table_right = $this->progressModel->getTable();
+        $table_contract = $this->contractModel->getTable();
+        $select = "
+            `{$table_left}`.`id`,
+            `{$table_left}`.`pkg_id`,
+            `{$table_left}`.`pkgd_no`,
+            `{$table_left}`.`pkgd_name`,
+            `{$table_right}`.`prog_week`,
+            `{$table_right}`.`prog_physical`,
+            `{$table_right}`.`prog_finance`,
+            `{$table_contract}`.`cnt_value`
         ";
+        $join = "`{$table_right}`
+            ON `{$table_right}`.`pkgd_id` = `{$table_left}`.`id`";
+        $join_contract = "`{$table_contract}`
+            ON `{$table_contract}`.`pkgd_id` = `{$table_left}`.`id`";
+        $where = "WHERE `{$table_left}`.`pkg_id` IN ({$pkgIdList})
+            {$filter}";
+
+        $query = "SELECT {$select} FROM `{$table_left}` 
+            LEFT JOIN {$join} 
+            LEFT JOIN {$join_contract}
+            {$where}
+            UNION 
+            SELECT {$select} FROM `{$table_left}` 
+            RIGHT JOIN {$join} 
+            LEFT JOIN {$join_contract}
+            {$where}";
         $progress = $this->db->query($query)->toArray();
 
         $progressOpt = [];

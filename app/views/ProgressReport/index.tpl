@@ -13,7 +13,6 @@
       <div class="form-group row">
         <label for="pkg_fiscal_year" class="col-lg-3 col-sm-4 col-form-label">
           Tahun Anggaran
-          <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
         <div class="col-lg-1 col-sm-2 col-3">
@@ -34,18 +33,14 @@
       <div class="form-group row">
         <label for="prg_code" class="col-lg-3 col-sm-4 col-form-label">
           Program
-          <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
         <div class="col-lg-2 col-sm-3 col-8">
           <select class="custom-select rounded-0" name="prg_code" id="prg_code">
             <option value="">-- Pilih --</option>
             {section inner $program}
-            <option
-              value="{$program[inner].prg_code}"
-              data-value="{$program[inner].prg_name}"
-            >
-              {$program[inner].prg_code}
+            <option value="{$program[inner].prg_code}">
+              {$program[inner].prg_name}
             </option>
             {/section}
           </select>
@@ -56,18 +51,32 @@
       <div class="form-group row">
         <label for="act_code" class="col-lg-3 col-sm-4 col-form-label">
           Kegiatan
-          <sup class="fas fa-asterisk text-red"></sup>
           <span class="float-sm-right d-sm-inline d-none">:</span>
         </label>
         <div class="col-lg-2 col-sm-3 col-8">
           <select class="custom-select rounded-0" name="act_code" id="act_code">
             <option value="">-- Pilih --</option>
             {section inner $activity}
-            <option
-              value="{$activity[inner].act_code}"
-              data-value="{$activity[inner].act_name}"
-            >
-              {$activity[inner].act_code}
+            <option value="{$activity[inner].act_code}">
+              {$activity[inner].act_name}
+            </option>
+            {/section}
+          </select>
+          <div class="invalid-feedback"></div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="pkgd_id" class="col-lg-3 col-sm-4 col-form-label">
+          Paket
+          <span class="float-sm-right d-sm-inline d-none">:</span>
+        </label>
+        <div class="col-lg-2 col-sm-3 col-8">
+          <select class="custom-select rounded-0" name="pkgd_id" id="pkgd_id">
+            <option value="">-- Pilih --</option>
+            {section inner $packageDetail}
+            <option value="{$packageDetail[inner].id}">
+              {$packageDetail[inner].pkgd_name}
             </option>
             {/section}
           </select>
@@ -236,7 +245,7 @@
               children: ['Paket Kegiatan'],
             })
 
-            let headContractValue = createElement({
+            let headCntValue = createElement({
               element: 'th',
               class: ['text-center', 'align-middle'],
               attribute: {
@@ -281,7 +290,7 @@
               children: [
                 headNo,
                 headPackage,
-                headContractValue,
+                headCntValue,
                 headWeek,
                 headTarget,
                 headProgress,
@@ -367,16 +376,16 @@
                 ],
               })
 
-              let bodyContractValue = createElement({
+              let bodyCntValue = createElement({
                 element: 'td',
                 class: ['text-right'],
-                children: [`${res[index].detail[idx].pkgd_contract_value}`],
+                children: [`${res[index].detail[idx].cnt_value}`],
               })
 
               let bodyWeek = createElement({
                 element: 'td',
                 class: ['text-center'],
-                children: [`${res[index].detail[idx].trg_week}`],
+                children: [`${res[index].detail[idx].week}`],
               })
 
               let bodyTrgPhysical = createElement({
@@ -408,7 +417,7 @@
                 children: [
                   bodyNo,
                   bodyPackage,
-                  bodyContractValue,
+                  bodyCntValue,
                   bodyWeek,
                   bodyTrgPhysical,
                   bodyTrgFinance,

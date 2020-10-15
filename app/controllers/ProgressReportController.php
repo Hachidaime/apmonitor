@@ -3,7 +3,8 @@ use app\controllers\Controller;
 use app\models\ProgramModel;
 use app\models\ActivityModel;
 use app\models\ProgressReportModel;
-
+use app\models\PackageDetailModel;
+use app\models\PackageModel;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -25,12 +26,30 @@ class ProgressReportController extends Controller
     public function index()
     {
         $programModel = new ProgramModel();
-        list($program) = $programModel->multiarray(null, [['prg_code', 'ASC']]);
+        list($program) = $programModel->multiarray(null, [['prg_name', 'ASC']]);
 
         $activityModel = new ActivityModel();
         list($activity) = $activityModel->multiarray(null, [
-            ['act_code', 'ASC'],
+            ['act_name', 'ASC'],
         ]);
+
+        $packageModel = new PackageModel();
+        list($package, $packageCount) = $packageModel->multiarray();
+
+        $packageDetail = [];
+        if ($packageCount > 0) {
+            $pkgIdList = implode(
+                ',',
+                array_map(function ($val) {
+                    return $val['id'];
+                }, $package),
+            );
+            $packageDetailModel = new PackageDetailModel();
+            $query = "SELECT * FROM `{$packageDetailModel->getTable()}` 
+                WHERE `pkg_id` IN ($pkgIdList) 
+                ORDER BY `pkgd_name` ASC";
+            $packageDetail = $packageDetailModel->db->query($query)->toArray();
+        }
 
         $this->smarty->assign('breadcrumb', [
             ['Laporan', ''],
@@ -40,6 +59,7 @@ class ProgressReportController extends Controller
         $this->smarty->assign('subtitle', "Laporan {$this->title}");
         $this->smarty->assign('program', $program);
         $this->smarty->assign('activity', $activity);
+        $this->smarty->assign('packageDetail', $packageDetail);
 
         $this->smarty->display("{$this->directory}/index.tpl");
     }
@@ -164,11 +184,8 @@ class ProgressReportController extends Controller
                         "B{$detail_body}",
                         "{$row['pkgd_no']} - {$row['pkgd_name']}",
                     );
-                    $sheet->setCellValue(
-                        "D{$detail_body}",
-                        $row['pkgd_contract_value'],
-                    );
-                    $sheet->setCellValue("E{$detail_body}", $row['trg_week']);
+                    $sheet->setCellValue("D{$detail_body}", $row['cnt_value']);
+                    $sheet->setCellValue("E{$detail_body}", $row['week']);
                     $sheet->setCellValue(
                         "F{$detail_body}",
                         $row['trg_physical'],
