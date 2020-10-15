@@ -189,7 +189,7 @@
             let progValue = createElement({
               element: 'div',
               class: ['col-lg-10', 'col-md-9', 'col-sm-8', 'col-6'],
-              children: [res[index].prg_code],
+              children: [res[index].prg_name],
             })
 
             let progContainer = createElement({
@@ -211,7 +211,7 @@
             let actValue = createElement({
               element: 'div',
               class: ['col-lg-10', 'col-md-9', 'col-sm-8', 'col-6'],
-              children: [res[index].act_code],
+              children: [res[index].act_name],
             })
 
             let actContainer = createElement({

@@ -7,6 +7,8 @@ use app\models\PackageDetailModel;
 use app\models\PackageModel;
 use app\models\TargetModel;
 use app\models\ProgressModel;
+use app\models\ProgramModel;
+use app\models\ActivityModel;
 
 /**
  * @desc this class will handle Program model
@@ -24,10 +26,30 @@ class ProgressReportModel extends Model
         $this->targetModel = new TargetModel();
         $this->progressModel = new ProgressModel();
         $this->contractModel = new ContractModel();
+        $this->programModel = new ProgramModel();
+        $this->activityModel = new ActivityModel();
     }
 
     public function getData($data)
     {
+        list($program) = $this->programModel->multiarray(null, [
+            ['prg_code', 'ASC'],
+        ]);
+        $programOptions = Functions::listToOptions(
+            $program,
+            'prg_code',
+            'prg_name',
+        );
+
+        list($activity) = $this->activityModel->multiarray(null, [
+            ['act_code', 'ASC'],
+        ]);
+        $activityOptions = Functions::listToOptions(
+            $activity,
+            'act_code',
+            'act_name',
+        );
+
         $where = [];
         $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
         if ($data['prg_code'] != '') {
@@ -50,6 +72,9 @@ class ProgressReportModel extends Model
             $progressOpt = $this->getProgressOpt($pkgIdList, $data['pkgd_id']);
 
             foreach ($package as $idx => $row) {
+                $row['prg_name'] = $programOptions[$row['prg_code']];
+                $row['act_name'] = $activityOptions[$row['act_code']];
+
                 $targetOpt[$row['id']] = $targetOpt[$row['id']] ?? [];
                 $progressOpt[$row['id']] = $progressOpt[$row['id']] ?? [];
 
