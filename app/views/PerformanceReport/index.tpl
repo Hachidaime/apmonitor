@@ -234,16 +234,6 @@
             //#region Table
             //#region Thead
             //#region Thead Row 1
-            // let headNo = createElement({
-            //   element: 'th',
-            //   class: ['text-center', 'align-middle'],
-            //   attribute: {
-            //     rowspan: 2,
-            //     width: '50px',
-            //   },
-            //   children: ['No.'],
-            // })
-
             let headPackage = createElement({
               element: 'th',
               class: ['text-center', 'align-middle'],
@@ -419,16 +409,7 @@
               element: 'tbody',
             })
 
-            let n = 1
             for (idx in res[index].detail) {
-              // n = res[index].detail[idx].pkgd_no != '' ? n : n - 1
-              // let bodyNo = createElement({
-              //   element: 'td',
-              //   class: ['text-right'],
-              //   children: [res[index].detail[idx].pkgd_no != '' ? n : `&nbsp;`],
-              // })
-              // n++
-
               let bodyPackage = createElement({
                 element: 'td',
                 children: [
@@ -443,12 +424,6 @@
                 class: ['text-right'],
                 children: [`${res[index].detail[idx].cnt_value}`],
               })
-
-              // let bodyWeek = createElement({
-              //   element: 'td',
-              //   class: ['text-center'],
-              //   children: [`${res[index].detail[idx].week}`],
-              // })
 
               let bodyDate = createElement({
                 element: 'td',
