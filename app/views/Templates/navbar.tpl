@@ -17,6 +17,9 @@
     <div class="collapse navbar-collapse order-3" id="navbarCollapse">
       <!-- Left navbar links -->
       <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{$smarty.const.BASE_URL}">Dashboard</a>
+        </li>
         {if $smarty.session.USER.usr_is_master eq 1}
         <li class="nav-item dropdown">
           <a

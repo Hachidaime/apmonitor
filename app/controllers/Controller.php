@@ -11,6 +11,7 @@ use app\helper\Flasher;
 use app\helper\Functions;
 use app\rules\UniqTrgRule;
 use app\rules\UniqProgRule;
+use app\models\LogModel;
 
 /**
  * Class Controller
@@ -68,6 +69,8 @@ class Controller
         $this->smarty = &$smarty;
 
         $this->smarty->assign('flash', Flasher::getFlash());
+
+        $this->logModel = new LogModel();
     }
 
     public function setControllerAttribute(string $class)
@@ -149,7 +152,7 @@ class Controller
             Functions::getCreated(),
             Functions::getRemoteIp(),
         );
-        $this->model('LogModel')->save($data);
+        $this->logModel->save($data);
     }
 
     /**

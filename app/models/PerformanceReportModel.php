@@ -30,7 +30,7 @@ class PerformanceReportModel extends Model
         $this->activityModel = new ActivityModel();
     }
 
-    public function getData($data)
+    public function getData($data = null)
     {
         list($program) = $this->programModel->multiarray(null, [
             ['prg_code', 'ASC'],
@@ -51,13 +51,17 @@ class PerformanceReportModel extends Model
         );
 
         $where = [];
-        $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
-        if ($data['prg_code'] != '') {
+        if (!empty($data['pkg_fiscal_year'])) {
+            $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
+        }
+        if (!empty($data['prg_code'])) {
             $where[] = ['prg_code', $data['prg_code']];
         }
-        if ($data['act_code'] != '') {
+        if (!empty($data['act_code'])) {
             $where[] = ['act_code', $data['act_code']];
         }
+
+        $where = count($where) > 0 ? $where : null;
         list($package, $packageCount) = $this->packageModel->multiarray($where);
 
         if ($packageCount > 0) {

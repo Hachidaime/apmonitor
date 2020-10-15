@@ -1,6 +1,9 @@
 <?php
 
 use app\controllers\Controller;
+use app\models\DashboardModel;
+use app\models\LogModel;
+
 /**
  * Class DashboardController
  *
@@ -11,6 +14,15 @@ use app\controllers\Controller;
 
 class DashboardController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setControllerAttribute(__CLASS__);
+        $this->smarty->assign('title', $this->title);
+
+        $this->dashboardModel = new DashboardModel();
+        $this->logModel = new LogModel();
+    }
     /**
      * function index
      *
@@ -20,8 +32,13 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $this->smarty->assign('title', 'Dashboard');
-        $this->smarty->assign('lastActivity', $this->lastActivity(10));
+        // $this->smarty->assign('lastActivity', $this->lastActivity(10));
+
+        $activityInfo = $this->dashboardModel->activityInfo();
+
+        // print '<pre>';
+        // print_r($activityInfo);
+        // print '</pre>';
         $this->smarty->display('Dashboard/index.tpl');
     }
 
@@ -36,7 +53,7 @@ class DashboardController extends Controller
      */
     private function lastActivity(int $limit = null)
     {
-        list($list) = $this->model('LogModel')->getLastActivity($limit);
+        list($list) = $this->logModel->getLastActivity($limit);
 
         $result = [
             'title' => 'Aktivitas Terakhir',

@@ -2,6 +2,7 @@
 {extends file='Templates/mainlayout.tpl'}
 
 {block name='content'}
+{*
 <!-- Main row -->
 <div class="row">
   <div class="col-md-6 col-12">
@@ -34,4 +35,6 @@
   </div>
 </div>
 <!-- /.row (main row) -->
+<!-- prettier-ignore -->
+*}
 {/block}
