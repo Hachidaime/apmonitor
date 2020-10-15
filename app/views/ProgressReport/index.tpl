@@ -250,7 +250,7 @@
               class: ['text-center', 'align-middle'],
               attribute: {
                 rowspan: 2,
-                width: '15%',
+                width: '10%',
               },
               children: ['Nilai Contract (Rp)'],
             })
@@ -294,6 +294,15 @@
               },
               children: ['Realisasi'],
             })
+            let headDeviation = createElement({
+              element: 'th',
+              class: ['text-center', 'align-middle'],
+              attribute: {
+                colspan: 2,
+                width: '200px',
+              },
+              children: ['Deviasi'],
+            })
 
             let theadRow1 = createElement({
               element: 'tr',
@@ -305,6 +314,7 @@
                 headDate,
                 headTarget,
                 headProgress,
+                headDeviation,
               ],
             })
             //#endregion
@@ -346,6 +356,24 @@
               children: ['Keuangan (Rp)'],
             })
 
+            let headDevnPhysical = createElement({
+              element: 'th',
+              class: ['text-center', 'align-middle'],
+              attribute: {
+                width: '75px',
+              },
+              children: ['Fisik (%)'],
+            })
+
+            let headDevnFinance = createElement({
+              element: 'th',
+              class: ['text-center', 'align-middle'],
+              attribute: {
+                width: '125px',
+              },
+              children: ['Keuangan (Rp)'],
+            })
+
             let theadRow2 = createElement({
               element: 'tr',
               children: [
@@ -353,6 +381,8 @@
                 headTrgFinance,
                 headProgPhysical,
                 headProgFinance,
+                headDevnPhysical,
+                headDevnFinance,
               ],
             })
             //#endregion
@@ -428,6 +458,18 @@
                 children: [`${res[index].detail[idx].prog_finance}`],
               })
 
+              let bodyDevnPhysical = createElement({
+                element: 'td',
+                class: ['text-right'],
+                children: [`${res[index].detail[idx].devn_physical}`],
+              })
+
+              let bodyDevnFinance = createElement({
+                element: 'td',
+                class: ['text-right'],
+                children: [`${res[index].detail[idx].devn_finance}`],
+              })
+
               let bodyRow = createElement({
                 element: 'tr',
                 children: [
@@ -440,6 +482,8 @@
                   bodyTrgFinance,
                   bodyProgPhysical,
                   bodyProgFinance,
+                  bodyDevnPhysical,
+                  bodyDevnFinance,
                 ],
               })
 
