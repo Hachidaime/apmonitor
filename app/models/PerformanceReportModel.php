@@ -30,7 +30,7 @@ class PerformanceReportModel extends Model
         $this->activityModel = new ActivityModel();
     }
 
-    public function getData($data = null)
+    public function getData($data)
     {
         list($program) = $this->programModel->multiarray(null, [
             ['prg_code', 'ASC'],
@@ -51,17 +51,13 @@ class PerformanceReportModel extends Model
         );
 
         $where = [];
-        if (!empty($data['pkg_fiscal_year'])) {
-            $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
-        }
-        if (!empty($data['prg_code'])) {
+        $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
+        if ($data['prg_code'] != '') {
             $where[] = ['prg_code', $data['prg_code']];
         }
-        if (!empty($data['act_code'])) {
+        if ($data['act_code'] != '') {
             $where[] = ['act_code', $data['act_code']];
         }
-
-        $where = count($where) > 0 ? $where : null;
         list($package, $packageCount) = $this->packageModel->multiarray($where);
 
         if ($packageCount > 0) {
@@ -75,68 +71,81 @@ class PerformanceReportModel extends Model
             $targetOpt = $this->getTargetOpt($pkgIdList, $data['pkgd_id']);
             $progressOpt = $this->getProgressOpt($pkgIdList, $data['pkgd_id']);
 
+            // var_dump($targetOpt);
+            // var_dump($progressOpt);
+
             foreach ($package as $idx => $row) {
+                // var_dump($row);
                 $row['prg_name'] = $programOptions[$row['prg_code']];
                 $row['act_name'] = $activityOptions[$row['act_code']];
 
                 $targetOpt[$row['id']] = $targetOpt[$row['id']] ?? [];
                 $progressOpt[$row['id']] = $progressOpt[$row['id']] ?? [];
 
-                if (
-                    count($targetOpt[$row['id']]) >
-                    count($progressOpt[$row['id']])
-                ) {
-                    foreach ($targetOpt[$row['id']] as $key => $value) {
-                        $progressOpt[$row['id']][$key] = is_array(
-                            $progressOpt[$row['id']][$key],
-                        )
-                            ? $progressOpt[$row['id']][$key]
-                            : [];
+                $target = [];
+                foreach ($targetOpt[$row['id']] as $value) {
+                    $target[$value['id']][] = $value;
+                }
+                $target = array_values($target);
 
-                        $detail = array_merge(
-                            $targetOpt[$row['id']][$key],
-                            $progressOpt[$row['id']][$key],
-                        );
+                $progress = [];
+                foreach ($progressOpt[$row['id']] as $key => $value) {
+                    $progress[$value['id']][] = $value;
+                }
+                $progress = array_values($progress);
 
-                        if (
-                            $detail['pkgd_no'] ==
-                            $row['detail'][$key - 1]['pkgd_no']
-                        ) {
-                            $detail['pkgd_no'] = '';
-                            $detail['pkgd_name'] = '';
-                            $detail['cnt_value'] = '';
-                            $detail['pkgd_last_prog_date'] = '';
+                $packageDetail = [];
+                for ($i = 0; $i < count($target); $i++) {
+                    if (count($target[$i]) > count($progress[$i])) {
+                        foreach ($target[$i] as $key => $value) {
+                            $progress[$i][$key] = is_array($progress[$i][$key])
+                                ? $progress[$i][$key]
+                                : [];
+
+                            $detail = array_merge(
+                                $target[$i][$key],
+                                $progress[$i][$key],
+                            );
+
+                            $detail = $this->getDetail($detail);
+                            if ($detail['week'] > 1) {
+                                $detail['pkgd_no'] = '';
+                                $detail['pkgd_name'] = '';
+                                $detail['cnt_value'] = '';
+                                $detail['pkgd_last_prog_date'] = '';
+                            }
+
+                            $packageDetail[$i][$key] = $detail;
                         }
+                    } else {
+                        foreach ($progress[$i] as $key => $value) {
+                            $target[$i][$key] = is_array($target[$i][$key])
+                                ? $target[$i][$key]
+                                : [];
 
-                        $row['detail'][$key] = $this->getDetail($detail);
-                    }
-                } else {
-                    foreach ($progressOpt[$row['id']] as $key => $value) {
-                        $targetOpt[$row['id']][$key] = is_array(
-                            $targetOpt[$row['id']][$key],
-                        )
-                            ? $targetOpt[$row['id']][$key]
-                            : [];
+                            $detail = array_merge(
+                                $target[$i][$key],
+                                $progress[$i][$key],
+                            );
 
-                        $detail = array_merge(
-                            $targetOpt[$row['id']][$key],
-                            $progressOpt[$row['id']][$key],
-                        );
-
-                        if (
-                            $detail['pkgd_no'] ==
-                            $row['detail'][$key - 1]['pkgd_no']
-                        ) {
-                            $detail['pkgd_no'] = '';
-                            $detail['pkgd_name'] = '';
-                            $detail['cnt_value'] = '';
-                            $detail['pkgd_last_prog_date'] = '';
+                            $detail = $this->getDetail($detail);
+                            if ($detail['week'] > 1) {
+                                $detail['pkgd_no'] = '';
+                                $detail['pkgd_name'] = '';
+                                $detail['cnt_value'] = '';
+                                $detail['pkgd_last_prog_date'] = '';
+                            }
+                            $packageDetail[$i][$key] = $detail;
                         }
-
-                        $row['detail'][$key] = $this->getDetail($detail);
                     }
                 }
 
+                // print '<pre>';
+                // print_r($target);
+                // print_r($progress);
+                // print '</pre>';
+
+                $row['detail'] = $packageDetail;
                 $package[$idx] = $row;
             }
         }
@@ -151,56 +160,29 @@ class PerformanceReportModel extends Model
         $detail['devn_finance'] =
             $detail['prog_finance'] - $detail['trg_finance'];
 
-        $color = 'white';
-        if (!is_null($detail['trg_physical'])) {
-            if (
-                ($detail['trg_physical'] >= 0 &&
-                    $detail['trg_physical'] <= 70 &&
-                    $detail['devn_physical'] > -10) ||
-                ($detail['trg_physical'] >= 71 &&
-                    $detail['trg_physical'] <= 100 &&
-                    $detail['devn_physical'] > -5)
-            ) {
-                $color = 'red';
-            } elseif (
-                ($detail['trg_physical'] >= 0 &&
-                    $detail['trg_physical'] <= 70 &&
-                    $detail['devn_physical'] >= 0 &&
-                    $detail['devn_physical'] <= 10) ||
-                ($detail['trg_physical'] >= 71 &&
-                    $detail['trg_physical'] <= 100 &&
-                    $detail['devn_physical'] >= 0 &&
-                    $detail['devn_physical'] <= 5)
-            ) {
-                $color = 'yellow';
-            } elseif (
-                ($detail['trg_physical'] >= 0 &&
-                    $detail['trg_physical'] <= 70 &&
-                    $detail['devn_physical'] >= 0) ||
-                ($detail['trg_physical'] >= 71 &&
-                    $detail['trg_physical'] <= 100 &&
-                    $detail['devn_physical'] >= 0)
-            ) {
-                $color = 'green';
-            }
-        }
+        // var_dump($detail);
 
         return [
+            'pkgd_id' => $detail['id'],
             'pkgd_no' => $detail['pkgd_no'],
             'pkgd_name' => $detail['pkgd_name'],
             'cnt_value' =>
                 $detail['cnt_value'] > 0
                     ? number_format($detail['cnt_value'], 2, ',', '.')
                     : '',
-            'date' =>
-                !is_null($detail['pkgd_last_prog_date']) &&
-                !empty($detail['pkgd_last_prog_date'])
-                    ? Functions::dateFormat(
-                        'Y-m-d',
-                        'd/m/Y',
-                        $detail['pkgd_last_prog_date'],
-                    )
-                    : '',
+            'week' =>
+                $detail['trg_week'] > 0
+                    ? $detail['trg_week']
+                    : ($detail['prog_week'] > 0
+                        ? $detail['prog_week']
+                        : ''),
+            'pkgd_last_prog_date' => !is_null($detail['pkgd_last_prog_date'])
+                ? Functions::dateFormat(
+                    'Y-m-d',
+                    'd/m/Y',
+                    $detail['pkgd_last_prog_date'],
+                )
+                : '',
             'trg_physical' =>
                 $detail['trg_physical'] > 0
                     ? number_format($detail['trg_physical'], 2, ',', '.')
@@ -217,13 +199,16 @@ class PerformanceReportModel extends Model
                 $detail['prog_finance'] > 0
                     ? number_format($detail['prog_finance'], 2, ',', '.')
                     : '',
-            'devn_physical' => !empty($detail['devn_physical'])
-                ? number_format($detail['devn_physical'], 2, ',', '.')
-                : '',
-            'devn_finance' => !empty($detail['devn_finance'])
-                ? number_format($detail['devn_finance'], 2, ',', '.')
-                : '',
-            'indicator' => $color,
+            'devn_physical' =>
+                !empty($detail['trg_physical']) ||
+                !empty($detail['prog_physical'])
+                    ? number_format($detail['devn_physical'], 2, ',', '.')
+                    : '',
+            'devn_finance' =>
+                !empty($detail['trg_finance']) ||
+                !empty($detail['prog_finance'])
+                    ? number_format($detail['devn_finance'], 2, ',', '.')
+                    : '',
         ];
     }
 
@@ -243,6 +228,7 @@ class PerformanceReportModel extends Model
             `{$table_left}`.`pkgd_no`,
             `{$table_left}`.`pkgd_name`,
             `{$table_left}`.`pkgd_last_prog_date`,
+            `{$table_right}`.`trg_week`,
             `{$table_right}`.`trg_physical`,
             `{$table_right}`.`trg_finance`,
             `{$table_contract}`.`cnt_value`
@@ -290,6 +276,7 @@ class PerformanceReportModel extends Model
             `{$table_left}`.`pkgd_no`,
             `{$table_left}`.`pkgd_name`,
             `{$table_left}`.`pkgd_last_prog_date`,
+            `{$table_right}`.`prog_week`,
             `{$table_right}`.`prog_physical`,
             `{$table_right}`.`prog_finance`,
             `{$table_contract}`.`cnt_value`

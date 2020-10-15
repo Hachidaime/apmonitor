@@ -188,334 +188,311 @@
           resultWrapper.append(downloadBtn, title1, title2, title3)
 
           for (index in res) {
-            //#region Program
-            let progLabel = createElement({
-              element: 'div',
-              class: ['col-lg-2', 'col-md-3', 'col-sm-4', 'col-6'],
-              children: [/*html*/ `Program <span class="float-right">:</span>`],
-            })
-
-            let progValue = createElement({
-              element: 'div',
-              class: ['col-lg-10', 'col-md-9', 'col-sm-8', 'col-6'],
-              children: [res[index].prg_name],
-            })
-
-            let progContainer = createElement({
-              element: 'div',
-              class: ['row'],
-              children: [progLabel, progValue],
-            })
-            //#endregion
-
-            //#region Activity
-            let actLabel = createElement({
-              element: 'div',
-              class: ['col-lg-2', 'col-md-3', 'col-sm-4', 'col-6'],
-              children: [
-                /*html*/ `Kegiatan <span class="float-right">:</span>`,
-              ],
-            })
-
-            let actValue = createElement({
-              element: 'div',
-              class: ['col-lg-10', 'col-md-9', 'col-sm-8', 'col-6'],
-              children: [res[index].act_name],
-            })
-
-            let actContainer = createElement({
-              element: 'div',
-              class: ['row', 'mb-2'],
-              children: [actLabel, actValue],
-            })
-            //#endregion
-
-            //#region Package
-            //#region Table
-            //#region Thead
-            //#region Thead Row 1
-            let headPackage = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                rowspan: 2,
-                width: '*',
-              },
-              children: ['Paket Kegiatan'],
-            })
-
-            let headCntValue = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                rowspan: 2,
-                width: '10%',
-              },
-              children: ['Nilai Contract (Rp)'],
-            })
-
-            // let headWeek = createElement({
-            //   element: 'th',
-            //   class: ['text-center', 'align-middle'],
-            //   attribute: {
-            //     rowspan: 2,
-            //     width: '75px',
-            //   },
-            //   children: ['Minggu Ke'],
-            // })
-
-            let headDate = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                rowspan: 2,
-                width: '125px',
-              },
-              children: [/*html*/ `Tanggal Periode<br>Terakhir`],
-            })
-
-            let headTarget = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                colspan: 2,
-                width: '175px',
-              },
-              children: ['Target'],
-            })
-
-            let headProgress = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                colspan: 2,
-                width: '175px',
-              },
-              children: ['Realisasi'],
-            })
-
-            let headDeviation = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                colspan: 2,
-                width: '175px',
-              },
-              children: ['Deviasi'],
-            })
-
-            let headIndicator = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                rowspan: 2,
-                width: '50px',
-              },
-              children: ['Indi-<br>kator'],
-            })
-
-            let theadRow1 = createElement({
-              element: 'tr',
-              children: [
-                // headNo,
-                headPackage,
-                headCntValue,
-                // headWeek,
-                headDate,
-                headTarget,
-                headProgress,
-                headDeviation,
-                headIndicator,
-              ],
-            })
-            //#endregion
-
-            //#region Thead Row 2
-            let headTrgPhysical = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                width: '50px',
-              },
-              children: ['Fisik (%)'],
-            })
-
-            let headTrgFinance = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                width: '125px',
-              },
-              children: ['Keuangan<br>(Rp)'],
-            })
-
-            let headProgPhysical = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                width: '50px',
-              },
-              children: ['Fisik (%)'],
-            })
-
-            let headProgFinance = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                width: '125px',
-              },
-              children: ['Keuangan<br>(Rp)'],
-            })
-
-            let headDevnPhysical = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                width: '50px',
-              },
-              children: ['Fisik (%)'],
-            })
-
-            let headDevnFinance = createElement({
-              element: 'th',
-              class: ['text-center', 'align-middle'],
-              attribute: {
-                width: '125px',
-              },
-              children: ['Keuangan<br>(Rp)'],
-            })
-
-            let theadRow2 = createElement({
-              element: 'tr',
-              children: [
-                headTrgPhysical,
-                headTrgFinance,
-                headProgPhysical,
-                headProgFinance,
-                headDevnPhysical,
-                headDevnFinance,
-              ],
-            })
-            //#endregion
-
-            let thead = createElement({
-              element: 'thead',
-              children: [theadRow1, theadRow2],
-            })
-            //#endregion
-
-            //#region Table
-            let tbody = createElement({
-              element: 'tbody',
-            })
-
             for (idx in res[index].detail) {
-              let bodyPackage = createElement({
-                element: 'td',
+              //#region Program
+              let progLabel = createElement({
+                element: 'div',
+                class: ['col-lg-2', 'col-md-3', 'col-sm-4', 'col-6'],
                 children: [
-                  res[index].detail[idx].pkgd_no != ''
-                    ? `${res[index].detail[idx].pkgd_no} - ${res[index].detail[idx].pkgd_name}`
-                    : '',
+                  /*html*/ `Program <span class="float-right">:</span>`,
                 ],
               })
 
-              let bodyCntValue = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].cnt_value}`],
+              let progValue = createElement({
+                element: 'div',
+                class: ['col-lg-10', 'col-md-9', 'col-sm-8', 'col-6'],
+                children: [res[index].prg_name],
               })
 
-              let bodyDate = createElement({
-                element: 'td',
-                children: [`${res[index].detail[idx].date}`],
+              let progContainer = createElement({
+                element: 'div',
+                class: ['row'],
+                children: [progLabel, progValue],
+              })
+              //#endregion
+
+              //#region Activity
+              let actLabel = createElement({
+                element: 'div',
+                class: ['col-lg-2', 'col-md-3', 'col-sm-4', 'col-6'],
+                children: [
+                  /*html*/ `Kegiatan <span class="float-right">:</span>`,
+                ],
               })
 
-              let bodyTrgPhysical = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].trg_physical}`],
+              let actValue = createElement({
+                element: 'div',
+                class: ['col-lg-10', 'col-md-9', 'col-sm-8', 'col-6'],
+                children: [res[index].act_name],
               })
 
-              let bodyTrgFinance = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].trg_finance}`],
+              let actContainer = createElement({
+                element: 'div',
+                class: ['row', 'mb-2'],
+                children: [actLabel, actValue],
+              })
+              //#endregion
+
+              //#region Package
+              //#region Table
+              //#region Thead
+              //#region Thead Row 1
+
+              let headPackage = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  rowspan: 2,
+                  width: '*',
+                },
+                children: ['Paket Kegiatan'],
               })
 
-              let bodyProgPhysical = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].prog_physical}`],
+              let headCntValue = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  rowspan: 2,
+                  width: '10%',
+                },
+                children: ['Nilai Contract (Rp)'],
               })
 
-              let bodyProgFinance = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].prog_finance}`],
+              let headDate = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  rowspan: 2,
+                  width: '100px',
+                },
+                children: ['Tanggal Periode Terakhir'],
               })
 
-              let bodyDevnPhysical = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].devn_physical}`],
+              let headTarget = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  colspan: 2,
+                  width: '200px',
+                },
+                children: ['Target'],
               })
 
-              let bodyDevnFinance = createElement({
-                element: 'td',
-                class: ['text-right'],
-                children: [`${res[index].detail[idx].devn_finance}`],
+              let headProgress = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  colspan: 2,
+                  width: '200px',
+                },
+                children: ['Realisasi'],
+              })
+              let headDeviation = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  colspan: 2,
+                  width: '200px',
+                },
+                children: ['Deviasi'],
               })
 
-              let bodyIndicator = createElement({
-                element: 'td',
-                class: [`bg-${res[index].detail[idx].indicator}`],
-              })
-
-              let bodyRow = createElement({
+              let theadRow1 = createElement({
                 element: 'tr',
                 children: [
-                  // bodyNo,
-                  bodyPackage,
-                  bodyCntValue,
-                  // bodyWeek,
-                  bodyDate,
-                  bodyTrgPhysical,
-                  bodyTrgFinance,
-                  bodyProgPhysical,
-                  bodyProgFinance,
-                  bodyDevnPhysical,
-                  bodyDevnFinance,
-                  bodyIndicator,
+                  headPackage,
+                  headCntValue,
+                  headDate,
+                  headTarget,
+                  headProgress,
+                  headDeviation,
                 ],
               })
+              //#endregion
 
-              tbody.appendChild(bodyRow)
+              //#region Thead Row 2
+              let headTrgPhysical = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  width: '75px',
+                },
+                children: ['Fisik (%)'],
+              })
+
+              let headTrgFinance = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  width: '125px',
+                },
+                children: ['Keuangan (Rp)'],
+              })
+
+              let headProgPhysical = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  width: '75px',
+                },
+                children: ['Fisik (%)'],
+              })
+
+              let headProgFinance = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  width: '125px',
+                },
+                children: ['Keuangan (Rp)'],
+              })
+
+              let headDevnPhysical = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  width: '75px',
+                },
+                children: ['Fisik (%)'],
+              })
+
+              let headDevnFinance = createElement({
+                element: 'th',
+                class: ['text-center', 'align-middle'],
+                attribute: {
+                  width: '125px',
+                },
+                children: ['Keuangan (Rp)'],
+              })
+
+              let theadRow2 = createElement({
+                element: 'tr',
+                children: [
+                  headTrgPhysical,
+                  headTrgFinance,
+                  headProgPhysical,
+                  headProgFinance,
+                  headDevnPhysical,
+                  headDevnFinance,
+                ],
+              })
+              //#endregion
+
+              let thead = createElement({
+                element: 'thead',
+                children: [theadRow1, theadRow2],
+              })
+              //#endregion
+
+              //#region Table
+              let tbody = createElement({
+                element: 'tbody',
+              })
+
+              // let labels = []
+
+              let packageDetail = res[index].detail[idx]
+              for (pkgd in packageDetail) {
+                let bodyPackage = createElement({
+                  element: 'td',
+                  children: [
+                    packageDetail[pkgd].pkgd_no != ''
+                      ? `${packageDetail[pkgd].pkgd_name}`
+                      : '',
+                  ],
+                })
+
+                let bodyCntValue = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].cnt_value}`],
+                })
+
+                let bodyDate = createElement({
+                  element: 'td',
+                  children: [`${packageDetail[pkgd].pkgd_last_prog_date}`],
+                })
+
+                let bodyTrgPhysical = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].trg_physical}`],
+                })
+
+                let bodyTrgFinance = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].trg_finance}`],
+                })
+
+                let bodyProgPhysical = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].prog_physical}`],
+                })
+
+                let bodyProgFinance = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].prog_finance}`],
+                })
+
+                let bodyDevnPhysical = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].devn_physical}`],
+                })
+
+                let bodyDevnFinance = createElement({
+                  element: 'td',
+                  class: ['text-right'],
+                  children: [`${packageDetail[pkgd].devn_finance}`],
+                })
+
+                let bodyRow = createElement({
+                  element: 'tr',
+                  children: [
+                    bodyPackage,
+                    bodyCntValue,
+                    bodyDate,
+                    bodyTrgPhysical,
+                    bodyTrgFinance,
+                    bodyProgPhysical,
+                    bodyProgFinance,
+                    bodyDevnPhysical,
+                    bodyDevnFinance,
+                  ],
+                })
+
+                tbody.appendChild(bodyRow)
+              }
+
+              //#endregion
+
+              let table = createElement({
+                element: 'table',
+                class: ['table', 'table-bordered', 'table-sm'],
+                attribute: {
+                  width: '100%',
+                },
+                children: [thead, tbody],
+              })
+              //#endregion
+
+              let packageWrapper = createElement({
+                element: 'div',
+                class: ['col-12', 'table-responsive'],
+                children: [table],
+              })
+
+              let package = createElement({
+                element: 'div',
+                class: ['row', 'mb-3'],
+                children: [packageWrapper],
+              })
+              //#endregion
+              resultWrapper.append(progContainer, actContainer, package)
             }
-            //#endregion
-
-            let table = createElement({
-              element: 'table',
-              class: ['table', 'table-bordered', 'table-sm'],
-              attribute: {
-                width: '100%',
-              },
-              children: [thead, tbody],
-            })
-            //#endregion
-
-            let packageWrapper = createElement({
-              element: 'div',
-              class: ['col-12', 'table-responsive'],
-              children: [table],
-            })
-
-            let package = createElement({
-              element: 'div',
-              class: ['row', 'mb-3'],
-              children: [packageWrapper],
-            })
-            //#endregion
-            resultWrapper.append(progContainer, actContainer, package)
           }
         } else {
           resultWrapper.innerHTML = /*html*/ `<h3 class="text-center">Data tidak ditemukan.</h3>`
