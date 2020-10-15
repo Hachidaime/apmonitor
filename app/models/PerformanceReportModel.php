@@ -30,7 +30,7 @@ class PerformanceReportModel extends Model
         $this->activityModel = new ActivityModel();
     }
 
-    public function getData($data)
+    public function getData($data = null)
     {
         list($program) = $this->programModel->multiarray(null, [
             ['prg_code', 'ASC'],
