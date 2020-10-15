@@ -191,7 +191,7 @@ class ProgressReportController extends Controller
                         $sheet->mergeCells("B{$detail_body}:C{$detail_body}");
 
                         $number = '';
-                        if ($row['week'] == 1) {
+                        if ($row['week'] <= 1) {
                             $number = $no;
                             $no++;
                         }
