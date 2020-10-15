@@ -1,5 +1,7 @@
 <?php
 namespace app\models;
+
+use app\helper\Functions;
 use app\models\Model;
 use app\models\PackageDetailModel;
 use app\models\PackageModel;
@@ -125,6 +127,9 @@ class ProgressReportModel extends Model
                     : $detail['prog_week'] > 0)
                 ? $detail['prog_week']
                 : '',
+            'trg_date' => !is_null($detail['trg_date'])
+                ? Functions::dateFormat('Y-m-d', 'd/m/Y', $detail['trg_date'])
+                : '',
             'trg_physical' =>
                 $detail['trg_physical'] > 0
                     ? number_format($detail['trg_physical'], 2, ',', '.')
@@ -160,6 +165,7 @@ class ProgressReportModel extends Model
             `{$table_left}`.`pkgd_no`,
             `{$table_left}`.`pkgd_name`,
             `{$table_right}`.`trg_week`,
+            `{$table_right}`.`trg_date`,
             `{$table_right}`.`trg_physical`,
             `{$table_right}`.`trg_finance`,
             `{$table_contract}`.`cnt_value`

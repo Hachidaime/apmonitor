@@ -86,9 +86,9 @@ class ProgressReportController extends Controller
         $sheet->setCellValue('A2', 'BINA MARGA KAB. SEMARANG');
         $sheet->setCellValue('A3', "THN ANGGARAN: {$_POST['pkg_fiscal_year']}");
 
-        $sheet->mergeCells('A1:I1');
-        $sheet->mergeCells('A2:I2');
-        $sheet->mergeCells('A3:I3');
+        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A2:J2');
+        $sheet->mergeCells('A3:J3');
 
         $sheet->getStyle('A1:A3')->applyFromArray([
             'font' => [
@@ -122,9 +122,10 @@ class ProgressReportController extends Controller
                 $sheet->mergeCells("B{$detail_head1}:C{$detail_head2}");
                 $sheet->mergeCells("D{$detail_head1}:D{$detail_head2}");
                 $sheet->mergeCells("E{$detail_head1}:E{$detail_head2}");
+                $sheet->mergeCells("F{$detail_head1}:F{$detail_head2}");
 
-                $sheet->mergeCells("F{$detail_head1}:G{$detail_head1}");
-                $sheet->mergeCells("H{$detail_head1}:I{$detail_head1}");
+                $sheet->mergeCells("G{$detail_head1}:H{$detail_head1}");
+                $sheet->mergeCells("I{$detail_head1}:J{$detail_head1}");
                 $sheet->getRowDimension($detail_head1)->setRowHeight(30);
 
                 $sheet->fromArray(
@@ -134,6 +135,7 @@ class ProgressReportController extends Controller
                         '',
                         'Nilai Kontrak (Rp)',
                         'Minggu Ke',
+                        'Tanggal Periode',
                         'Target',
                         '',
                         'Realisasi',
@@ -150,11 +152,11 @@ class ProgressReportController extends Controller
                         'Keuangan (Rp)',
                     ],
                     null,
-                    "F{$detail_head2}",
+                    "G{$detail_head2}",
                 );
 
                 $sheet
-                    ->getStyle("A{$detail_head1}:I{$detail_head2}")
+                    ->getStyle("A{$detail_head1}:J{$detail_head2}")
                     ->applyFromArray([
                         'font' => [
                             'bold' => true,
@@ -186,20 +188,21 @@ class ProgressReportController extends Controller
                     );
                     $sheet->setCellValue("D{$detail_body}", $row['cnt_value']);
                     $sheet->setCellValue("E{$detail_body}", $row['week']);
+                    $sheet->setCellValue("F{$detail_body}", $row['trg_date']);
                     $sheet->setCellValue(
-                        "F{$detail_body}",
+                        "G{$detail_body}",
                         $row['trg_physical'],
                     );
                     $sheet->setCellValue(
-                        "G{$detail_body}",
+                        "H{$detail_body}",
                         $row['trg_finance'],
                     );
                     $sheet->setCellValue(
-                        "H{$detail_body}",
+                        "I{$detail_body}",
                         $row['prog_physical'],
                     );
                     $sheet->setCellValue(
-                        "I{$detail_body}",
+                        "J{$detail_body}",
                         $row['prog_finance'],
                     );
 
@@ -210,7 +213,7 @@ class ProgressReportController extends Controller
                         ],
                     ]);
                     $sheet
-                        ->getStyle("F{$detail_body}:I{$detail_body}")
+                        ->getStyle("G{$detail_body}:J{$detail_body}")
                         ->applyFromArray([
                             'alignment' => [
                                 'horizontal' =>
@@ -220,7 +223,7 @@ class ProgressReportController extends Controller
                 }
 
                 $sheet
-                    ->getStyle("A{$detail_head2}:I{$detail_body}")
+                    ->getStyle("A{$detail_head2}:J{$detail_body}")
                     ->applyFromArray([
                         'borders' => [
                             'allBorders' => [
@@ -242,6 +245,7 @@ class ProgressReportController extends Controller
         $sheet->getColumnDimension('G')->setAutoSize(true);
         $sheet->getColumnDimension('H')->setAutoSize(true);
         $sheet->getColumnDimension('I')->setAutoSize(true);
+        $sheet->getColumnDimension('J')->setAutoSize(true);
 
         $writer = new Xlsx($spreadsheet);
         $t = time();

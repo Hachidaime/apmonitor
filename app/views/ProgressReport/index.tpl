@@ -265,6 +265,16 @@
               children: ['Minggu Ke'],
             })
 
+            let headDate = createElement({
+              element: 'th',
+              class: ['text-center', 'align-middle'],
+              attribute: {
+                rowspan: 2,
+                width: '100px',
+              },
+              children: ['Tanggal Periode'],
+            })
+
             let headTarget = createElement({
               element: 'th',
               class: ['text-center', 'align-middle'],
@@ -292,6 +302,7 @@
                 headPackage,
                 headCntValue,
                 headWeek,
+                headDate,
                 headTarget,
                 headProgress,
               ],
@@ -388,6 +399,11 @@
                 children: [`${res[index].detail[idx].week}`],
               })
 
+              let bodyDate = createElement({
+                element: 'td',
+                children: [`${res[index].detail[idx].trg_date}`],
+              })
+
               let bodyTrgPhysical = createElement({
                 element: 'td',
                 class: ['text-right'],
@@ -419,6 +435,7 @@
                   bodyPackage,
                   bodyCntValue,
                   bodyWeek,
+                  bodyDate,
                   bodyTrgPhysical,
                   bodyTrgFinance,
                   bodyProgPhysical,
