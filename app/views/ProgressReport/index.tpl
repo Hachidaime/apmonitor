@@ -84,18 +84,6 @@
         </div>
       </div>
     </form>
-
-    <!-- <div style="width: 50%;">
-      <canvas
-        id="lineChart"
-        style="
-          min-height: 250px;
-          height: 250px;
-          max-height: 250px;
-          max-width: 100%;
-        "
-      ></canvas>
-    </div> -->
   </div>
   <!-- /.card-body -->
 
@@ -107,6 +95,20 @@
 
 <div class="card rounded-0 sr-only result-container">
   <div class="card-body"></div>
+</div>
+
+<div class="card rounded-0 sr-only chart-container">
+  <div class="card-body">
+    <canvas
+      id="lineChart"
+      style="
+        min-height: 300px;
+        height: 300px;
+        max-height: 300px;
+        max-width: 100%;
+      "
+    ></canvas>
+  </div>
 </div>
 <!-- prettier-ignore -->
 {/block}
@@ -409,17 +411,18 @@
             })
             //#endregion
 
-            //#region Table
+            //#region Tbody
             let tbody = createElement({
               element: 'tbody',
             })
 
-            // let labels = []
+            let labels = []
+            let trgPhysical = []
+            let progPhysical = []
+
             let n = 1
-            // console.log(res[index].detail)
             for (idx in res[index].detail) {
               let packageDetail = res[index].detail[idx]
-              console.log(packageDetail)
               for (pkgd in packageDetail) {
                 n = packageDetail[pkgd].pkgd_no != '' ? n : n - 1
                 let bodyNo = createElement({
@@ -433,7 +436,7 @@
                   element: 'td',
                   children: [
                     packageDetail[pkgd].pkgd_no != ''
-                      ? `${packageDetail[pkgd].pkgd_no} - ${packageDetail[pkgd].pkgd_name}`
+                      ? `${packageDetail[pkgd].pkgd_name}`
                       : '',
                   ],
                 })
@@ -449,7 +452,7 @@
                   class: ['text-center'],
                   children: [`${packageDetail[pkgd].week}`],
                 })
-                // labels[idx] = packageDetail[pkgd].week
+                labels.push(packageDetail[pkgd].week)
 
                 let bodyDate = createElement({
                   element: 'td',
@@ -461,6 +464,9 @@
                   class: ['text-right'],
                   children: [`${packageDetail[pkgd].trg_physical}`],
                 })
+                trgPhysical.push(
+                  Number(packageDetail[pkgd].trg_physical.replace(',', '.'))
+                )
 
                 let bodyTrgFinance = createElement({
                   element: 'td',
@@ -473,6 +479,9 @@
                   class: ['text-right'],
                   children: [`${packageDetail[pkgd].prog_physical}`],
                 })
+                progPhysical.push(
+                  Number(packageDetail[pkgd].prog_physical.replace(',', '.'))
+                )
 
                 let bodyProgFinance = createElement({
                   element: 'td',
@@ -536,7 +545,39 @@
               children: [packageWrapper],
             })
             //#endregion
+
             resultWrapper.append(progContainer, actContainer, package)
+
+            let chartContainer = document.querySelector('.chart-container')
+            chartContainer.classList.add('sr-only')
+
+            if ($('#pkgd_id').val() != '') {
+              chartContainer.classList.remove('sr-only')
+              let chartData = {
+                id: 'lineChart',
+                labels: labels,
+                xLabel: 'Minggu Ke',
+                yLabel: 'Persentase Fisik',
+                datasets: [
+                  {
+                    label: 'Target',
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    data: trgPhysical,
+                    lineTension: 0,
+                  },
+                  {
+                    label: 'Progres',
+                    backgroundColor: '#dc3545',
+                    borderColor: '#dc3545',
+                    data: progPhysical,
+                    lineTension: 0,
+                  },
+                ],
+              }
+
+              createChart(chartData)
+            }
           }
         } else {
           resultWrapper.innerHTML = /*html*/ `<h3 class="text-center">Data tidak ditemukan.</h3>`
@@ -565,25 +606,14 @@
   }
 
   let createChart = (params) => {
-    var chartData = {
+    let chartData = {
       labels: params.labels,
       datasets: params.datasets,
-      // datasets: [
-      //   {
-      //     label: 'Digital Goods',
-      //     backgroundColor: params,
-      //     data: params.data,
-      //     lineTension: 0,
-      //   },
-      // ],
     }
 
-    var chartOptions = {
+    let chartOptions = {
       maintainAspectRatio: false,
       responsive: true,
-      legend: {
-        display: false,
-      },
       scales: {
         xAxes: [
           {
@@ -613,15 +643,16 @@
     //-------------
     //- LINE CHART -
     //--------------
-    var lineChartCanvas = $(`#${params.id}`).get(0).getContext('2d')
-    var lineChartOptions = jQuery.extend(true, {}, chartOptions)
-    var lineChartData = jQuery.extend(true, {}, chartData)
+    let lineChartCanvas = $(`#lineChart`).get(0).getContext('2d')
+    let lineChartOptions = jQuery.extend(true, {}, chartOptions)
+    let lineChartData = jQuery.extend(true, {}, chartData)
+    console.log(params.datasets.length)
     for (let i = 0; i < params.datasets.length; i++) {
       lineChartData.datasets[i].fill = false
     }
     lineChartOptions.datasetFill = false
 
-    var lineChart = new Chart(lineChartCanvas, {
+    let lineChart = new Chart(lineChartCanvas, {
       type: 'line',
       data: lineChartData,
       options: lineChartOptions,

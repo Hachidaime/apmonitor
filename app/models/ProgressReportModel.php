@@ -82,52 +82,67 @@ class ProgressReportModel extends Model
                 $targetOpt[$row['id']] = $targetOpt[$row['id']] ?? [];
                 $progressOpt[$row['id']] = $progressOpt[$row['id']] ?? [];
 
-                if (
-                    count($targetOpt[$row['id']]) >
-                    count($progressOpt[$row['id']])
-                ) {
-                    foreach ($targetOpt[$row['id']] as $key => $value) {
-                        $progressOpt[$row['id']][$key] = is_array(
-                            $progressOpt[$row['id']][$key],
-                        )
-                            ? $progressOpt[$row['id']][$key]
-                            : [];
+                $target = [];
+                foreach ($targetOpt[$row['id']] as $value) {
+                    $target[$value['id']][] = $value;
+                }
+                $target = array_values($target);
 
-                        $detail = array_merge(
-                            $targetOpt[$row['id']][$key],
-                            $progressOpt[$row['id']][$key],
-                        );
+                $progress = [];
+                foreach ($progressOpt[$row['id']] as $key => $value) {
+                    $progress[$value['id']][] = $value;
+                }
+                $progress = array_values($progress);
 
-                        $detail = $this->getDetail($detail);
-                        if ($detail['week'] > 1) {
-                            $detail['pkgd_no'] = '';
-                            $detail['pkgd_name'] = '';
-                            $detail['cnt_value'] = '';
+                $packageDetail = [];
+                for ($i = 0; $i < count($target); $i++) {
+                    if (count($target[$i]) > count($progress[$i])) {
+                        foreach ($target[$i] as $key => $value) {
+                            $progress[$i][$key] = is_array($progress[$i][$key])
+                                ? $progress[$i][$key]
+                                : [];
+
+                            $detail = array_merge(
+                                $target[$i][$key],
+                                $progress[$i][$key],
+                            );
+
+                            $detail = $this->getDetail($detail);
+                            if ($detail['week'] > 1) {
+                                $detail['pkgd_no'] = '';
+                                $detail['pkgd_name'] = '';
+                                $detail['cnt_value'] = '';
+                            }
+
+                            $packageDetail[$i][$key] = $detail;
                         }
-                        $packageDetail[$detail['pkgd_id']][] = $detail;
-                    }
-                } else {
-                    foreach ($progressOpt[$row['id']] as $key => $value) {
-                        $targetOpt[$row['id']][$key] = is_array(
-                            $targetOpt[$row['id']][$key],
-                        )
-                            ? $targetOpt[$row['id']][$key]
-                            : [];
+                    } else {
+                        foreach ($progress[$i] as $key => $value) {
+                            $target[$i][$key] = is_array($target[$i][$key])
+                                ? $target[$i][$key]
+                                : [];
 
-                        $detail = array_merge(
-                            $targetOpt[$row['id']][$key],
-                            $progressOpt[$row['id']][$key],
-                        );
+                            $detail = array_merge(
+                                $target[$i][$key],
+                                $progress[$i][$key],
+                            );
 
-                        $detail = $this->getDetail($detail);
-                        if ($detail['week'] > 1) {
-                            $detail['pkgd_no'] = '';
-                            $detail['pkgd_name'] = '';
-                            $detail['cnt_value'] = '';
+                            $detail = $this->getDetail($detail);
+                            if ($detail['week'] > 1) {
+                                $detail['pkgd_no'] = '';
+                                $detail['pkgd_name'] = '';
+                                $detail['cnt_value'] = '';
+                            }
+                            $packageDetail[$i][$key] = $detail;
                         }
-                        $packageDetail[$detail['pkgd_id']][] = $detail;
                     }
                 }
+
+                // print '<pre>';
+                // print_r($target);
+                // print_r($progress);
+                // print '</pre>';
+
                 $row['detail'] = $packageDetail;
                 $package[$idx] = $row;
             }
@@ -143,6 +158,8 @@ class ProgressReportModel extends Model
         $detail['devn_finance'] =
             $detail['prog_finance'] - $detail['trg_finance'];
 
+        // var_dump($detail);
+
         return [
             'pkgd_id' => $detail['id'],
             'pkgd_no' => $detail['pkgd_no'],
@@ -151,11 +168,12 @@ class ProgressReportModel extends Model
                 $detail['cnt_value'] > 0
                     ? number_format($detail['cnt_value'], 2, ',', '.')
                     : '',
-            'week' => ($detail['trg_week'] > 0
+            'week' =>
+                $detail['trg_week'] > 0
                     ? $detail['trg_week']
-                    : $detail['prog_week'] > 0)
-                ? $detail['prog_week']
-                : '',
+                    : ($detail['prog_week'] > 0
+                        ? $detail['prog_week']
+                        : ''),
             'trg_date' => !is_null($detail['trg_date'])
                 ? Functions::dateFormat('Y-m-d', 'd/m/Y', $detail['trg_date'])
                 : '',
