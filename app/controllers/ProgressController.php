@@ -38,7 +38,7 @@ class ProgressController extends Controller
     public function index()
     {
         $this->smarty->assign('breadcrumb', [
-            ['Master', ''],
+            ['Paket Pekerjaan', ''],
             [$this->title, ''],
         ]);
 
@@ -83,7 +83,7 @@ class ProgressController extends Controller
         }
 
         $this->smarty->assign('breadcrumb', [
-            ['Master', ''],
+            ['Paket Pekerjaan', ''],
             [$this->title, $this->lowerName],
             [$tag, ''],
         ]);
