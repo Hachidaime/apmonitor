@@ -115,6 +115,11 @@ class ProgressReportModel extends Model
 
     public function getDetail($detail)
     {
+        $detail['devn_physical'] =
+            $detail['prog_physical'] - $detail['trg_physical'];
+        $detail['devn_finance'] =
+            $detail['prog_finance'] - $detail['trg_finance'];
+
         return [
             'pkgd_no' => $detail['pkgd_no'],
             'pkgd_name' => $detail['pkgd_name'],
@@ -146,6 +151,12 @@ class ProgressReportModel extends Model
                 $detail['prog_finance'] > 0
                     ? number_format($detail['prog_finance'], 2, ',', '.')
                     : '',
+            'devn_physical' => !empty($detail['devn_physical'])
+                ? number_format($detail['devn_physical'], 2, ',', '.')
+                : '',
+            'devn_finance' => !empty($detail['devn_finance'])
+                ? number_format($detail['devn_finance'], 2, ',', '.')
+                : '',
         ];
     }
 
