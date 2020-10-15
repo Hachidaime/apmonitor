@@ -51,13 +51,16 @@ class PerformanceReportModel extends Model
         );
 
         $where = [];
-        $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
-        if ($data['prg_code'] != '') {
+        if (!empty($data['pkg_fiscal_year'])) {
+            $where[] = ['pkg_fiscal_year', $data['pkg_fiscal_year']];
+        }
+        if (!empty($data['prg_code'])) {
             $where[] = ['prg_code', $data['prg_code']];
         }
-        if ($data['act_code'] != '') {
+        if (!empty($data['act_code'])) {
             $where[] = ['act_code', $data['act_code']];
         }
+        $where = !empty($where) ? $where : null;
         list($package, $packageCount) = $this->packageModel->multiarray($where);
 
         if ($packageCount > 0) {
