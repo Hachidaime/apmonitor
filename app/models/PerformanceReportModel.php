@@ -160,7 +160,39 @@ class PerformanceReportModel extends Model
         $detail['devn_finance'] =
             $detail['prog_finance'] - $detail['trg_finance'];
 
-        // var_dump($detail);
+        $indicator = 'white';
+        if (!is_null($detail['trg_physical'])) {
+            if (
+                ($detail['trg_physical'] >= 0 &&
+                    $detail['trg_physical'] <= 70 &&
+                    $detail['devn_physical'] > -10) ||
+                ($detail['trg_physical'] > 70 &&
+                    $detail['trg_physical'] <= 100 &&
+                    $detail['devn_physical'] > -5)
+            ) {
+                $indicator = 'red';
+            } elseif (
+                ($detail['trg_physical'] >= 0 &&
+                    $detail['trg_physical'] <= 70 &&
+                    $detail['devn_physical'] >= 0 &&
+                    $detail['devn_physical'] <= 10) ||
+                ($detail['trg_physical'] > 70 &&
+                    $detail['trg_physical'] <= 100 &&
+                    $detail['devn_physical'] >= 0 &&
+                    $detail['devn_physical'] <= 5)
+            ) {
+                $indicator = 'yellow';
+            } elseif (
+                ($detail['trg_physical'] >= 0 &&
+                    $detail['trg_physical'] <= 70 &&
+                    $detail['devn_physical'] > 0) ||
+                ($detail['trg_physical'] > 70 &&
+                    $detail['trg_physical'] <= 100 &&
+                    $detail['devn_physical'] > 0)
+            ) {
+                $indicator = 'green';
+            }
+        }
 
         return [
             'pkgd_id' => $detail['id'],
@@ -209,6 +241,7 @@ class PerformanceReportModel extends Model
                 !empty($detail['prog_finance'])
                     ? number_format($detail['devn_finance'], 2, ',', '.')
                     : '',
+            'indicator' => $indicator,
         ];
     }
 
